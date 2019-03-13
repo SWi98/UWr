@@ -12,4 +12,12 @@ private:
 public:
 	triangle(point x, point y, point z);
 	void move_by_vector(double x, double y);
+	void rotate(point p, double angle);
+	double get_perimeter();
+	double get_area();
+	double get_middle_point();
+
 };
+
+bool if_contains(triangle bigger, triangle smaller);
+bool if_separable(triangle t1, triangle t2);

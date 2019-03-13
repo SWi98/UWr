@@ -4,10 +4,61 @@
 #include "point.h"
 using namespace std;
 
+
+bool if_parallel(segment f, segment g) {
+	if (f.getCoefficientA() * g.getCoefficientB() == g.getCoefficientA() * f.getCoefficientB())
+		return true;
+	else
+		return false;
+}
+
+bool if_perp(segment f, segment g) {
+	if (f.getCoefficientA() * g.getCoefficientA() == 
+		-1 * f.getCoefficientB() * g.getCoefficientB()) {
+		//cout << "\n" << f.getCoefficientA() << " " << f.getCoefficientB() << " " 
+		//<< g.getCoefficientA() << " " << g.getCoefficientB();
+		return true;
+	}
+	else
+		return false;
+}
+
+point intersection_point(segment f, segment g) {
+	// line formulas of f, g and check if the
+	//point where they intersect is in f and in g(point_in_segment()
+
+	if (f.getCoefficientA() == g.getCoefficientB())
+		throw ("Parallel lines");
+	
+	double a = f.getCoefficientA();
+	double c = f.getCoefficientB();
+	double b = g.getCoefficientA();
+	double d = g.getCoefficientB();
+	double X = (d - c) / (a - b);
+	double Y = (a*d - b * c) / (a - b);
+	point K(X, Y);
+
+	if (!(f.point_in_segment(K) and g.point_in_segment(K)))
+		throw ("No such point exists");
+	else
+		return K;
+}
+
+double segment::getCoefficientA() {
+	return coefficientA;
+}
+
+double segment::getCoefficientB() {
+	return coefficientB;
+}
+
 segment::segment(point x, point y)
-	:a(x)
+	: a(x)
 	, b(y) {
-	line_formula();
+	if (x.get_x() == y.get_x() && x.get_y() == y.get_y()) 
+		throw invalid_argument("Points are identical");
+	else
+		line_formula();
 }
 
 void segment::line_formula() {
@@ -16,9 +67,18 @@ void segment::line_formula() {
 	point A = get_a();	point B = get_b();
 	a_x = A.get_x();	a_y = A.get_y();
 	b_x = B.get_x();	b_y = B.get_y();
-
-	double coA = (b_y - a_y) / (b_x - a_x);
-	double coB = a_y - coA * a_x;
+	double coA;
+	double coB;
+	if (a_y == b_y)
+		coA = 0;
+	else
+		coA = (b_y - a_y) / (b_x - a_x);
+	if (a_x == b_x) {
+		coA = 0;
+		coB = 0;
+	}
+	else
+		coB = a_y - coA * a_x;
 
 	coefficientA = coA;
 	coefficientB = coB;
@@ -62,4 +122,11 @@ bool segment::point_in_segment(point p) {
 		return true;
 	else
 		return false;
+}
+
+point segment::get_middle() {
+	double x = (a.get_x() + b.get_x()) / 2;
+	double y = (a.get_y() + b.get_y()) / 2;
+	point k(x, y);
+	return k;	
 }

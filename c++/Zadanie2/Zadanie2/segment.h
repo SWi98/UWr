@@ -10,6 +10,8 @@ private:
 	double coefficientA, coefficientB; 
 	void line_formula();
 public:
+	double getCoefficientA();
+	double getCoefficientB();
 	segment(point x, point y);
 	point get_a();
 	point get_b();
@@ -17,4 +19,7 @@ public:
 	void move_by_vector(double x, double y);
 	void write_line_formula();
 	bool point_in_segment(point p);
+	point get_middle();
 };
+
+bool if_perp(segment f, segment g);
