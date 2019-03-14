@@ -10,9 +10,12 @@ private:
 	double coefficientA, coefficientB; 
 	void line_formula();
 public:
+	void write();
+	void rotate(point p, double angle);
 	double getCoefficientA();
 	double getCoefficientB();
 	segment(point x, point y);
+	segment(const segment &s);
 	point get_a();
 	point get_b();
 	double get_length();
@@ -20,7 +23,8 @@ public:
 	void write_line_formula();
 	bool point_in_segment(point p);
 	point get_middle();
-	segment();
+	//segment();
+
 };
 
 bool if_perp(segment f, segment g);

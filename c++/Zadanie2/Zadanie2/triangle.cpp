@@ -1,4 +1,5 @@
 #include <iostream>
+#include<math.h>
 #include  "triangle.h"
 #include "point.h"
 using namespace std;
@@ -6,7 +7,16 @@ using namespace std;
 triangle::triangle(point x, point y, point z)
 	: a(x)
 	, b(y)
-	, c(z) {}
+	, c(z) {
+	if (this->notDifferent())
+		throw invalid_argument("Points are the same");
+}
+
+triangle::triangle(const triangle &T) {
+	a = T.a;
+	b = T.b;
+	c = T.c;
+}
 
 void triangle::move_by_vector(double x, double y) {
 	a.move_by_vector(x, y);
@@ -42,13 +52,30 @@ point triangle::get_middle_point() {
 	return k;
 }
 
-bool triangle::if_point_inside(point p) {
-	triangle M(a, p, b);
-	triangle N(b, p, c);
-	triangle O(c, p, a);
-	if (M.get_area() + N.get_area() + O.get_area() == this->get_area())
-		return true;
-	else
-		return false;
 
+
+double triangle::sign(point p1, point p2, point p3) {
+	return (p1.get_x() - p3.get_x()) * 
+		(p2.get_y() - p3.get_y()) - (p2.get_x() - p3.get_x()) 
+		* (p1.get_y() - p3.get_y());
 }
+
+
+bool triangle::is_point_in(point p) {
+	double d1, d2, d3;
+	bool has_neg, has_pos;
+
+	d1 = sign(p, this->a, this->b);
+	d2 = sign(p, this->b, this->c);
+	d3 = sign(p, this->c, this->a);
+
+	has_neg = (d1 < 0) || (d2 < 0) || (d3 < 0);
+	has_pos = (d1 > 0) || (d2 > 0) || (d3 > 0);
+
+	return !(has_neg && has_pos);	
+}
+
+bool triangle::notDifferent(){
+	return !different(a, b) && !different(b, c) && !different(c, a);
+}
+

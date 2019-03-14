@@ -22,8 +22,6 @@ bool if_perp(segment f, segment g) {
 }
 
 point intersection_point(segment f, segment g) {
-	// line formulas of f, g and check if the
-	//point where they intersect is in f and in g(point_in_segment()
 
 	if (if_parallel(f, g))
 		throw ("Parallel lines");
@@ -50,7 +48,7 @@ double segment::getCoefficientB() {
 	return coefficientB;
 }
 
-segment::segment() = default;
+//segment::segment() = default;
 
 segment::segment(point x, point y){
 	if (x.get_x() == y.get_x() && x.get_y() == y.get_y())
@@ -58,13 +56,28 @@ segment::segment(point x, point y){
 	a = x;
 	b = y;
 	line_formula();
+}
+
+segment::segment(const segment &s) {
+	a = s.a;
+	b = s.b;
 	line_formula();
+}
+
+void segment::rotate(point p, double angle) {
+	a.rotate(p, angle);
+	b.rotate(p, angle);
+}
+
+void segment::write() {
+	cout << "(" << a.get_x() << ", " << a.get_y() << "); " << "(" << b.get_x()
+		<< ", " << b.get_y() << ")" << endl;
 }
 
 void segment::line_formula() {
 	double a_x, a_y, b_x, b_y;
 
-	point A = get_a();	point B = get_b();
+	point A = a;	point B = b;
 	a_x = A.get_x();	a_y = A.get_y();
 	b_x = B.get_x();	b_y = B.get_y();
 	double coA;

@@ -11,6 +11,12 @@ double get_distance(point a, point b) {
 
 point::point() = default;
 
+point::point(const point &p) {
+	x = p.x;
+	y = p.y;
+
+}
+
 point::point(double a, double b)
 	: x(a)
 	, y(b) {}
@@ -36,7 +42,11 @@ void point::rotate(point p, double angle) {
 	double p_x = p.get_x();
 	double p_y = p.get_y();
 	double old_x = x;
-	x = x * cos(angle * M_PI / 180.0) - y * sin(angle * M_PI / 180.0);
-	y = old_x * sin(angle * M_PI / 180.0) + y * cos(angle * M_PI / 180.0);
+	this->x = this->x * cos(angle * M_PI / 180.0) - this->y * sin(angle * M_PI / 180.0);
+	this->y = old_x * sin(angle * M_PI / 180.0) + this->y * cos(angle * M_PI / 180.0);
 	this->move_by_vector(p_x, p_y);
+}
+
+bool different(point a, point b){
+	return (a.get_x() != b.get_x()) || (a.get_y() != b.get_y());
 }
