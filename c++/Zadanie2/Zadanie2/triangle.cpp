@@ -29,7 +29,7 @@ double triangle::get_area() {
 	x = get_distance(a, b);
 	y = get_distance(b, c);
 	z = get_distance(c, a);
-	p = (x + y + y) / 2;
+	p = (x + y + z) / 2;
 	res = sqrt(p *(p - x)*(p - y)*(p - z));
 	return res;
 }
@@ -38,6 +38,8 @@ point triangle::get_middle_point() {
 	double X, Y;
 	X = (a.get_x() + b.get_x() + c.get_x()) / 3;
 	Y = (a.get_y() + b.get_y() + c.get_y()) / 3;
+	point k(X, Y);
+	return k;
 }
 
 bool triangle::if_point_inside(point p) {

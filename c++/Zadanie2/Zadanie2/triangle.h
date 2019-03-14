@@ -17,7 +17,6 @@ public:
 	double get_area();
 	point get_middle_point();
 	bool if_point_inside(point k);
-
 };
 
 //bool if_contains(triangle bigger, triangle smaller);
