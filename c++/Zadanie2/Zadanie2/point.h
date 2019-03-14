@@ -8,6 +8,7 @@ private:
 	double y;
 public:
 	point(double a, double b);
+	point();
 	void move_by_vector(double a, double b);
 	void write();
 	double get_x();

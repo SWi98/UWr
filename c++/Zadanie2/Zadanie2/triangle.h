@@ -15,9 +15,10 @@ public:
 	void rotate(point p, double angle);
 	double get_perimeter();
 	double get_area();
-	double get_middle_point();
+	point get_middle_point();
+	bool if_point_inside(point k);
 
 };
 
-bool if_contains(triangle bigger, triangle smaller);
-bool if_separable(triangle t1, triangle t2);
+//bool if_contains(triangle bigger, triangle smaller);
+//bool if_separable(triangle t1, triangle t2);

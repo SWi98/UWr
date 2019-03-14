@@ -20,6 +20,7 @@ public:
 	void write_line_formula();
 	bool point_in_segment(point p);
 	point get_middle();
+	segment();
 };
 
 bool if_perp(segment f, segment g);

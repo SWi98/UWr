@@ -5,8 +5,11 @@
 using namespace std;
 
 double get_distance(point a, point b) {
-	return 1;
+	return sqrt((b.get_x() - a.get_x()) * (b.get_x() - a.get_x()) +
+		((b.get_y() - a.get_y()) * (b.get_y() - a.get_y())));
 }
+
+point::point() = default;
 
 point::point(double a, double b)
 	: x(a)

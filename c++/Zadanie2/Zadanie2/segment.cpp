@@ -15,8 +15,6 @@ bool if_parallel(segment f, segment g) {
 bool if_perp(segment f, segment g) {
 	if (f.getCoefficientA() * g.getCoefficientA() == 
 		-1 * f.getCoefficientB() * g.getCoefficientB()) {
-		//cout << "\n" << f.getCoefficientA() << " " << f.getCoefficientB() << " " 
-		//<< g.getCoefficientA() << " " << g.getCoefficientB();
 		return true;
 	}
 	else
@@ -27,7 +25,7 @@ point intersection_point(segment f, segment g) {
 	// line formulas of f, g and check if the
 	//point where they intersect is in f and in g(point_in_segment()
 
-	if (f.getCoefficientA() == g.getCoefficientB())
+	if (if_parallel(f, g))
 		throw ("Parallel lines");
 	
 	double a = f.getCoefficientA();
@@ -52,13 +50,15 @@ double segment::getCoefficientB() {
 	return coefficientB;
 }
 
-segment::segment(point x, point y)
-	: a(x)
-	, b(y) {
-	if (x.get_x() == y.get_x() && x.get_y() == y.get_y()) 
+segment::segment() = default;
+
+segment::segment(point x, point y){
+	if (x.get_x() == y.get_x() && x.get_y() == y.get_y())
 		throw invalid_argument("Points are identical");
-	else
-		line_formula();
+	a = x;
+	b = y;
+	line_formula();
+	line_formula();
 }
 
 void segment::line_formula() {

@@ -15,11 +15,12 @@ int main() {
 	cout << seg.point_in_segment(y2) << endl;*/
 	point a(0, 0);
 	point b(0, 0);
-	point c(-2, 2);
+	point c(10, 2);
 	point d(4, 2);
 	segment A(a, b);
 	segment B(c, d);
-	//A.write_line_formula();
+	A.write_line_formula();
+	cout << "asdasdasd";
 	cout << c.get_x() << " " << c.get_y() << " " << d.get_x() << " " << d.get_y() << endl;
 	B.write_line_formula();
 	//cout << if_perp(A, B);
