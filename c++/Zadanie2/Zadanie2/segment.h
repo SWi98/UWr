@@ -23,8 +23,9 @@ public:
 	void write_line_formula();
 	bool point_in_segment(point p);
 	point get_middle();
-	//segment();
+	point intersection_point(segment f, segment g);
 
 };
 
+bool if_parallel(segment f, segment g);
 bool if_perp(segment f, segment g);

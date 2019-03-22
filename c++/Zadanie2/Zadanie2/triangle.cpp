@@ -4,12 +4,36 @@
 #include "point.h"
 using namespace std;
 
+point triangle::get_a() {
+	return this->a;
+}
+
+point triangle::get_b() {
+	return this->b;
+}
+
+point triangle::get_c() {
+	return this->c;
+}
+
+bool triangle::tr_cond(double x, double y, double z) {
+	return !((x + y > z) && (x + z > y) && (y + z > x));
+}
+
+
 triangle::triangle(point x, point y, point z)
 	: a(x)
 	, b(y)
 	, c(z) {
-	if (this->notDifferent())
+	cout << "Trojkat z punktow: " << endl;
+	x.write();
+	y.write();
+	z.write();
+	if (!this->Different())
 		throw invalid_argument("Points are the same");
+	/*else if (this->tr_cond(get_distance(x, y), get_distance(y, z), get_distance(z, x))) 
+		throw invalid_argument("Wrong distances between points");*/
+	
 }
 
 triangle::triangle(const triangle &T) {
@@ -75,7 +99,18 @@ bool triangle::is_point_in(point p) {
 	return !(has_neg && has_pos);	
 }
 
-bool triangle::notDifferent(){
-	return !different(a, b) && !different(b, c) && !different(c, a);
+bool triangle::Different(){
+	return (different(a, b) && different(b, c) && different(c, a));
+}
+
+bool if_contains(triangle bigger, triangle smaller) {
+	return (bigger.is_point_in(smaller.get_a()) && bigger.is_point_in(smaller.get_b())
+		&& bigger.is_point_in(smaller.get_c()));
+}
+
+bool if_separable(triangle one, triangle two) {
+	return (one.is_point_in(two.get_a()) || one.is_point_in(two.get_b()) ||
+		one.is_point_in(two.get_c()) || two.is_point_in(one.get_a()) ||
+		two.is_point_in(one.get_b()) || two.is_point_in(one.get_c()));
 }
 

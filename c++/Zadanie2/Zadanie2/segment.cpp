@@ -6,22 +6,21 @@ using namespace std;
 
 
 bool if_parallel(segment f, segment g) {
-	if (f.getCoefficientA() * g.getCoefficientB() == g.getCoefficientA() * f.getCoefficientB())
+	if (f.getCoefficientA()  == g.getCoefficientA() )
 		return true;
 	else
 		return false;
 }
 
 bool if_perp(segment f, segment g) {
-	if (f.getCoefficientA() * g.getCoefficientA() == 
-		-1 * f.getCoefficientB() * g.getCoefficientB()) {
+	if (f.getCoefficientA() * g.getCoefficientA() == -1)  {
 		return true;
 	}
 	else
 		return false;
 }
 
-point intersection_point(segment f, segment g) {
+point segment::intersection_point(segment f, segment g) {
 
 	if (if_parallel(f, g))
 		throw ("Parallel lines");

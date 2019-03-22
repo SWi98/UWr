@@ -9,7 +9,9 @@ double get_distance(point a, point b) {
 		((b.get_y() - a.get_y()) * (b.get_y() - a.get_y())));
 }
 
-point::point() = default;
+point::point() {
+
+}
 
 point::point(const point &p) {
 	x = p.x;
