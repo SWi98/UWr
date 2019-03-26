@@ -64,21 +64,21 @@ namespace Zadanie4
 
         public static void Sort<T>(List<T> list, Comparison<T> comparison)
         {
-            for(int i = 0; i < list.Count(); i++)
+            list.Sort(comparison);
+           /* int n = list.Count();
+            while (n > 1)
             {
-                int k = i;
-                for(int j = i+1; j < list.Count(); j++)
+                for(int i = 0; i < n - 1; i++)
                 {
-                    if(comparison(list[j], list[k]) < 0)
+                    if(comparison(list[i], list[i+1]) > 0)
                     {
-                        k = j;
-                        T tmp = list[j];
-                        list[j] = list[k];
-                        list[k] = tmp;
+                        T tmp = list[i];
+                        list[i] = list[i + 1];
+                        list[i + 1] = tmp;
                     }
+                    n--;
                 }
-
-            }
+            }*/
         }
     }
 

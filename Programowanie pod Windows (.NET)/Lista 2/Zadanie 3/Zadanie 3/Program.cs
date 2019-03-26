@@ -20,7 +20,7 @@ namespace Zadanie_3
                 test_list.Add(i * 4);
             }
             writeList(test_list);
-
+            
             List<string> test_list_string = test_list.ConvertAll(
                 new Converter<int, string>(delegate (int x)
                 {
@@ -47,14 +47,14 @@ namespace Zadanie_3
             Console.Write("\n");
             Console.WriteLine("Wypisanie elementow podzielonych przez 10 korzystajac" +
                 " z ForEach:");
-
+            
             test_list.ForEach(delegate (int x)
             {
                 if(x % 10 == 0)
                     Console.WriteLine(x);
             });
 
-            test_list.RemoveAll(delegate (int x)
+            test_list.RemoveAll(delegate(int x)
             {
                 return x > 10;
             });
