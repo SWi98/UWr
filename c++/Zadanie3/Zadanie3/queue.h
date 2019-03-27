@@ -10,10 +10,11 @@ private:
 	int pojemnosc, ile, pocz;
 	string *qArray;
 public:
+	~queue();
 	queue();
 	queue(int capacity);
 	queue(const queue &Q);
-	queue(list<string> InitList);
+	queue(initializer_list<string> InitList);
 	queue operator=(const queue &otherQ);
 	queue& operator=(queue&& otherQ);
 	string get();

@@ -5,7 +5,12 @@
 #include "queue.h"
 using namespace std;
 
-// default constructor
+// Destructor
+queue::~queue() {
+	delete[] qArray;
+}
+
+// Default constructor
 queue::queue() {
 	this->pojemnosc = 1; 
 	this->qArray = new string[pojemnosc];
@@ -17,7 +22,7 @@ queue::queue(int pojemnosc) : queue() {
 	qArray = new string[pojemnosc];
 }
 
-// copying constructor
+// Copying constructor
 queue::queue(const queue &Q) {
 	this->qArray = Q.qArray;
 	this->pojemnosc = Q.pojemnosc;
@@ -25,8 +30,8 @@ queue::queue(const queue &Q) {
 	this->pocz = Q.pocz;
 }
 
-// constructor with list of strings 
-queue::queue(list<string> InitList) {
+// Constructor with list of strings 
+queue::queue(initializer_list<string> InitList) {
 	this->pojemnosc = InitList.size();
 	this->ile = InitList.size();
 	this->pocz = 0;
@@ -39,7 +44,7 @@ queue::queue(list<string> InitList) {
 	}
 }
 
-// copy assignment operator
+// Copy assignment operator
 queue queue::operator=(const queue &otherQ) {
 	this->qArray = otherQ.qArray;
 	this->pojemnosc = otherQ.pojemnosc;
@@ -48,7 +53,7 @@ queue queue::operator=(const queue &otherQ) {
 	return *this;
 }
 
-// move assignment operator
+// Move assignment operator
 queue& queue::operator=(queue&& otherQ) {
 	if (this != &otherQ) {
 		delete[] this->qArray;

@@ -6,14 +6,58 @@
 using namespace std;
 
 int main() {
-	queue testQ = new queue(10);
-	testQ.put("pierwszy");
-	testQ.put("drugi");
-	testQ.put("trzeci");
-	testQ.write();
-	string first = testQ.get();
-	string snd = testQ.get();
-	string third = testQ.get();
-	cout << first << snd << third << endl;
-	getchar();
+	queue *q = new queue(initializer_list<string>{"jeden", "dwa", "trzy"});
+	bool test = true;
+	string param, choose;
+	while (test) {
+		cout << "1. Create new queue. Enter parameter (int)" << endl
+			<< "2. Add element. Enter parameter (string)" << endl
+			<< "3. Take one element." << endl
+			<< "4. Show all elements." << endl
+			<< "5. Exit" << endl;
+		cin >> choose;
+		switch (stoi(choose)) {
+			case 1:
+				delete q;
+				cin >> param;
+				try {
+					q = new queue(stoi(param));
+				}
+				catch(exception &e){
+					queue *q = new queue();
+					clog << e.what() << endl << "Default queue created" << endl;
+				}
+				break;
+			case 2:
+				cin >> param;
+				try {
+					q->put(param);
+				}
+				catch (exception &e) {
+					clog << e.what() << endl;
+				}
+				break;
+			case 3:
+				try {
+					string elem = q->get();
+					cout << "Taken element: " << elem << endl;
+				}
+				catch (exception &e) {
+					clog << e.what() << endl;
+				}
+				break;
+			case 4:
+				try {
+					q->write();
+				}
+				catch (exception &e) {
+					clog << e.what() << endl;
+				}
+				break;
+			case 5:
+				delete q;
+				break;
+		}
+
+	}
 }
