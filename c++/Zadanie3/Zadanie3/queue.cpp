@@ -30,6 +30,18 @@ queue::queue(const queue &Q) {
 	this->pocz = Q.pocz;
 }
 
+queue::queue(queue && otherQ) {
+	this->qArray = otherQ.qArray;
+	this->pojemnosc = otherQ.pojemnosc;
+	this->ile = otherQ.ile;
+	this->pocz = otherQ.pocz;
+	otherQ.qArray = nullptr;
+	otherQ.pojemnosc = 0;
+	otherQ.ile = 0;
+	otherQ.pocz = 0;
+}
+
+
 // Constructor with list of strings 
 queue::queue(initializer_list<string> InitList) {
 	this->pojemnosc = InitList.size();
@@ -45,13 +57,8 @@ queue::queue(initializer_list<string> InitList) {
 }
 
 // Copy assignment operator
-queue queue::operator=(const queue &otherQ) {
-	this->qArray = otherQ.qArray;
-	this->pojemnosc = otherQ.pojemnosc;
-	this->ile = otherQ.ile;
-	this->pocz = otherQ.pocz;
-	return *this;
-}
+queue &queue::operator=(const queue &otherQ) = default;
+
 
 // Move assignment operator
 queue& queue::operator=(queue&& otherQ) {
@@ -89,8 +96,7 @@ void queue::put(string arg) {
 }
 
 void queue::write() {
-	for (int i = 0; i < pojemnosc; i++)
-		cout << i <<". " << qArray[i] << endl;
+	cout << qArray[pocz] << endl;
 }
 
 

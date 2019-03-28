@@ -14,8 +14,9 @@ public:
 	queue();
 	queue(int capacity);
 	queue(const queue &Q);
+	queue(queue && otherQ);
 	queue(initializer_list<string> InitList);
-	queue operator=(const queue &otherQ);
+	queue& operator=(const queue &otherQ);
 	queue& operator=(queue&& otherQ);
 	string get();
 	void put(string arg);

@@ -7,18 +7,24 @@ using namespace std;
 
 int main() {
 	queue *q = new queue(initializer_list<string>{"jeden", "dwa", "trzy"});
+	q->write();
+	queue *newQ = new queue(4);
+	newQ->put("1234");
+	newQ->write();
+	newQ = q;
+	newQ->write();
+	delete q;
 	bool test = true;
 	string param, choose;
 	while (test) {
 		cout << "1. Create new queue. Enter parameter (int)" << endl
 			<< "2. Add element. Enter parameter (string)" << endl
 			<< "3. Take one element." << endl
-			<< "4. Show all elements." << endl
+			<< "4. Show first element." << endl
 			<< "5. Exit" << endl;
 		cin >> choose;
 		switch (stoi(choose)) {
 			case 1:
-				delete q;
 				cin >> param;
 				try {
 					q = new queue(stoi(param));
@@ -56,6 +62,7 @@ int main() {
 				break;
 			case 5:
 				delete q;
+				test = false;
 				break;
 		}
 
