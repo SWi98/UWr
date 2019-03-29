@@ -17,9 +17,10 @@ public:
 	queue(queue && otherQ);
 	queue(initializer_list<string> InitList);
 	queue& operator=(const queue &otherQ);
-	queue& operator=(queue&& otherQ);
+	queue& operator=(queue&& otherQ) noexcept;
 	string get();
 	void put(string arg);
-	void write();
+
+	void write(); // for tests only
 
 };

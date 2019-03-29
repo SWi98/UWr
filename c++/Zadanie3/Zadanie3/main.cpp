@@ -13,7 +13,7 @@ int main() {
 	newQ->write();
 	newQ = q;
 	newQ->write();
-	delete q;
+	//delete q;
 	bool test = true;
 	string param, choose;
 	while (test) {
@@ -25,6 +25,7 @@ int main() {
 		cin >> choose;
 		switch (stoi(choose)) {
 			case 1:
+				delete q;
 				cin >> param;
 				try {
 					q = new queue(stoi(param));
@@ -61,7 +62,6 @@ int main() {
 				}
 				break;
 			case 5:
-				delete q;
 				test = false;
 				break;
 		}

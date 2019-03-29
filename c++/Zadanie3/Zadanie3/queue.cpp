@@ -50,18 +50,18 @@ queue::queue(initializer_list<string> InitList) {
 	this->qArray = new string[pojemnosc];
 
 	int iter = 0;
-	for (string value : InitList) {
+	for (auto& value : InitList) {
 		this->qArray[iter] = value;
 		iter++;
 	}
 }
 
 // Copy assignment operator
-queue &queue::operator=(const queue &otherQ) = default;
+queue &queue::operator=(const queue &otherQ) = default; 
 
 
 // Move assignment operator
-queue& queue::operator=(queue&& otherQ) {
+queue& queue::operator=(queue&& otherQ) noexcept {
 	if (this != &otherQ) {
 		delete[] this->qArray;
 
