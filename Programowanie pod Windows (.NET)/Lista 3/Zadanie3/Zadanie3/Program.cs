@@ -12,12 +12,12 @@ namespace Zadanie3
         {
             string path = @"D:\Documents\GitHub\UWr\Programowanie pod Windows (.NET)"
                             + @"\Lista 3\DoZadania3.txt";
-            
             string[] data = System.IO.File.ReadAllLines(path);
-            var subset =               from name in data 
-                                       group name[0] by name[0] into nameGroup
-                                       orderby nameGroup.Key
-                                       select nameGroup;
+
+            var subset = from name in data
+                         group name[0] by name[0] into nameGroup
+                         orderby nameGroup.Key
+                         select nameGroup; // albo nameGroup.Key
 
             foreach (IGrouping<char, char> x in subset)
             {
@@ -27,9 +27,8 @@ namespace Zadanie3
                     Console.WriteLine(name);
                 }
             }
-
-
         }
+
         static void Main(string[] args)
         {
             GroupNames();
