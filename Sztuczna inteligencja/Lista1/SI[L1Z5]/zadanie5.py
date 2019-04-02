@@ -11,32 +11,22 @@ def NumberOfBits(NewSeries, GivenSeries):
     return Count
 
 
-def opt_dist(s, D):
-    n = len(s)
-    pref = [0 for _ in range(n + 1)]
-    if s[0] == 1:
-        pref[0] = 1
+def opt_dist(sequence, D):
+    for i in range(1, len(sequence)):
+        sequence[i] += sequence[i-1]
+    min_value = len(sequence) + 1
+    k = 0
 
-    for i in range(1, n):
-        pref[i] = pref[i - 1]
-        if s[i] == 1:
-            pref[i] += 1
-
-    ans = 100
-    p = 0
-
-    while p + D - 1 < n:
+    while k + D - 1 < len(sequence):
         ones_before = 0
-        if p > 0:
-            ones_before = pref[p - 1]
-
-        ones_after = pref[n - 1] - pref[p + D - 1]
-        ones_in_range = pref[p + D - 1] - ones_before
-        changes_need = ones_before + ones_after + D - ones_in_range
-        ans = min(ans, changes_need)
-        p += 1
-
-    return ans
+        if k > 0:
+            ones_before = sequence[k-1]
+        ones_after = sequence[len(sequence) - 1] - sequence[k + D - 1]
+        ones_in_range = sequence[k + D - 1] - ones_before
+        changes_needed = ones_before + ones_after + D - ones_in_range
+        min_value = min(min_value, changes_needed)
+        k += 1
+    return min_value
 
 
 def is_good(row, row_number):

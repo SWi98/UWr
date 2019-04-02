@@ -4,6 +4,7 @@ import sys
 import copy
 import queue
 
+
 def FindSequences(S):
     ListOfSequences = []
     for i in range(0, len(S)):
@@ -14,11 +15,13 @@ def FindSequences(S):
             ListOfSequences[i][i] = '0'
     return ListOfSequences
 
+
 def IsTested(AllSeq, Seq):
     for i in range(0, len(AllSeq)):
         if AllSeq[i] == Seq:
             return True
     return False
+
 
 def IsGood(Seq, D):
     for i in range(0, len(Seq)):
@@ -40,22 +43,17 @@ def IsGood(Seq, D):
             return True
     return D == 0   # If there were no '1s' in the series
 
+
 def RemoveRepeating(AllSeries, SeqList):
     IndexesToRemove = []
-    #print(AllSeries)
-    #print(SeqList)
     for i in range(0, len(SeqList)):
         if IsTested(AllSeries, SeqList[i]):
             IndexesToRemove.append(i)
-           # print(SeqList[i])
-    #print("WSZYSTKIE:", AllSeries)
-    #print("AKTUALNE:", SeqList)
     for i in range(len(IndexesToRemove)-1, -1, -1):
-        #print("\nPRZED: SeqList:", SeqList, "IndexToRemove:", IndexesToRemove[i])
         del SeqList[IndexesToRemove[i]]
-        #print("PO: SeqList:", SeqList, "\n")
     del IndexesToRemove
     return SeqList
+
 
 def Steps(Res, Seq):
     Counter = 0
@@ -89,5 +87,4 @@ def opt_dist(Series, D):
 
 series = input()
 series = list(series)
-d = int(input())
-print(opt_dist(series, d))
+D = int(input())
