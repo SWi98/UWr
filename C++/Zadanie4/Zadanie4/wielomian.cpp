@@ -13,16 +13,23 @@ wielomian::wielomian() {
 wielomian::wielomian(int st, const double wsp[]) {
 	this->n = st;
 	this->a = new double[n+1];
+	if (wsp[n] == 0 && st!=0)
+		throw(invalid_argument("Leading coefficient equals 0"));
 	for (int i = 0; i < n+1; i++) {
 		this->a[i] = wsp[i];
 	}
 }
 
 wielomian::wielomian(initializer_list<double> wsp) {
+	if (wsp.size() == 0)
+		throw(invalid_argument("Empty list of arguments"));
+
 	this->n = wsp.size() - 1;
 	this->a = new double[n+1];
 	int i = 0;
 	for (double x : wsp) {
+		if (i == 0 && x == 0 && this->n != 0)
+			throw(invalid_argument("Leading coefficient equals 0"));
 		this->a[i] = x;
 		i++;
 	}
@@ -90,6 +97,15 @@ wielomian operator + (const wielomian& A, const wielomian& B) {
 	for (int i = 0; i <= B.n; i++)
 		wsp[i] += B.a[i];
 
+	int iter = n;
+	while (iter >= 0) {
+		if (wsp[iter] != 0) {
+			n = iter;
+			iter = 0;
+		}
+		iter--;
+	}
+
 	return wielomian(n, wsp);
 }
 
@@ -103,6 +119,15 @@ wielomian operator - (const wielomian &A, const wielomian &B) {
 		wsp[i] += A.a[i];
 	for (int i = 0; i <= B.n; i++)
 		wsp[i] -= B.a[i];
+
+	int iter = n;
+	while (iter >= 0) {
+		if (wsp[iter] != 0) {
+			n = iter;
+			iter = 0;
+		}
+		iter--;
+	}
 
 	return wielomian(n, wsp);
 }
@@ -121,7 +146,7 @@ wielomian operator * (const wielomian &u, const wielomian &v) {
 	return wielomian(n, wsp);
 }
 
-wielomian operator * (const double &c, const wielomian&B) {
+wielomian operator * (const double c, const wielomian&B) {
 	double *wsp = new double[B.n + 1];
 	for (int i = 0; i < B.n + 1; i++)
 		wsp[i] = B.a[i] * c;

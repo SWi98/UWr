@@ -21,7 +21,7 @@ public:
 	friend wielomian operator +(const wielomian &A, const wielomian &B);
 	friend wielomian operator -(const wielomian &A, const wielomian &B);
 	friend wielomian operator * (const wielomian &u, const wielomian &v);
-	friend wielomian operator * (const double &c, const wielomian&B);
+	friend wielomian operator * (const double c, const wielomian&B);
 	wielomian& operator += (const wielomian &v);
 	wielomian& operator -= (const wielomian &v);
 	wielomian& operator *= (const wielomian &v);
