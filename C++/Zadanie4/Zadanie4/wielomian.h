@@ -18,6 +18,8 @@ public:
 	wielomian& operator = (wielomian &&W);		// przypisanie przenoszace
 	~wielomian();								// destruktor
 	double oblicz(double val);					// Horner
+	double operator () (double val);
+	double operator [] (int i);
 	friend wielomian operator +(const wielomian &A, const wielomian &B);
 	friend wielomian operator -(const wielomian &A, const wielomian &B);
 	friend wielomian operator * (const wielomian &u, const wielomian &v);
