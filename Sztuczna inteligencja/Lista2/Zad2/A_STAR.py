@@ -13,17 +13,17 @@ def find_moves(state):
     result = []
     for i in range(2):  # 0 -> moving LEFT/RIGHT; 1 -> moving UP/DOWN
         for j in range(-1, 2, 2):
-            player_pos = copy.deepcopy(state[0])
-            chests = copy.deepcopy(state[1])
-            walls = copy.deepcopy(state[2])
-            moves = copy.deepcopy(state[6])
+            player_pos = state[0]
+            chests = copy.copy(state[1])
+            walls = state[2]
+            moves = copy.copy(state[6])
             moved = False
             if i == 0:
-                new_pos = (copy.deepcopy(player_pos[0]), copy.deepcopy(player_pos[1]) + j)
-                new_chest_pos = (copy.deepcopy(player_pos[0]), copy.deepcopy(player_pos[1]) + 2 * j)
+                new_pos = (player_pos[0], player_pos[1] + j)
+                new_chest_pos = (player_pos[0], player_pos[1] + 2 * j)
             else:
-                new_pos = (copy.deepcopy(player_pos[0]) + j, copy.deepcopy(player_pos[1]))
-                new_chest_pos = (copy.deepcopy(player_pos[0]) + 2 * j, copy.deepcopy(player_pos[1]))
+                new_pos = (player_pos[0] + j, player_pos[1])
+                new_chest_pos = (player_pos[0] + 2 * j, player_pos[1])
             if new_pos not in walls:
                 if new_pos in chests and new_chest_pos not in chests and new_chest_pos not in walls:
                     chests.remove(new_pos)
@@ -47,7 +47,7 @@ def find_moves(state):
                 new_state = [player_pos, chests, walls, state[3], state[4], state[5], moves]
                 if (player_pos, tuple(chests)) not in VISITED:
                     VISITED.add((player_pos, tuple(chests)))
-                    result.append(copy.deepcopy(new_state))
+                    result.append(new_state)
     return result
 
 
@@ -118,17 +118,18 @@ def heur(state):
     goals = state[3]
     chests = state[1]
     player_pos = state[0]
-    act_dist = int
     min_value = 99999
     for c in chests:
         for g in goals:
             act_dist = abs(c[0] - g[0]) + abs(c[1] - g[1])
             act_dist += abs(player_pos[0] - c[0]) + abs(player_pos[1] - c[1])
-            min_value = min(act_dist, min_value)
+            min_value = max(act_dist, min_value)
     return min_value
+
 
 def priority(state):
     return len(state[6]) + heur(state)
+
 
 # state == player_pos, chests, walls, goals, x, y, moves
 def BFS(state):
@@ -138,15 +139,10 @@ def BFS(state):
     while len(Q) > 0:
         new_states = find_moves(heapq.heappop(Q)[1])
         for s in new_states:
-            #if(s[6] == ['L', 'L', 'D', 'L', 'U']):
-           #     print_maze(s)
-           #     print(s[6])
-           #     print()
             if finished(s):
                 return s
             else:
                 heapq.heappush(Q, (priority(s), s))
-
 
 
 obj = init()

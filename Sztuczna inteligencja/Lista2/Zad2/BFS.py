@@ -13,9 +13,9 @@ def find_moves(state):
     for i in range(2):  # 0 -> moving LEFT/RIGHT; 1 -> moving UP/DOWN
         for j in range(-1, 2, 2):
             player_pos = state[0]
-            chests = copy.deepcopy(state[1])
+            chests = copy.copy(state[1])
             walls = state[2]
-            moves = copy.deepcopy(state[6])
+            moves = copy.copy(state[6])
             moved = False
             if i == 0:
                 new_pos = (player_pos[0], player_pos[1] + j)
@@ -54,7 +54,7 @@ def init():
     chests = set()
     goals = set()
     walls = set()
-    file = open("test3.txt")
+    file = open("test107.txt")
     lines = file.readlines()
     i = 0
     for y in lines:
