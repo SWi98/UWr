@@ -1,4 +1,4 @@
-#!"D:\Documents\GitHub\UWr\Sztuczna inteligencja\Lista2\Zadanie2\venv\Scripts\python.exe"
+#!"D:\Documents\GitHub\UWr\Sztuczna inteligencja\Lista2\Zad2\venv\Scripts\python.exe"
 # EASY-INSTALL-ENTRY-SCRIPT: 'setuptools==39.1.0','console_scripts','easy_install'
 __requires__ = 'setuptools==39.1.0'
 import re
