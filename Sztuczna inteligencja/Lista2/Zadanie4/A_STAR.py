@@ -69,7 +69,7 @@ def finished(state):
 def right20(state):
     player_pos = state[0]
     walls = state[2]
-    for i in range(20):
+    for i in range(18):
         for j in range(len(player_pos)):
             pos = player_pos[j]
             new_pos = (pos[0], pos[1] + 1)
@@ -78,10 +78,11 @@ def right20(state):
 
         state[5].append('R')
 
+
 def left20(state):
     player_pos = state[0]
     walls = state[2]
-    for i in range(20):
+    for i in range(18):
         for j in range(len(player_pos)):
             pos = player_pos[j]
             new_pos = (pos[0], pos[1] -1)
@@ -89,10 +90,11 @@ def left20(state):
                 player_pos[j] = new_pos
         state[5].append('L')
 
+
 def up20(state):
     player_pos = state[0]
     walls = state[2]
-    for i in range(20):
+    for i in range(18):
         for j in range(len(player_pos)):
             pos = player_pos[j]
             new_pos = (pos[0] - 1, pos[1])
@@ -100,10 +102,11 @@ def up20(state):
                 player_pos[j] = new_pos
         state[5].append('U')
 
+
 def down20(state):
     player_pos = state[0]
     walls = state[2]
-    for i in range(20):
+    for i in range(18):
         for j in range(len(player_pos)):
             pos = player_pos[j]
             new_pos = (pos[0]+1, pos[1])
@@ -129,11 +132,13 @@ def random_moves(state, perm):
 
 def merge_positions(state):
     player_pos = state[0]
+    merged = False
     sorted_pos = list(sorted(player_pos))
     for i in range(len(sorted_pos)-1):
         if sorted_pos[i] == sorted_pos[i+1]:
             player_pos.remove(sorted_pos[i])
-
+            merged = True
+    return merged
 
 # state == player_pos, goals, walls, x, y, moves
 def find_moves(state):
@@ -163,14 +168,18 @@ def find_moves(state):
                     moves.append('D')
                 else:
                     moves.append('U')
+
+            player_pos = sorted(player_pos)
             new_state = [player_pos, state[1], state[2], state[3], state[4], moves]
-            merge_positions(new_state)
+           # merge_positions(new_state)
             if tuple(player_pos) not in VISITED:
                 VISITED.add(tuple(player_pos))
                 result.append(new_state)
+
     return result
 
 
+# doing greedy moves to reduce the number of commandos
 def find_best_start(st):
     all_sequences = list(itertools.permutations(['U', 'L', 'D', 'R']))
     minPositions = 999999999
@@ -190,44 +199,46 @@ def convert(stat):
     return res
 
 
+def heuristic(state):
+    goals = state[1]
+    player_pos = state[0]
+    minimum_sum = len(state[0]) * 100000
+    for goal in goals:
+        current_sum = 0
+        for pos in player_pos:
+            current_sum += abs(pos[1] - goal[1]) + abs(pos[0] - goal[0])
+        if current_sum < minimum_sum:
+            minimum_sum = current_sum
+    return minimum_sum
+
+
 def priority(state):
-    return 1
+    return len(state[5]) + heuristic(state)
 
 
 # state == player_pos, goals, walls, x, y, moves
-'''def BFS(state):
-    Q = []
-    state = find_best_start(state)
+def BFS(state):
+    Q = []  # heap
+    #state = find_best_start(state)
     heapq.heappush(Q, (priority(state), state))
     VISITED.add(tuple(state[0]))
-    while not Q.empty():
-        new_states = find_moves(Q.get())
+    while len(Q) > 0:
+        st_from_Q = heapq.heappop(Q)[1]
+        if merge_positions(st_from_Q):
+            Q.clear()
+            #print("CLEARED")
+        new_states = find_moves(st_from_Q)
         for st in new_states:
             if finished(st):
                 file = open("zad_output.txt", "w+")
                 file.write(convert(st[5]))
                 return st
             else:
-                Q.put(st)'''
-
-
-def BFS(state):
-    Q = []  # heap
-    find_best_start(state)
-    heapq.heappush(Q, (priority(state), state))
-    VISITED.add(tuple(state[0]))
-    iter = 0
-    while len(Q) > 0:
-        iter += 1
-        new_states = find_moves(heapq.heappop(Q)[1])
-        for s in new_states:
-            if finished(s):
-                file = open("zad_output.txt", "w+")
-                file.write(convert(s[6]))
-                return s
-            else:
-                heapq.heappush(Q, (priority(s), s))
+                heapq.heappush(Q, (priority(st), st))
 
 
 s = init()
+start = time.time()
 BFS(s)
+end = time.time()
+#print(start - end)
