@@ -1,0 +1,44 @@
+############
+#SSSSSS#SSS#
+#SS#####SSS#
+#SSSS#SSSBS#
+#BBSSSS#SSS#
+#SS##SSSSSS#
+#SS##SSSSSS#
+############
+LLLLDDDDDULLULLLL 55.23292779922485 s
+LULLLLURULURDDRULLDR 1.6409895420074463 s
+
+
+##################
+#SSSSSSSSSSSSSSSS#
+######SSSS###SSSS#
+#SSSSSSSSS###SSSS#
+#SSS###SSSSSSSSSS#
+#SSS###SSSS#####S#
+#SS####SSSS#SSSSS#
+#SSSSSSSSSS#SSSSB#
+#SSSSSSSSSS#SSSSB#
+##################
+RRUURURRRRRURURURRRDDRRDRDDD 19.489886045455933 s
+RRRRRRRRDRRDRRDRRRRRDDUURRRRRRDRUUURRRDRDRDRDDD 0.02390313148498535 s
+
+
+######################
+#        #         G #
+#            ##      #
+#       S#############
+#      ###           #
+#      ###   #       #
+#        #   #       #
+## #######   ####S   #
+#   S           #    #
+#               ##   #
+#                    #
+#    #################
+#                    #
+#                    #
+#                  S #
+######################
+DRDDLLLUUULLLLLLLLLLLLLULLUUUUUUURRRRURRURDRRRRURRRRRRR 1.234790325164795 s
+ULLULLULLLLLLLDLLDDDLUULLLUUUUULLLLUURRRRUUURRDRRURRURRRRRRRRRRL 0.05385708808898926 s
