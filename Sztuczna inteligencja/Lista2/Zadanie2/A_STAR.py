@@ -118,12 +118,12 @@ def heur(state):
     goals = state[3]
     chests = state[1]
     player_pos = state[0]
-    min_value = 99999
+    min_value = 999999999999
     for c in chests:
         for g in goals:
             act_dist = abs(c[0] - g[0]) + abs(c[1] - g[1])
             act_dist += abs(player_pos[0] - c[0]) + abs(player_pos[1] - c[1])
-            min_value = max(act_dist, min_value)
+            min_value = min(act_dist, min_value)
     return min_value
 
 
