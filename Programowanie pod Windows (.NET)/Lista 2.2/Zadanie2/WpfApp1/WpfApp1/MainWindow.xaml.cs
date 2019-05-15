@@ -10,6 +10,7 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using System.Windows.Media.Animation;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
@@ -73,6 +74,14 @@ namespace WpfApp1
 
         private void ProgressBar_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
+
+        }
+
+        private void button3_Click(object sender, RoutedEventArgs e)
+        {
+            Duration duration = new Duration(TimeSpan.FromSeconds(1));
+            DoubleAnimation doubleAN = new DoubleAnimation(ProgressB.Value + 20, duration);
+            ProgressB.BeginAnimation(ProgressBar.ValueProperty, doubleAN);
 
         }
     }
