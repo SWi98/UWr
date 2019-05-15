@@ -106,11 +106,20 @@ namespace obliczenia {
 	wymierna::operator int() const {
 		return this->licz / this->mian;
 	}
+
+	string wymierna::get_whole() {
+		string res = "";
+		res += to_string(this->licz) + "/" + to_string(this->mian);
+		return res;
+	}
+	ostream& operator<<(ostream &wyj, const wymierna &W) {
+		double x = W; 
+		wyj << x;
+		return wyj;
+	}
 }
 
-/*ostream& operator<<(ostream &wyj, const wymierna &W) {
 
-}
 /*wymierna::~wymierna() {
 	delete &this->licz;
 	delete &this->mian;

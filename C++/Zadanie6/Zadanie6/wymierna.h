@@ -28,7 +28,9 @@ namespace obliczenia {
 		friend wymierna operator ! (const wymierna &W1);
 		operator double() const;
 		operator int() const;
-		//friend ostream& operator <<(ostream &wyj, const wymierna &W);
+		string get_whole();
+		friend ostream& operator <<(ostream &wyj, const wymierna &W);
 		//~wymierna();
 	};
+	
 }
