@@ -1,4 +1,5 @@
 #include "wymierna.h"
+using namespace obliczenia;
 
 string fraction(int num, int den) {
 	if (num == 0)

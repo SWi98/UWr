@@ -120,6 +120,7 @@
     <ClCompile Include="wymierna.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="wyjatek_wymierny.h" />
     <ClInclude Include="wymierna.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
