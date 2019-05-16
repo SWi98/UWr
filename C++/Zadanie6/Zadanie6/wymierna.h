@@ -9,8 +9,8 @@
 using namespace std;
 
 namespace obliczenia {
-	class wymierna {
 
+	class wymierna {
 	private:
 		int licz, mian;
 	public:
@@ -26,11 +26,12 @@ namespace obliczenia {
 		friend wymierna operator / (const wymierna &W1, const wymierna &W2);
 		friend wymierna operator - (const wymierna &W1);
 		friend wymierna operator ! (const wymierna &W1);
-		operator double() const;
-		operator int() const;
-		string get_whole();
+		explicit operator double() const;
+		explicit operator int() const;
+		string get_whole(); //
 		friend ostream& operator <<(ostream &wyj, const wymierna &W);
-		//~wymierna();
 	};
-	
+
+	string fraction(int num, int den);
+
 }

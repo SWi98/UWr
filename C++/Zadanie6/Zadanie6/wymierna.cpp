@@ -4,15 +4,6 @@ using namespace std;
 using namespace obliczenia;
 using namespace wyjatek_wymierny;
 
-/*int gcd(int a, int b) {
-	if(b > a)
-		swap(a, b);
-	if (b == 0)
-		return a;
-	a %= b;
-	return gcd(b, a);
-}*/
-
 namespace obliczenia {
 	wymierna::wymierna(int l, int m) {
 		if (m == 0)
@@ -113,11 +104,33 @@ namespace obliczenia {
 		return res;
 	}
 	ostream& operator<<(ostream &wyj, const wymierna &W) {
-		double x = W; 
-		wyj << x;
+		wyj << fraction(W.licz, W.mian);
 		return wyj;
 	}
+
+	// geeksforgeeks
+	string fraction(int num, int den) {
+		string res = "";
+		string start = to_string(num / den) + ",";
+		// Create a map to store already seen remainders, remainder is used as key and its position in 
+		// result is stored as value. 
+		map<int, int> mp;
+		mp.clear();
+		int rem = num % den;
+		while ((rem != 0) && (mp.find(rem) == mp.end())) {
+			mp[rem] = res.length();
+			rem = rem * 10;
+			int res_part = rem / den;
+			res += to_string(res_part);
+			rem = rem % den; \
+		}
+		start += res;
+		start.insert(start.size() - res.substr(mp[rem]).size(), "(");
+		start += ")";
+		return (rem == 0) ? "" : start; // res.substr(mp[rem]);
+	}
 }
+
 
 
 /*wymierna::~wymierna() {
