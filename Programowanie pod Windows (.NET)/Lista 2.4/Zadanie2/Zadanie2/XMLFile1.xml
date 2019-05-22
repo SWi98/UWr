@@ -1,0 +1,12 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<register xmlns:xs ="http://www.w3.org/2001/XMLSchema">
+  <xs:student Name ="Jan" Surname = "Kowalski" BirthDate ="1990-08-10">
+    <xs:Address City ="Katowice" Street ="Kolejowa"></xs:Address>
+    <xs:TemporaryAddress City ="Wrocław" Street ="Wyszyńskiego"></xs:TemporaryAddress>
+    <xs:Classes>
+      <xs:Programowanie_Windows Grade ="5.0"></xs:Programowanie_Windows>
+      <xs:AiSD Grade ="3.0"></xs:AiSD>
+      <xs:cpp Grade ="4.0"></xs:cpp>
+    </xs:Classes>
+  </xs:student>
+</register>
