@@ -1,0 +1,42 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema attributeFormDefault="unqualified" elementFormDefault="qualified" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:element name="register">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element maxOccurs="unbounded" name="student">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="Address">
+                <xs:complexType>
+                  <xs:attribute name="City" type="xs:string" use="required" />
+                  <xs:attribute name="Street" type="xs:string" use="required" />
+                </xs:complexType>
+              </xs:element>
+              <xs:element name="TemporaryAddress">
+                <xs:complexType>
+                  <xs:attribute name="City" type="xs:string" use="required" />
+                  <xs:attribute name="Street" type="xs:string" use="required" />
+                </xs:complexType>
+              </xs:element>
+              <xs:element name="Classes">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element maxOccurs="unbounded" name="SingleClass">
+                      <xs:complexType>
+                        <xs:attribute name="Name" type="xs:string" use="required" />
+                        <xs:attribute name="Grade" type="xs:decimal" use="required" />
+                      </xs:complexType>
+                    </xs:element>
+                  </xs:sequence>
+                </xs:complexType>
+              </xs:element>
+            </xs:sequence>
+            <xs:attribute name="Name" type="xs:string" use="required" />
+            <xs:attribute name="Surname" type="xs:string" use="required" />
+            <xs:attribute name="BirthDate" type="xs:date" use="required" />
+          </xs:complexType>
+        </xs:element>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+</xs:schema>

@@ -1,0 +1,29 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<register>
+  <student Name="Jan" Surname="Kowalski" BirthDate="1990-08-10">
+    <Address City="Katowice" Street="Kolejowa">
+    </Address>
+    <TemporaryAddress City="Wrocław" Street="Wyszyńskiego">
+    </TemporaryAddress>
+    <Classes>
+      <SingleClass Name="Programowanie_Windows" Grade="5.0">
+      </SingleClass>
+      <SingleClass Name="AiSD" Grade="3.0">
+      </SingleClass>
+      <SingleClass Name="C++" Grade="4.0">
+      </SingleClass>
+    </Classes>
+  </student>
+  <student Name="Karolina" Surname="Kwiatkowska" BirthDate="1998-01-20">
+    <Address City="Warszawa" Street="Marszałkowska">
+    </Address>
+    <TemporaryAddress City="Wrocław" Street="Podwale">
+    </TemporaryAddress>
+    <Classes>
+      <SingleClass Name="C++" Grade="3.0">
+      </SingleClass>
+      <SingleClass Name="Bazy danych" Grade="4.0">
+      </SingleClass>
+    </Classes>
+  </student>
+</register>
