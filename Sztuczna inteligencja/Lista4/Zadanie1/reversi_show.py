@@ -257,7 +257,7 @@ class Board:
                     if alpha >= beta:
                         break
                 return alpha
-            # enemy's move
+            # our move
             else:
                 for move in children:
                     new_board = custom_deepcopy(state)
