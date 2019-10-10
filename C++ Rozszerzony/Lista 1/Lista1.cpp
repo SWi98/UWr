@@ -10,7 +10,9 @@ void Zad1(){
 
 void Zad2(){
     cout <<"\n-----------------------------\n\n";
-    cout << " \?\?\"))))))\"\"\"(\" "<< endl;
+    string out = R"###(/n(") "( )")")###";
+    cout << out << endl;
+
 }
 
 void Zad3(){
