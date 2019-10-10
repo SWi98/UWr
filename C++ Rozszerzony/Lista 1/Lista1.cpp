@@ -1,5 +1,6 @@
 #include <iostream>
 #include <set>
+#include<math.h>
 
 using namespace std;
 
@@ -8,12 +9,12 @@ void Zad1(){
 }
 
 void Zad2(){
-    cout <<"-----------------------------\n";
+    cout <<"\n-----------------------------\n\n";
     cout << " \?\?\"))))))\"\"\"(\" "<< endl;
 }
 
 void Zad3(){
-    cout <<"-----------------------------\n";
+    cout <<"\n-----------------------------\n\n";
     using custom = set <string>;
     custom my_set {"jeden", "dwa", "trzy"};
   //  for (auto iter = my_set.begin(); iter != my_set.end(); iter++){
@@ -28,7 +29,7 @@ void Zad3(){
 enum class Names : uint16_t {Szymon, Igor, Dawid}; 
 
 void Zad4(string name, Names n){
-    cout <<"-----------------------------\n";
+    cout <<"\n-----------------------------\n\n";
 
     switch(n){
         case Names::Szymon:
@@ -54,12 +55,35 @@ auto Zad5(int n){
         return Zad5(n-1) + Zad5(n-2);
 }
 
+
+void Zad6(double a, double b, double c){
+    if(auto delta = b * b - 4 * a * c; delta >= 0){
+        if(delta == 0){
+            cout << -b / (2 * a) << endl;
+        }
+        else{
+            cout << (-b + sqrt(delta))/(2*a) << ",   " << (-b - sqrt(delta))/(2*a) << endl; 
+        }
+    }
+    else{
+        cout << "Brak" << endl;
+    }
+}
+
 int main(){  
     Zad1();
     Zad2();
     Zad3();
     Zad4("abc", Names::Szymon);
-    cout <<"-----------------------------\n";
-    cout << Zad5(5) << " " << Zad5(10) << " " << Zad5(100) << endl;
-    cout << typeid(Zad5(5)).name() << " " << typeid(Zad5(100)).name() << endl;
+    cout <<"\n-----------------------------\n\n";
+    cout << "Liczby Lucasa: 5, 0 i 40: \n";
+    cout << Zad5(5) << " " << Zad5(10) << " " << Zad5(40) << endl;
+    //cout << typeid(Zad5(5)).name() << " " << typeid(Zad5(100)).name() << endl;
+    cout <<"\n-----------------------------\n\n";
+    cout << "x^2:  ";
+    Zad6(1, 0, 0);
+    cout << "x^2 - 4x + 3:  ";
+    Zad6(1, -4, 3);
+    cout << "5x^2 + 100:  ";
+    Zad6(5, 0, 100);
 }

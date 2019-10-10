@@ -4,7 +4,7 @@ import itertools
 def sum23(a, b):
     return round(a + 0.77 * b, 2)
 
-def vat_faktura(zakupy):
+def vat_faktura(zakupy): 
     return functools.reduce(sum23, zakupy)
 
 def vat_paragon(zakupy):
@@ -25,16 +25,23 @@ def romb(n):
     h = 1
     spaces = n 
     for _ in range(n):
-        print(' ' * spaces, '#' * h)
+        print(" " * spaces + '#' * h)
         h += 2
         spaces += -1
     h -= 4
     spaces += 2
     for _ in range(n):
-        print(' ' * spaces, '#' * h)
+        print(" " * spaces +  '#' * h)
         h -= 2
         spaces += 1
         
+
+#def zaszyfruj(tekst, klucz):
+ #   res = ""
+  #  bin_klucz = bin(klucz)
+   # for i in range(len(tekst)):
+    #    ascii_num = ord(tekst[i])
+     #   bin_num = bin(ascii_num)
 
 
 
@@ -43,7 +50,6 @@ print(vat_paragon([1, 2, 3, 4, 20.5, 115.29]))
 drobne(19)
 drobne(7)
 drobne(51)
-romb(5)
 romb(1)
-romb(0)
+romb(5)
 romb(10)
