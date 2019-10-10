@@ -12,16 +12,12 @@ void Zad2(){
     cout <<"\n-----------------------------\n\n";
     string out = R"###(/n(") "( )")")###";
     cout << out << endl;
-
 }
 
 void Zad3(){
     cout <<"\n-----------------------------\n\n";
     using custom = set <string>;
     custom my_set {"jeden", "dwa", "trzy"};
-  //  for (auto iter = my_set.begin(); iter != my_set.end(); iter++){
-   //     cout << iter << endl;     CZEMU NIE DZIAŁA?
-   // }
 
     for (auto iter : my_set){
         cout << iter << endl;
@@ -78,7 +74,7 @@ int main(){
     Zad3();
     Zad4("abc", Names::Szymon);
     cout <<"\n-----------------------------\n\n";
-    cout << "Liczby Lucasa: 5, 0 i 40: \n";
+    cout << "Liczby Lucasa: 5, 10 i 40: \n";
     cout << Zad5(5) << " " << Zad5(10) << " " << Zad5(40) << endl;
     //cout << typeid(Zad5(5)).name() << " " << typeid(Zad5(100)).name() << endl;
     cout <<"\n-----------------------------\n\n";
