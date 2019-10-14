@@ -1,39 +1,31 @@
-fn count_red_beads(n: u32) -> u32 {
-    if n < 2{
-        0
-    }
-    else{
-        2*(n-1)
-    }
+fn string_to_number(s: &str) -> i32 {
+    s.parse().unwrap()
 }
-
 fn main(){
 }
 
 #[cfg(test)]
-mod tests{
-    use super::count_red_beads;
+mod tests {
+    use super::string_to_number;
+    
     #[test]
     fn test1(){
-        assert_eq!(count_red_beads(0), 0);
+        assert_eq!(string_to_number("1234"), 1234);
     }
     #[test]
     fn test2(){
-        assert_eq!(count_red_beads(1), 0);
+        assert_eq!(string_to_number("605"), 605);
     }
     #[test]
     fn test3(){
-        assert_eq!(count_red_beads(3), 4);
+        assert_eq!(string_to_number("1405"), 1405);
     }
     #[test]
     fn test4(){
-        assert_eq!(count_red_beads(5), 8);
+        assert_eq!(string_to_number("-7"), -7);
     }
     #[test]
     fn test5(){
-        assert_eq!(count_red_beads(10), 18);
+        assert_eq!(string_to_number("0"), 0);
     }
-    
-    
-
 }
