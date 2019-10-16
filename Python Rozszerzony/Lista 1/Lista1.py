@@ -10,7 +10,6 @@ def vat_faktura(zakupy):
 def vat_paragon(zakupy):
     return 0.77 * sum(zakupy)
     
-
 def drobne(kwota):
     noms = {1 : 0, 2 : 0, 5 : 0, 10 : 0, 20: 0}
     nom = 20 

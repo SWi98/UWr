@@ -1,12 +1,9 @@
 
 fn printer_error(s: &str) -> String {
-   // let text = String::from s;
-   // let x = 
-
     let mut len: i32 = 0;
     let mut errors: i32 = 0; 
     for letter in s.chars(){
-        if !(letter as u32 >= 97 && letter as u32 <= 109){
+        if !(letter  >= 'a' && letter  <= 'm'){
             errors = errors + 1;
         }
         len = len + 1;
