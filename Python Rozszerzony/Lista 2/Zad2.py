@@ -35,7 +35,6 @@ class True_(Formula):
     def __str__(self):
         return "T"
     
-    
 
 class False_(Formula):
     def oblicz(self, zmienne):
@@ -123,7 +122,7 @@ test1 = Iff(Zmienna("x"), Zmienna("x"))
 test1.test()
 test2 = Impl(Zmienna("x"), And(Zmienna("y"), True_()))
 test2.test()
-test3 = Impl(Neg(And(Zmienna("A"), Zmienna("B"))), Alt(Neg(Zmienna("A")), Neg(Zmienna("B"))))
+test3 = Iff(Neg(And(Zmienna("A"), Zmienna("B"))), Alt(Neg(Zmienna("A")), Neg(Zmienna("B"))))
 test3.test()
 test4 = Impl(False_(), Zmienna("y"))
 test4.test()
