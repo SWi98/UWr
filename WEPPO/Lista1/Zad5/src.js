@@ -19,10 +19,21 @@ function iter_fib(n){
     return b;
 }
 
-for(var i = 1; i <= 5; i++){
-    console.time();
-    console.log("\n", i, "fib(", 30, ") =", rec_fib(30));
-    console.timeEnd();
+function test_rec(n){
+    for(var i = 1; i <= n; i++){
+        console.time();
+        console.log("\n", "fib(", n, ") =", rec_fib(n));
+        console.timeEnd();
+    }
 }
+
+function test_iter(n){
+    for(var i = 1; i <= n; i++){
+        console.time();
+        console.log("\n", "fib(", n, ") =", iter_fib(n));
+        console.timeEnd();
+    }
+}
+
 
 //IE dla 35
