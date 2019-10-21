@@ -22,7 +22,7 @@ function iter_fib(n){
 function test_rec(n){
     for(var i = 1; i <= n; i++){
         console.time();
-        console.log("\n", "fib(", n, ") =", rec_fib(n));
+        console.log("\n", "fib(", i, ") =", rec_fib(i));
         console.timeEnd();
     }
 }
@@ -30,10 +30,11 @@ function test_rec(n){
 function test_iter(n){
     for(var i = 1; i <= n; i++){
         console.time();
-        console.log("\n", "fib(", n, ") =", iter_fib(n));
+        console.log("\n", "fib(", i, ") =", iter_fib(i));
         console.timeEnd();
     }
 }
 
+test_rec(43);
 
 //IE dla 35

@@ -4,15 +4,22 @@ function z1(){
     for(var i = 1; i < 100000; i += 1){
         var digits = i.toString().split('').map(x => parseInt(x));
         var sum = digits.reduce( (x, y) => x + y);
+        var add = true;
         if (i % sum != 0) {
-            continue; 
+            add = false;
+            continue;
         }
-        for (var digit in digits){
-            if (digits % digit != 0){
-                continue;
+
+        for (var j = 0; j < digits.length; j++){
+            if (i % digits[j] != 0){
+                add = false; 
+                break;
             }
         }
-        res.push(i);
+
+        if(add){
+            res.push(i);
+        }
     }
 
     console.log(res);
@@ -44,4 +51,5 @@ function z2(){
     console.log(primes);
 }
 
-z2();
+console.log(5 % 0 == 10 % 0);
+z1();
