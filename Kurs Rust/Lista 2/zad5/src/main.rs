@@ -35,11 +35,36 @@ fn test1(){
 fn test2(){
     assert_eq!(536489, next_bigger_number(534986));
 }
-/*#[test]
 #[test]
+fn test3(){
+    assert_eq!(-1, next_bigger_number(1));
+}
 #[test]
+fn test4(){
+    assert_eq!(20071, next_bigger_number(20017));
+}
 #[test]
+fn test5(){
+    assert_eq!(-1, next_bigger_number(4321));
+}
+
 #[test]
+fn test6(){
+    assert_eq!(41, next_bigger_number(14));
+}
 #[test]
+fn test7(){
+    assert_eq!(531, next_bigger_number(513));
+}
 #[test]
-#[test]*/
+fn test8(){
+    assert_eq!(414, next_bigger_number(144));
+}
+#[test]
+fn test9(){
+    assert_eq!(441, next_bigger_number(414));
+}
+#[test]
+fn test10(){
+    assert_eq!(-1, next_bigger_number(998877665544332211));
+}
