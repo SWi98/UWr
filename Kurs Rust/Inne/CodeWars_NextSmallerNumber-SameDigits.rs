@@ -1,7 +1,7 @@
 fn next_smaller_number(n: u64) -> Option<u64> {
     let mut number: Vec<u64> = n.to_string().chars().map(|x| x.to_digit(10).unwrap() as u64).collect();
     number.reverse();
-    println!("{:?}", number);
+    //println!("{:?}", number);
     for i in 0..(number.len()-1){
         //iterating from the end of our number (0..len because our vector is reversed) we want to find the first digit
         //bigger than its predecessor (in 1234 it's 3 because it's smaller than 4 and we iterated from the end)

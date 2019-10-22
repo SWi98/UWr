@@ -14,6 +14,7 @@ fn next_bigger_number(n: i64) -> i64 {
                     s_d_position = j;
                 }
             }
+
             number.swap(i+1, s_d_position);
             &number[0..(i+1)].sort();
             &number[0..(i+1)].reverse();
