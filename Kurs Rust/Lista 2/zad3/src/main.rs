@@ -3,26 +3,26 @@ fn string_into_int(s: String) -> i32{
 }
 
 fn summy(strng: &str) -> i32 {
-    let mut sum: i32 = 0;
+    strng.split(" ").map(|x| x.parse::<i32>().unwrap().sum())
+    /*let mut sum: i32 = 0;
     let mut acc: String = "".to_string();
     for c in strng.chars(){
         if c != ' '{
             acc.push(c);
         }
         else{
-            println!("_{}_", acc);
             sum = sum + string_into_int(acc);
             acc = "".to_string();
         }
     }
     if acc != "".to_string(){
         sum = sum + string_into_int(acc)
-    }
+    }*/
     return sum;
 }
 
 fn main() {
-    println!("{}", summy("20 10 30 40"));
+   // println!("{}", summy("20 10 30 40"));
     //println!("{}", string_into_int("102".to_string()));
 }
 

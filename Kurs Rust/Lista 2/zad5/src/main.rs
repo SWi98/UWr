@@ -19,7 +19,7 @@ fn next_bigger_number(n: i64) -> i64 {
             &number[0..(i+1)].sort();
             &number[0..(i+1)].reverse();
             number.reverse();
-            return number.iter().fold(0, |acc, x| acc*10 + x)
+            return number.iter().fold(0, |acc, x| acc*10 + x);
         }
     }
     -1
