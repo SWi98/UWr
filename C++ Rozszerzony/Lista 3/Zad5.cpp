@@ -6,7 +6,7 @@ using namespace std;
 void fill_vector(vector<vector<double>> &matrix){
     for(int i = 0; i < matrix.size(); i++){
         for(int j = 0; j < matrix[i].size(); j++){
-            double random = (rand() % 16 + 5) / 10;
+            double random = (rand() % 16 + 5) / 10.0;
             matrix[i][j] = random;
         }
     }
@@ -34,12 +34,19 @@ int main(){
     vector<vector<double>> matrix10000(10000, vector<double>(10000));
     fill_vector(matrix10); fill_vector(matrix100); fill_vector(matrix1000); fill_vector(matrix10000);
 
+
+    vector<vector<double>> test(100, vector<double>(100));
     chrono::duration<double> sum(0);
     for(int i = 0; i < 10; i++){
         auto start = chrono::high_resolution_clock::now();
-        matrix100 = mult(matrix100);
+        test = mult(matrix100);
         auto end = chrono::high_resolution_clock::now();
         sum += chrono::duration_cast<chrono::duration<double>>(end - start);
     }
     cout << sum.count() / 10 << endl;
+
+    auto start = chrono::high_resolution_clock::now();
+    matrix1000 = mult(matrix1000);
+    auto end = chrono::high_resolution_clock::now();
+    cout << chrono::duration_cast<chrono::duration<double>>(end - start).count() << endl;
 }

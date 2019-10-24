@@ -17,11 +17,12 @@ void zad1(){
 
 void zad2(){
     cout << "Najmniejszy double: " << numeric_limits<double>::min() << endl;
-    cout << "Największy ujemny double: " << -1 * numeric_limits<double>::min() << endl;
-    cout << "Największy double: " << numeric_limits<double>::max() << "\n\n";
-    cout << 1.0 - numeric_limits<double>::min() << endl;
+    cout << "Największy ujemny double: " << -numeric_limits<double>::min() << endl;
+    cout << "Największy double: " << numeric_limits<double>::max() << endl;
+    cout << 1.0 - numeric_limits<double>::min() << "\n\n";
+
     cout << "Najmniejszy float: " << numeric_limits<float>::min() << endl;
-    cout << "Największy dodatni float: " << -1 * numeric_limits<float>::min() << endl;
+    cout << "Największy ujemny float: " << -numeric_limits<float>::min() << endl;
     cout << "Największy float: " <<numeric_limits<float>::max() << endl;
     cout << (float)1.0 - numeric_limits<float>::min() << endl;
 }
@@ -39,5 +40,9 @@ void zad3(){
 
 
 int main(){
+    zad1();
+    cout << endl;
     zad2();
+    cout << endl;
+    zad3();
 }
