@@ -96,9 +96,6 @@ function test_auto_mem(n){
     console.log("\n\n");
 }
 
-test_rec(42);
-test_iter(42);
-test_mem(42);
 test_auto_mem(42);
 
 //IE dla 35
