@@ -31,7 +31,7 @@ console.log(arr.length, arr[5])
 console.log()
 
 
-// ZAD5 
+// ZAD4 
 let x = 10 
 let y = new String("zzzz")
 let z = "zzzzzzzz"
