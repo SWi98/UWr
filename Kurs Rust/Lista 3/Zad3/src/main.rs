@@ -13,7 +13,7 @@ impl Cipher {
             encMap.insert(v.0, v.1);
             decMap.insert(v.1, v.0);
         }
-        Cipher{encodeMap : encMap, decodeMap : decMap}
+        Cipher{encodeMap : map1.chars().zip(map2.chars()).collect(), decodeMap : decMap}
     }
   
     fn encode(&self, string: &str) -> String {
