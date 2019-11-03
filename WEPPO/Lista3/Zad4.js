@@ -1,14 +1,19 @@
 function createFs(n) { // tworzy tablicę n funkcji
     var fs = []; // i-ta funkcja z tablicy ma zwrócić i
 
-    function inner(j){
+   /* function inner(j){
         fs[j] = function(){
             return j;
         }
-    }
+    }*/
 
     for ( var i=0; i<n; i++ ) {
-        inner(i);
+        //inner(i);
+        fs[i] = function(j){
+            return function(){
+                return j;
+            }
+        }(i);
     };
     return fs;
 }
