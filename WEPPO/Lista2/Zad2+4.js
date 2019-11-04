@@ -9,8 +9,8 @@ let pizza = {
 let arr = [1, 2, 3, 4, 5, 6]
 let test = [3]
 
-console.log(pizza["1+2"])
-console.log(pizza[1+2])  // using [], firstly the argument in [] is evaluated
+console.log("pizza[\"1+2\"] = ", pizza["1+2"])
+console.log("pizza[1+2] = ", pizza[1+2])  // using [], firstly the argument in [] is evaluated
 //console.log(pizza."toppings") // When working with dot notation, property identifies can only be alphanumeric (and _ and $).
 console.log(pizza.toppings)     // Properties can’t start with a number.
 //console.log(pizza.3) 
