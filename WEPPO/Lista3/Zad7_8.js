@@ -15,8 +15,8 @@ function fib() {
 }
 
 function *fib2() {
-    var _prev = 0;
-    var _current = 1;
+    let  _prev = 0;
+    let _current = 1;
     while(true){
         _current += _prev;
         _prev = _current - _prev;
@@ -32,7 +32,7 @@ function* take(it, top) {
 // zwróć dokładnie 10 wartości z potencjalnie
 // "nieskończonego" iteratora/generatora
 
-for (let num of take( fib(), 10 ) ) {
+for (let num of take( fib2(), 10 ) ) {
     console.log(num["value"]);
 }
     
