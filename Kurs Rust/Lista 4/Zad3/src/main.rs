@@ -15,7 +15,7 @@ pub fn highlight(code: &str) -> String {
                 'F' => res += "<span style=\"color: pink\">F",
                 'L' => res += "<span style=\"color: red\">L",
                 'R' => res += "<span style=\"color: green\">R",
-                '0' | '1' | '2' | '3' | '4' | '5' | '6' | '7' | '8' | '9' => 
+                '0'..='9' => 
                 res += &("<span style=\"color: orange\">".to_string() + &vec[i].to_string()),
                 '(' | ')' => res += &vec[i].to_string(),
                 _ => ()

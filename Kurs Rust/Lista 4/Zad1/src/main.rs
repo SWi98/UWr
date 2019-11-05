@@ -11,7 +11,7 @@ fn find_digit(num: i32, nth: i32) -> i32 {
 
     let str = number.to_string().chars().rev().collect::<String>();
 
-    if (str.len() as i32) < nth{
+    if str.len() < nth as usize{
         return 0;
     }
 

@@ -3,6 +3,7 @@ use std::collections::HashSet;
 fn sum_pairs(ints: &[i8], s: i8) -> Option<(i8, i8)> {
     let mut seen = HashSet::new();
     seen.insert(ints[0]);
+
     for i in 1..ints.len(){
         let needed = s - ints[i];
         if seen.contains(&needed){
@@ -10,6 +11,7 @@ fn sum_pairs(ints: &[i8], s: i8) -> Option<(i8, i8)> {
         }
         seen.insert(ints[i]);
     }
+    
     return None;
 }
 
