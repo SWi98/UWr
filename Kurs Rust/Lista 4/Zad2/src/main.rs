@@ -16,5 +16,34 @@ fn test2() {
 }
 #[test]
 fn test3() {
-    assert_eq!(even_numbers(&vec!(6, -25, 3, 7, 5, 5, 7, -3, 23), 1), vec!(6));
+    assert_eq!(even_numbers(&vec!(1, 2, 3, 4), 1), vec!(4));
 }
+#[test]
+fn test4() {
+    assert_eq!(even_numbers(&vec!(), 0), vec!());
+}
+#[test]
+fn test5() {
+    assert_eq!(even_numbers(&vec!(1, 2, 3, 4), 0), vec!());
+}
+#[test]
+fn test6() {
+    assert_eq!(even_numbers(&vec!(-2, -4, -6, -8), 4), vec!(-2, -4, -6, -8));
+}
+#[test]
+fn test7() {
+    assert_eq!(even_numbers(&vec!(1, 2, 3, 4), 1), vec!(4));
+}
+#[test]
+fn test8() {
+    assert_eq!(even_numbers(&vec!(100, 25, 10, 5), 2), vec!(100, 10));
+}
+#[test]
+fn test9() {
+    assert_eq!(even_numbers(&vec!(1, 3, 5, 7, 9), 0), vec!());
+}
+#[test]
+fn test10() {
+    assert_eq!(even_numbers(&vec!(111, 199, 200, 211), 1), vec!(200));
+}
+

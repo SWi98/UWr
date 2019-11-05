@@ -41,3 +41,19 @@ fn main() {
     println!("{}", highlight("FF"));
 }
 
+#[test]
+fn test1() {
+    assert_eq!(
+        highlight("F3RF5LF7"),
+        r#"<span style="color: pink">F</span><span style="color: orange">3</span><span style="color: green">R</span><span style="color: pink">F</span><span style="color: orange">5</span><span style="color: red">L</span><span style="color: pink">F</span><span style="color: orange">7</span>"#,
+    );
+}
+#[test]
+fn test2(){
+    assert_eq!(
+        highlight("FFFR345F2LL"),
+        r#"<span style="color: pink">FFF</span><span style="color: green">R</span><span style="color: orange">345</span><span style="color: pink">F</span><span style="color: orange">2</span><span style="color: red">LL</span>"#,
+    );
+}
+
+

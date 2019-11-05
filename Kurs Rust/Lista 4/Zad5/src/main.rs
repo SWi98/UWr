@@ -92,3 +92,13 @@ fn test8() {
     let l8 = [5, 9, 13, -3];
     assert_eq!(sum_pairs(&l8, 10), Some((13, -3)));
 }
+
+#[test]
+fn test9() {
+    assert_eq!(sum_pairs(&[1, 2], 3), Some((1, 2)));
+}
+
+#[test]
+fn test10() {
+    assert_eq!(sum_pairs(&[1, 2, 3, 4, 5, 6, 7, 8, 9], 10), Some((4, 6)));
+}
