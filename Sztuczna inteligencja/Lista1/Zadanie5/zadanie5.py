@@ -3,14 +3,6 @@ import random
 import time
 
 
-def NumberOfBits(NewSeries, GivenSeries):
-    Count = 0
-    for i in range(0, len(NewSeries)):
-        if NewSeries[i] != GivenSeries[i]:
-            Count += 1
-    return Count
-
-
 def opt_dist(sequence, D):
     for i in range(1, len(sequence)):
         sequence[i] += sequence[i-1]
@@ -26,6 +18,7 @@ def opt_dist(sequence, D):
         changes_needed = ones_before + ones_after + D - ones_in_range
         min_value = min(min_value, changes_needed)
         k += 1
+        
     return min_value
 
 
@@ -47,7 +40,6 @@ def is_done():
     for i in range(len(columns)):
         if not is_good(columns[i], column_values[i]):
             return False
-
     return True
 
 
@@ -62,8 +54,8 @@ def mark_pixel(iter_):
             columns[jj][row] = 1
             rows[row][jj] = 1
 
-    if iter_ % 10 == 0:
-        f = 1
+    #if iter_ % 10 == 0:
+   #     f = 1
 
     else:
         random_row = random.randint(0, r-1)

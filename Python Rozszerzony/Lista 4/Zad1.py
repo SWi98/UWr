@@ -1,5 +1,6 @@
 from math import sqrt
 import timeit
+import time
 
 '''def pierwsze_imperatywnaEr(n):
     res = []
@@ -38,10 +39,22 @@ def pierwsze_skladana(n):
 def pierwsze_funkcyjna(n):
     return list(filter(lambda x: x == 2 or x == 3 or list(filter(lambda y: x % y == 0 , range(2, round(sqrt(x)) + 1))) == [] , range(2, n+1)))
     
-
+start_time = time.time()
+pierwsze_imperatywna(2000)
+print(f"Iteracyjnie: {time.time() - start_time}")
+start_time = time.time()
+pierwsze_imperatywna(2000)
+print(f"Iteracyjnie: {time.time() - start_time}")  
+start_time = time.time()
+pierwsze_imperatywna(2000)
+print(f"Iteracyjnie: {time.time() - start_time}")  
+start_time = time.time()
+pierwsze_imperatywna(2000)
+print(f"Iteracyjnie: {time.time() - start_time}")      
+'''
 ti = timeit.Timer("pierwsze_imperatywna(2000)", "from __main__ import pierwsze_imperatywna\nprint(\"Iteracyjnie:\")")
 print(ti.timeit(200))
 ts = timeit.Timer("pierwsze_skladana(2000)", "from __main__ import pierwsze_skladana\nprint(\"Lista skladana:\")")
 print(ts.timeit(200))
 tf = timeit.Timer("pierwsze_funkcyjna(2000)", "from __main__ import pierwsze_funkcyjna\nprint(\"Funkcyjnie:\")")
-print(tf.timeit(200))
+print(tf.timeit(200))'''

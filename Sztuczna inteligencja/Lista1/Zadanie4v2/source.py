@@ -36,6 +36,4 @@ def test(s):
     for i in range(0, 6):
         print(opt_dist(s, i))
 
-print(opt_dist([0,0,0], 0))
-
 

@@ -17,6 +17,8 @@ namespace Zad1
         {
             Response.Cookies["testCookie"].Value = "testowa wartosc " + DateTime.Now.ToString();
             Response.Cookies["testCookie"].Expires = DateTime.Now.AddDays(1);
+           // HttpContext.Current.Request;
+           // Request
         }
 
         public void ToWebForm2(object sender, EventArgs e)
