@@ -61,9 +61,9 @@ def mark_pixel(iter_):
             columns[jj][row] = 1
             rows[row][jj] = 1
 
-    if iter_ % 10 == 0:
-        pass
-    elif True:
+    if iter_ % 30 == 0:
+        change(random.randint(0, r-1), random.randint(0, r-1))
+    else:
         random_row = random.randint(0, r-1)
         while is_good(rows[random_row], rows[random_row]):
             random_row = random.randint(0, r - 1)
@@ -86,7 +86,7 @@ def mark_pixel(iter_):
 
 
 def start():
-    global rows, columns, row_values, column_values
+    global rows, columns, row_values, column_values, r, c
     i = 0
     while i < 300:
         mark_pixel(i)
@@ -96,9 +96,9 @@ def start():
             print(i)
             return 0
         if i == 299:
-            rows = [copy.deepcopy([0 for ind in range(c)]) for j in range(r)]
-            columns = [copy.deepcopy([0 for ind in range(r)]) for j in range(c)]
-            print("XXXXX")
+            rows = [[0 for ind in range(c)] for j in range(r)]
+            columns = [[0 for ind in range(r)] for j in range(c)]
+            print("i=299")
             i = 0
         i += 1
 
@@ -118,7 +118,6 @@ for i in range(c):
 
 rows = [copy.deepcopy([0 for ind in range(c)]) for j in range(r)]
 columns = [copy.deepcopy([0 for i in range(r)]) for j in range(c)]
-print(rows, columns, row_values, column_values)
 st = time.time()
 start()
 en = time.time()

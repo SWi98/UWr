@@ -1,0 +1,1 @@
+res.append(next(my_iter))

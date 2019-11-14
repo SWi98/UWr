@@ -3,9 +3,10 @@
 #include<vector>
 #include <math.h>
 #include <cstdlib>
+#include <time.h>
 using namespace std;
 
-int SIZE = 10000; 
+const int SIZE = 10000; 
 vector<int> primes = vector<int>();
 
 class counter{
