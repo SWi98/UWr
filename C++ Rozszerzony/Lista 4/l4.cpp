@@ -161,8 +161,7 @@ pair<set<int>::iterator, set<int>::iterator> zad4_3(set<int> iset){
             if(*iter < minimal){
                 smallest = iter;
                 minimal = *iter;
-            }
-            
+            }     
             if(*iter > maximal){
                 biggest = iter;
                 maximal = *iter;
@@ -219,6 +218,7 @@ int main(){
         cout << x << endl;
         iset.insert(x);
     }
+    
     cout << "------------------------------------------\n";
     cout << "a = 10; b = 40 (vector): "; zad1_1(vec, 10, 40);
     cout << "\na = 3; b = 10 (list): "; zad1_2(lstr, 3, 10);
