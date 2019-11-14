@@ -1,6 +1,6 @@
 #include <iostream>
 #include <set>
-#include<math.h>
+#include <math.h>
 
 using namespace std;
 

@@ -6,6 +6,8 @@
         "xstring": "cpp",
         "list": "cpp",
         "set": "cpp",
-        "xtree": "cpp"
+        "xtree": "cpp",
+        "limits": "cpp",
+        "utility": "cpp"
     }
 }
