@@ -15,22 +15,21 @@ namespace Zad1
         {
             Response.Write("ZAD2:<br>");
 
+            Response.Write("Request.Cookies[\"testCookie\"] != null == ");
+            Response.Write(Request.Cookies["testCookie"] != null);
             if (Request.Cookies["testCookie"] != null)
             {
                 /*Response.Write(Request.Cookies["testCookie"].Value + "<br>");
-
                 Request.Cookies["testCookie"].Expires = DateTime.Now.AddDays(-1);
-
                 Response.Write(Request.Cookies["testCookie"].Expires + "<br>");
                 Response.Write("Request.Cookies[\"testCookie\"] != null == " +
                     Request.Cookies["testCookie"] != null);*/
 
-                 HttpCookie cookie = new HttpCookie("testCookie");
-                 cookie.Expires = DateTime.Now.AddDays(-1);
-                 Response.Cookies.Add(cookie);
-                 Response.Write("Request.Cookies[\"testCookie\"] != null == " +
-                     Request.Cookies["testCookie"] != null);
+                HttpCookie cookie = new HttpCookie("testCookie");
+                cookie.Expires = DateTime.Now.AddDays(-1);
+                Response.Cookies.Add(cookie);
             }
+
         }
 
         private void Z3()
@@ -46,6 +45,7 @@ namespace Zad1
 
         protected void Page_Load(object sender, EventArgs e)
         {
+
             Z2();
             Z3();
 

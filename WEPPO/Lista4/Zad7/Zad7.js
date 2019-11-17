@@ -1,4 +1,10 @@
 var fs = require("fs");
+var readline = require("readline");
+
+var lineReader = readline.createInterface({
+    input: fs.createReadStream("logs.txt")
+});
+
 var res; 
 
 function IPsorting(a, b){
@@ -11,7 +17,30 @@ function IPsorting(a, b){
     return 0;
 }
 
-fs.readFile("logs.txt", "utf8", (err, data) =>{
+dict = {};
+
+lineReader.on("line", (line) =>{
+    line = line.split(" ");
+    if (line[0] in dict){
+        dict[line[0]] += 1;
+    }
+    else{
+        dict[line[0]] = 1;
+    }
+})
+
+lineReader.on("close", () => {
+    var dict_as_array = Object.keys(dict).map((key) => [key, dict[key]]);
+    dict_as_array.sort(IPsorting);
+    //console.log(dict_as_array);
+
+    for(let i = 0; i < 3; i++){
+        if(i < dict_as_array.length){
+            console.log(dict_as_array[i][0]);
+        }
+}});
+
+/*fs.readFile("logs.txt", "utf8", (err, data) =>{
     if (err){
         throw err;
     }
@@ -38,7 +67,7 @@ fs.readFile("logs.txt", "utf8", (err, data) =>{
             console.log(dict_as_array[i][0]);
         }
     }
-})
+})*/
 
 
 //cd "D:\Documents\GitHub\UWr\WEPPO\Lista4\Zad7"

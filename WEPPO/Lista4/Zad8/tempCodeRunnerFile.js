@@ -1,0 +1,1 @@
+cd "D:\Documents\GitHub\UWr\WEPPO\Lista4\Zad8"

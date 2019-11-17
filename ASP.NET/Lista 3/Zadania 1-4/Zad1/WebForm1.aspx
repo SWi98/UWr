@@ -7,19 +7,20 @@
     <title></title>
 </head>
 <body>
+    Zadanie 1:
+    <br />
     <form action = "http://ap1.myserver.com/" method = "get">
         <input type ="text" name ="1"/>
         <input type ="submit" value ="GET instead of POST" />
     </form>
-    <br />
     <form id="form1" runat="server">
-        <div>
-            <asp:LinkButton ID ="LinkButton1" OnClick ="LinkButton1_Click" runat ="server">POSTInsteadOfGET</asp:LinkButton>
-        </div>
+        <asp:TextBox ID ="TestBox1" Text ="Enter POST value" runat ="server"></asp:TextBox>
+        <asp:LinkButton ID ="LinkButton2" runat ="server" Text="post" PostBackUrl ="http://ap1.myserver.com/" />
         <br />
-        <div>
-            <a href ="WebForm2.aspx">WebForm2</a>
-        </div>
+        <!-- <asp:LinkButton ID ="LinkButton1" OnClick ="LinkButton1_Click" runat ="server">POSTInsteadOfGET
+            </asp:LinkButton>-->
+        <br />
+        <a href ="WebForm2.aspx">Zadanie 2, 3</a>
         <br />
     </form>
 </body>
