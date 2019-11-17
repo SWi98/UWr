@@ -99,7 +99,7 @@ function zad3(){
 function zad4(){
     (async function (){
         let dataFromFile;
-        dataFromFile = await fs.promises.readFile("logs2.txt", "utf-8");
+        dataFromFile = await fs.promises.readFile("logs2.txt", "utf-8");    //Now readFile returns Promise object.
         res = dataFromFile.split("\n");
         for(var line of res){
             line = line.split(" ");
