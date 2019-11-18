@@ -57,7 +57,7 @@ function zad1(){
 
 function zad2(){
     fspromise("logs2.txt", "utf-8").then(data => console.log(data));
-    (async function(){                                      // async means that the function will return promise
+    (async function(){                                      
         var res = await fspromise("logs2.txt", "utf-8");    // The keyword await makes JavaScript wait until that promise settles 
         console.log(res);                                   // and returns its result.
     })();

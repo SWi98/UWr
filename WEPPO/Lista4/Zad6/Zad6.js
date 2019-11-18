@@ -1,5 +1,5 @@
 var fs = require("fs");
-fs.readFile("some_data.txt", "utf8", (err, data) =>{
+fs.readFile(String.raw`D:\Documents\GitHub\UWr\WEPPO\Lista4\Zad6\some_data.txt`, "utf8", (err, data) =>{
     if (err){
         throw err; 
     }

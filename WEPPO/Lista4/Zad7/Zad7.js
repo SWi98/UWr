@@ -2,7 +2,7 @@ var fs = require("fs");
 var readline = require("readline");
 
 var lineReader = readline.createInterface({
-    input: fs.createReadStream("logs.txt")
+    input: fs.createReadStream(String.raw`D:\Documents\GitHub\UWr\WEPPO\Lista4\Zad7\logs.txt`)
 });
 
 var res; 
@@ -19,7 +19,7 @@ function IPsorting(a, b){
 
 dict = {};
 
-lineReader.on("line", (line) =>{
+lineReader.on("line", (line) =>{        //The 'line' event is emitted whenever the input stream receives an end-of-line input
     line = line.split(" ");
     if (line[0] in dict){
         dict[line[0]] += 1;

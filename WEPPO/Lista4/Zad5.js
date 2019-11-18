@@ -9,9 +9,9 @@ function _once(){
 
 function _on(){
     process.stdin.on('readable', function(){
-        let name;                               // 'readable' event allows us to read the data whenever we want
-        name = this.read();                     // read() reads everything so we don't have to pause the stream (?)
-        console.log(name.toString());
+        let name;                               //  'readable' event allows us to read the data whenever we want
+        name = this.read();                     //  The readable.read() method pulls some data out of the internal buffer and returns it. 
+        console.log(name.toString());           //  If no data available to be read, null is returned. 
         //process.stdin.pause();
     })
 }

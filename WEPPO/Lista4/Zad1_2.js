@@ -4,7 +4,7 @@ var Tree = function(val, l, r){
     this.right = r; 
 }
 
-Tree.prototype[Symbol.iterator] = function*(){
+Tree.prototype[Symbol.iterator] = function*(){  //The Symbol.iterator specifies the default iterator for an object. Used by for...of.
     function * helper(node){
         if(node.left != null){
             yield* helper(node.left);       // The yield* is used to delegate to another generator or iterable object.
@@ -27,8 +27,8 @@ var node1 = new Tree(10, leaf1, leaf2);
 var node2 = new Tree(20, leaf3, null);
 var highest_node = new Tree(100, node1, node2);
 
-console.log(highest_node.left.value);
-console.log(highest_node.right.right)
+//console.log(highest_node.left.value);
+//console.log(highest_node.right.right)
 //console.log(highest_node.right.right.value);
 for(var x of highest_node){
     console.log(x);
