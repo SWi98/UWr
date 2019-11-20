@@ -16,7 +16,7 @@ namespace Zadanie7
         {
             HttpPostedFile file = Request.Files["File1"];
 
-            if(file != null)
+            if(file != null && file.ContentLength > 0)
             {
                 byte[] bytes;
                 BinaryReader binaryReader = new BinaryReader(file.InputStream);
