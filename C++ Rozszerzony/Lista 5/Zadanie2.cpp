@@ -20,9 +20,7 @@ class Graph{
     vector<Node> nodes;
     vector<Edge> edges;
 
-
     public:
-
     void AddNode(int val, string name){
         for(Node n : nodes){
             if (n.value == val || n.name == name)
@@ -32,6 +30,24 @@ class Graph{
         node.value = val;
         node.name = name;
         nodes.push_back(node);
+    }
+
+    void DeleteNode(int val){
+        // How to iterate with foreach over vector using pointers
+        //cout << val << endl;
+        
+        for(int i = 0; i < nodes.size(); i++){
+            //cout << nodes[i].name << ", liczba sasiadow = " << nodes[i].Adjacent.size() << ": ";
+            for(list<Node*>::iterator iter = nodes[i].Adjacent.begin(); iter != nodes[i].Adjacent.end(); iter++){
+               // cout << (*iter)-> name << ", ";
+                cout << (*iter)->name << " " << *iter << endl;
+                if((*iter)->value == val){
+                    //cout << nodes[i].name << " " << (*iter)->name << endl;
+                    //nodes[i].Adjacent.remove(*iter);  // https://stackoverflow.com/questions/596162/can-you-remove-elements-from-a-stdlist-while-iterating-through-it
+                }
+            }
+           // cout << endl;
+        }
     }
 
     void AddEdge(int val, int val2, int weight){
@@ -73,7 +89,7 @@ class Graph{
         for(Node &n : nodes){
             if(n.name== name1){
                 firstPresent = true;
-                first = &n;
+                  first = &n;
                 break;
             }
         }
@@ -96,8 +112,8 @@ class Graph{
 
     void Print(){
         for(Node &node: nodes){
-            cout << node.name << " " << node.value << endl;
-            cout << "Adjacent to: "; 
+            cout << node.name << " " << node.value << " " << &node;
+            cout << ", Adjacent to: "; 
             for(Node* neighbor : node.Adjacent){
                 cout << neighbor->value<< " " << neighbor->name << "; ";
             }
@@ -113,4 +129,6 @@ int main(){
     graph.AddEdge(1, 2, 1);
     graph.AddEdge(1, 3, 1);
     graph.Print();
+    graph.DeleteNode(1);
+    //graph.Print();
 }
