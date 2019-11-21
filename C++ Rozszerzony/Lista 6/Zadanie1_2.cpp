@@ -36,7 +36,7 @@ void uniform(){
 
 void binomial(){
     default_random_engine generator;
-    binomial_distribution<int> distr(100, (double)0.5);
+    binomial_distribution<int> distr(100, (double)0.5);  // The value obtained is the number of successes in a sequence of t yes/no experiments, each of which succeeds with probability p.
     ofstream myfile;
     myfile.open("binomial.csv");
     for(int i = 0; i < 1000; i++){

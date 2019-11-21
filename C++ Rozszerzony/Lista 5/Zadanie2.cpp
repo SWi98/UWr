@@ -38,7 +38,7 @@ class Graph{
         for(list<Node>::iterator nodeiter = nodes.begin(); nodeiter != nodes.end(); nodeiter++){
             for(list<Node*>::iterator iter = nodeiter->Adjacent.begin(); iter != nodeiter->Adjacent.end(); iter++){
                 if((*iter)->value == val){
-                    iter = nodeiter->Adjacent.erase(iter);          // https://stackoverflow.com/questions/596162/can-you-remove-elements-from-a-stdlist-while-iterating-through-it
+                    iter = nodeiter->Adjacent.erase(iter);          
                 }
             }
         }
@@ -52,6 +52,30 @@ class Graph{
 
         for(int i = 0; i < edges.size(); i++){
             if (edges[i].first.value == val || edges[i].second.value == val){
+                edges.erase(edges.begin() + i);
+                i--;
+            }
+        }
+    }
+
+    void DeleteNode(string val){
+        for(list<Node>::iterator nodeiter = nodes.begin(); nodeiter != nodes.end(); nodeiter++){
+            for(list<Node*>::iterator iter = nodeiter->Adjacent.begin(); iter != nodeiter->Adjacent.end(); iter++){
+                if((*iter)->name == val){
+                    iter = nodeiter->Adjacent.erase(iter);          
+                }
+            }
+        }
+
+        for(list<Node>::iterator nodeiter = nodes.begin(); nodeiter != nodes.end(); nodeiter++){
+            if(nodeiter->name == val){
+                nodes.erase(nodeiter++);
+                break;
+            }
+        }
+
+        for(int i = 0; i < edges.size(); i++){
+            if (edges[i].first.name == val || edges[i].second.name == val){
                 edges.erase(edges.begin() + i);
                 i--;
             }
@@ -135,6 +159,25 @@ class Graph{
             if(nodeiter->value == val1 || nodeiter->value == val2){
                 for(list<Node*>::iterator iter = nodeiter->Adjacent.begin(); iter != nodeiter->Adjacent.end(); iter++){
                     if((*iter)->value == val1 || (*iter)->value == val2){
+                        iter = nodeiter->Adjacent.erase(iter);          // https://stackoverflow.com/questions/596162/can-you-remove-elements-from-a-stdlist-while-iterating-through-it
+                    }
+                }
+            }
+        }
+    }
+
+    void DeleteEdge(string val1, string val2){
+        for(int i = 0; i < edges.size(); i++){
+            if(edges[i].first.name == val1 || edges[i].first.name == val2 || edges[i].second.name == val1 || edges[i].second.name == val2){
+                edges.erase(edges.begin() + i);
+                i--;
+            }
+        }
+
+        for(list<Node>::iterator nodeiter = nodes.begin(); nodeiter != nodes.end(); nodeiter++){
+            if(nodeiter->name == val1 || nodeiter->name == val2){
+                for(list<Node*>::iterator iter = nodeiter->Adjacent.begin(); iter != nodeiter->Adjacent.end(); iter++){
+                    if((*iter)->name == val1 || (*iter)->name == val2){
                         iter = nodeiter->Adjacent.erase(iter);          // https://stackoverflow.com/questions/596162/can-you-remove-elements-from-a-stdlist-while-iterating-through-it
                     }
                 }
@@ -238,6 +281,7 @@ int main(){
     graph.AddNode(4, "cztery");
     graph.AddNode(5, "piec");
     graph.AddEdge("cztery", "piec", 0);
+    
     cout << "Sciezka od 1 do 4: " << graph.FindPath(1, 4) << ", " << graph.FindPath("jeden", "cztery") << endl;
     cout << "Sciezka od 1 do 3: " << graph.FindPath(1, 3) << ", " << graph.FindPath("jeden", "trzy") << endl;
     cout << "Sciezka od 1 do 31: " << graph.FindPath(1, 31) << ", " << graph.FindPath("jeden", "trzyjeden") << endl;
