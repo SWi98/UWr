@@ -1,6 +1,8 @@
 #include <iostream>
 #include <vector>
 #include <list>
+#include <queue>
+#include <set>
 using namespace std;
 
 struct Node{
@@ -17,7 +19,7 @@ struct Edge{
 
 class Graph{
     private:
-    vector<Node> nodes;
+    list<Node> nodes;
     vector<Edge> edges;
 
     public:
@@ -33,20 +35,26 @@ class Graph{
     }
 
     void DeleteNode(int val){
-        // How to iterate with foreach over vector using pointers
-        //cout << val << endl;
-        
-        for(int i = 0; i < nodes.size(); i++){
-            //cout << nodes[i].name << ", liczba sasiadow = " << nodes[i].Adjacent.size() << ": ";
-            for(list<Node*>::iterator iter = nodes[i].Adjacent.begin(); iter != nodes[i].Adjacent.end(); iter++){
-               // cout << (*iter)-> name << ", ";
-                cout << (*iter)->name << " " << *iter << endl;
+        for(list<Node>::iterator nodeiter = nodes.begin(); nodeiter != nodes.end(); nodeiter++){
+            for(list<Node*>::iterator iter = nodeiter->Adjacent.begin(); iter != nodeiter->Adjacent.end(); iter++){
                 if((*iter)->value == val){
-                    //cout << nodes[i].name << " " << (*iter)->name << endl;
-                    //nodes[i].Adjacent.remove(*iter);  // https://stackoverflow.com/questions/596162/can-you-remove-elements-from-a-stdlist-while-iterating-through-it
+                    iter = nodeiter->Adjacent.erase(iter);          // https://stackoverflow.com/questions/596162/can-you-remove-elements-from-a-stdlist-while-iterating-through-it
                 }
             }
-           // cout << endl;
+        }
+
+        for(list<Node>::iterator nodeiter = nodes.begin(); nodeiter != nodes.end(); nodeiter++){
+            if(nodeiter->value == val){
+                nodes.erase(nodeiter++);
+                break;
+            }
+        }
+
+        for(int i = 0; i < edges.size(); i++){
+            if (edges[i].first.value == val || edges[i].second.value == val){
+                edges.erase(edges.begin() + i);
+                i--;
+            }
         }
     }
 
@@ -78,6 +86,8 @@ class Graph{
         Edge edge;
         edge.first = *first;
         edge.second = *second;
+        edge.weight = weight;
+        edges.push_back(edge);
     }
 
     void AddEdge(string name1, string name2, int weight){
@@ -103,22 +113,116 @@ class Graph{
         if (!firstPresent || !secondPresent)
             return;
         
+        
+        first->Adjacent.push_back(second);
+        second->Adjacent.push_back(first);
         Edge edge;
-        edge.first.Adjacent.push_back(second);
-        edge.second.Adjacent.push_back(first);
         edge.first = *first;
         edge.second = *second;
+        edge.weight = weight;
+        edges.push_back(edge);
+    }
+
+    void DeleteEdge(int val1, int val2){
+        for(int i = 0; i < edges.size(); i++){
+            if(edges[i].first.value == val1 || edges[i].first.value == val2 || edges[i].second.value == val1 || edges[i].second.value == val2){
+                edges.erase(edges.begin() + i);
+                i--;
+            }
+        }
+
+        for(list<Node>::iterator nodeiter = nodes.begin(); nodeiter != nodes.end(); nodeiter++){
+            if(nodeiter->value == val1 || nodeiter->value == val2){
+                for(list<Node*>::iterator iter = nodeiter->Adjacent.begin(); iter != nodeiter->Adjacent.end(); iter++){
+                    if((*iter)->value == val1 || (*iter)->value == val2){
+                        iter = nodeiter->Adjacent.erase(iter);          // https://stackoverflow.com/questions/596162/can-you-remove-elements-from-a-stdlist-while-iterating-through-it
+                    }
+                }
+            }
+        }
+    }
+
+    bool FindPath(int val1, int val2){
+        bool IsFirstIn = false, IsSecondIn = false;
+        Node first;
+        for(list<Node>::iterator nodeiter = nodes.begin(); nodeiter != nodes.end(); nodeiter ++){
+            if(nodeiter->value == val1){
+                IsFirstIn = true;
+                first = *nodeiter;
+            }
+            else if(nodeiter->value == val2)
+                IsSecondIn = true;
+        }
+        if(!IsFirstIn || !IsSecondIn)
+            return false;
+
+        queue<Node> q; 
+        set<int> visited; 
+        q.push(first);
+        while(q.size() > 0){
+            Node parent = q.front();
+            visited.insert(parent.value);
+            q.pop();
+            for(list<Node*>::iterator nodeiter = parent.Adjacent.begin(); nodeiter != parent.Adjacent.end(); nodeiter++){
+                if((*nodeiter)->value == val2){
+                    return true;
+                }
+                if(visited.find((*nodeiter)->value) == visited.end())
+                    q.push(**nodeiter);
+            }
+        }
+        return false;
+    }
+
+    bool FindPath(string name1, string name2){
+        bool IsFirstIn = false, IsSecondIn = false;
+        Node first;
+        for(list<Node>::iterator nodeiter = nodes.begin(); nodeiter != nodes.end(); nodeiter ++){
+            if(nodeiter->name == name1){
+                IsFirstIn = true;
+                first = *nodeiter;
+            }
+            else if(nodeiter->name == name2)
+                IsSecondIn = true;
+        }
+        if(!IsFirstIn || !IsSecondIn){
+            return false;
+        }
+
+        queue<Node> q; 
+        q.push(first);
+        set<int> visited; 
+        while(q.size() > 0){
+            Node parent = q.front();
+            visited.insert(parent.value);
+            q.pop();
+            for(list<Node*>::iterator nodeiter = parent.Adjacent.begin(); nodeiter != parent.Adjacent.end(); nodeiter++){
+                if((*nodeiter)->name == name2){
+                    return true;
+                }
+                if(visited.find((*nodeiter)->value) == visited.end())
+                    q.push(**nodeiter);
+            }
+        }
+        return false;
     }
 
     void Print(){
+        cout << "------------------\nNodes:\n";
         for(Node &node: nodes){
-            cout << node.name << " " << node.value << " " << &node;
+            cout << node.name << " " << node.value; // << " " << &node;
             cout << ", Adjacent to: "; 
             for(Node* neighbor : node.Adjacent){
-                cout << neighbor->value<< " " << neighbor->name << "; ";
+                cout << neighbor->value << " " << neighbor->name << "; ";
             }
             cout << "\n";
         }
+        cout << "\nEdges:\n";
+        for(Edge edge: edges){
+            cout << edge.first.name << " " << edge.first.value << " <-> ";
+            cout  << edge.second.name << " " << edge.second.value << "; - weight of edge = " << edge.weight << endl;
+        }
+        cout <<"------------------\n";
     }
 };
 int main(){
@@ -128,7 +232,18 @@ int main(){
     graph.AddNode(2, "dwa");
     graph.AddEdge(1, 2, 1);
     graph.AddEdge(1, 3, 1);
+    graph.AddEdge(3, 2, 10);
+    graph.AddNode(31, "trzyjeden");
+    graph.AddEdge(3, 31, 1);
+    graph.AddNode(4, "cztery");
+    graph.AddNode(5, "piec");
+    graph.AddEdge("cztery", "piec", 0);
+    cout << "Sciezka od 1 do 4: " << graph.FindPath(1, 4) << ", " << graph.FindPath("jeden", "cztery") << endl;
+    cout << "Sciezka od 1 do 3: " << graph.FindPath(1, 3) << ", " << graph.FindPath("jeden", "trzy") << endl;
+    cout << "Sciezka od 1 do 31: " << graph.FindPath(1, 31) << ", " << graph.FindPath("jeden", "trzyjeden") << endl;
     graph.Print();
-    graph.DeleteNode(1);
-    //graph.Print();
+    /*graph.DeleteNode(1);
+    graph.Print();
+    graph.DeleteEdge(3, 2);
+    graph.Print();*/
 }
