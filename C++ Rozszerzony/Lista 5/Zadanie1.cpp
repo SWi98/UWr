@@ -62,7 +62,7 @@ void toONP(string expression){
                 }
             }
             else if(current == "+" || current == "-"){
-                while(st.top() != "(" && st.top() != ")"){
+                while(!st.empty() && (st.top() == "+" ||st.top() == "-" || st.top() == "*" ||st.top() == "/")){
                     out.push(st.top());
                     st.pop();
                 }
@@ -93,8 +93,4 @@ int main(){
     string expression;
     getline(cin, expression);
     toONP(expression);
-    queue<int> test;
-    for(int i = 0; i < 5; i++){
-        test.push(i);
-    }
 }
