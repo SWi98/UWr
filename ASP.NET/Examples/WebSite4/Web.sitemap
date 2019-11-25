@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<siteMap xmlns="http://schemas.microsoft.com/AspNet/SiteMap-File-1.0" >
+  <siteMapNode url="x" title="y" >
+    <siteMapNode url="Default.aspx" title="Menu1" description="" roles="USER">
+      <siteMapNode url="Submenu1.aspx" title="Submenu1"  description="" />
+      <siteMapNode url="Submenu2.aspx" title="Submenu2"  description="" />
+    </siteMapNode>
+    <siteMapNode url="Default2.aspx" title="Menu2" description="" roles="ADMIN" >
+      <siteMapNode url="Admin/Admin1.aspx" title="Submenu1"  description="" />
+      <siteMapNode url="Submenu22.aspx" title="Submenu2"  description="" />
+    </siteMapNode>
+  </siteMapNode>
+</siteMap>

@@ -14,6 +14,9 @@
         "xutility": "cpp",
         "random": "cpp",
         "string": "cpp",
-        "queue": "cpp"
+        "queue": "cpp",
+        "tuple": "cpp",
+        "xiosbase": "cpp",
+        "chrono": "cpp"
     }
 }
