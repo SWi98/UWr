@@ -10,6 +10,10 @@
     <form id="form1" runat="server">
         <div>
             <%=User.Identity.Name%>
+            <br />
+            <%=User.Identity.AuthenticationType %>
+            <br />
+            <%=User.IsInRole("Administrator") %>
         </div>
     </form>
 </body>

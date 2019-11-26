@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
 using System.Web;
 using System.Web.UI;
@@ -12,7 +13,15 @@ namespace Zadanie1
         protected void Page_Load(object sender, EventArgs e)
         {
             var user = System.Security.Principal.WindowsIdentity.GetCurrent().Name;
-            Response.Write(user);
+            //Response.Write(user);
+
+
+            var cs = ConfigurationManager.AppSettings["cs2"];
+
+            using ( var ctx = new PersonCatalogDataContext(cs))
+            {
+                var persons = ctx.Persons.ToList();
+            }
         }
     }
 }
