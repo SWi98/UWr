@@ -1,24 +1,36 @@
 #include <iostream>
 #include <vector>
 #include <chrono>
+#include <tuple>
+#include <queue>
 using namespace std;
 
+class MyComparator{
+    public:
+        int Operator(const pair<int, int>& node1, const pair<int, int>& node2){
+            return node1.first > node2.second;
+        }
+};
+
+struct Edge{
+    int node; 
+    long long int weight;
+    Edge(n, w): node(n), weight(w){}
+};
+
 int main(){
-    int N, K;/*
+    int N, K;
     cin >> N >> K;
-    vector<int> cities(N);*/
-    auto start = chrono::steady_clock::now();
-    for(int i = 0; i < 1000000000; i++){
-        long long int y = 91239132913;
-        y = y / 2;
+    vector<long long int> deputies(N);
+    for(int i = 0; i < N; i++){
+        cin >> deputies[i];
     }
-    auto end = chrono::steady_clock::now();
-    cout << chrono::duration_cast<chrono::milliseconds>(end - start).count() << endl;
-    auto start2 = chrono::steady_clock::now();
-    for(int i = 0; i < 1000000000; i++){
-        long long int z = 91239132913;
-        z = z >> 1;
+    vector<vector<edge>> Graph(N);
+    for(int i = 0; i < N-1; i++){
+        int u, v, w; 
+        cin >> u >> v >> w;
+        u--; v--;
+        Graph[u].push_back(v, w);
+        Graph[v].push_back(u, w);
     }
-    auto end2 = chrono::steady_clock::now();
-    cout << chrono::duration_cast<chrono::milliseconds>(end - start).count() << endl;
 }

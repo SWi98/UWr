@@ -16,12 +16,18 @@ namespace Zadanie1
             //Response.Write(user);
 
 
-            var cs = ConfigurationManager.AppSettings["cs2"];
+            var cs = ConfigurationManager.AppSettings["cn2"];
 
             using ( var ctx = new PersonCatalogDataContext(cs))
             {
                 var persons = ctx.Persons.ToList();
+                foreach(var person in persons)
+                {
+                    Response.Write(person);
+                    Response.Write("<br/>");
+                }
             }
+            
         }
     }
 }
