@@ -128,22 +128,22 @@ public class MyMembershipProvider : MembershipProvider
 
                 var salt = (from p in passwords
                             where p.ID == id.First()
-                            select p.Salt);
+                            select p.Salt).First();
                 var iterations = (from p in passwords
                                   where p.ID == id.First()
-                                  select p.Iterations);
+                                  select p.Iterations).First();
                 var userPassword = (from p in passwords
                                     where p.ID == id.First()
-                                    select p.Value);
-                byte[] PasswordBytes = System.Text.Encoding.ASCII.GetBytes(password + salt.First());
+                                    select p.Value).First();
+                byte[] PasswordBytes = System.Text.Encoding.ASCII.GetBytes(password + salt);
                 byte[] EncryptedBites = ripemd160.ComputeHash(PasswordBytes);
                 string EncryptedPassword = System.Text.Encoding.ASCII.GetString(EncryptedBites);
-                for (int i = 2; i <= iterations.First(); i++)
+                for (int i = 2; i <= iterations; i++)
                 {
                     EncryptedBites = ripemd160.ComputeHash(System.Text.Encoding.ASCII.GetBytes(EncryptedPassword));
                     EncryptedPassword = System.Text.Encoding.ASCII.GetString(EncryptedBites);
                 }
-                if (EncryptedPassword == userPassword.First())
+                if (EncryptedPassword == userPassword)
                 {
                     return true;
                 }
