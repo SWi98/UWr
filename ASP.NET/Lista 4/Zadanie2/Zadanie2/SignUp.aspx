@@ -21,7 +21,7 @@
             <asp:RequiredFieldValidator ID="PasswordValidator" runat="server"
                 ControlToValidate="NewPassword1" ForeColor="red" ErrorMessage="Wymagane pole" />
             <br />
-            <asp:Button ID="Submit1" runat="server" OnClick="CreateNewUser" />
+            <asp:Button ID="Submit1" runat="server" OnClick="CreateNewUser" Text="Stwórz użytkownika"/>
         </div>
     </form>
 </body>

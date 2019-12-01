@@ -10,7 +10,9 @@
     <form id="form1" runat="server">
         <div>
             
-        <asp:Login ID="Login1" runat="server" BackColor="#F7F6F3" BorderColor="#E6E2D8" BorderPadding="4" BorderStyle="Solid" BorderWidth="1px" Font-Names="Verdana" Font-Size="0.8em" ForeColor="#333333">
+        <asp:Login ID="Login1" CreateUserText="Create a new user..." CreateUserUrl="SignUp.aspx" runat="server" 
+            BackColor="#F7F6F3" BorderColor="#E6E2D8" BorderPadding="4" BorderStyle="Solid" BorderWidth="1px" 
+            Font-Names="Verdana" Font-Size="0.8em" ForeColor="#333333" DestinationPageUrl="WebForm1.aspx">
             <TitleTextStyle BackColor="#5D7B9D" Font-Bold="True" Font-Size="0.9em" ForeColor="White" />
             <InstructionTextStyle Font-Italic="True" ForeColor="Black" />
             <TextBoxStyle Font-Size="0.8em" />
