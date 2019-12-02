@@ -27,8 +27,11 @@ namespace Zadanie2
         private void CreateUser(string name, string password)
         {
             var cs = ConfigurationManager.AppSettings["UDB"];
+
             using (var UDB = new UserDataContext(cs))
             using (var PDB = new PasswordDataContext(cs))
+            using (var UserRolesDB = new UserRolesDataContext(cs))
+            using (var RolesDB = new RolesDataContext(cs))
             {
                 var users = UDB.UserInfos.ToList();
                 var passwords = PDB.Passwords.ToList();
@@ -36,6 +39,15 @@ namespace Zadanie2
 
                 if (users.Any())
                 {
+                    var UserWithTheSameName = (from u in users
+                                               where u.Username == name
+                                               select u);
+                    if (UserWithTheSameName.Any())
+                    {
+                        Response.Write("User with this username already exists!</br>");
+                        return;
+                    }
+
                     var lastRecord = (from u in users
                                       orderby u.ID descending
                                       select u).First();
@@ -44,15 +56,17 @@ namespace Zadanie2
                         "VALUES ({0}, {1})", newID, name);
                 }
 
-                else        // If there are no users, new ID must be 1
+                else        // If there are no users, new ID must be equal to 1
                 {
                     newID = 1;
                     UDB.ExecuteCommand("INSERT INTO UserCatalog.dbo.UserInfo (ID, Username)" +
                         "VALUES ({0}, {1})", newID, name);
                 }
-                int Iterations = 1;
+
+                int Iterations = 10;
                 RIPEMD160 ripemd160 = RIPEMD160.Create();
                 string Salt = RandomString(15);
+
                 byte[] PasswordBytes = System.Text.Encoding.ASCII.GetBytes(password + Salt);
                 byte[] EncryptedBites = ripemd160.ComputeHash(PasswordBytes);
                 string EncryptedPassword = System.Text.Encoding.ASCII.GetString(EncryptedBites);
@@ -65,6 +79,7 @@ namespace Zadanie2
                 PDB.ExecuteCommand("INSERT INTO UserCatalog.dbo.Password (ID, Salt, Value, Iterations, Date)" +
                     "VALUES ({0}, {1}, {2}, {3}, {4})", newID, Salt, EncryptedPassword, Iterations,
                     DateTime.Now);
+                Roles.AddUserToRole(name, "User");
             }
 
         }

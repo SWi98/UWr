@@ -45,6 +45,18 @@ public class MyMembershipProvider : MembershipProvider
         throw new NotImplementedException();
     }
 
+    private string RandomString(int length)
+    {
+        var AllChars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()-=_+[]{}|;:'\"/?.>,<";
+        var RandomChars = new char[length];
+        var random = new Random();
+        for (int i = 0; i < length; i++)
+        {
+            RandomChars[i] = AllChars[random.Next(length)];
+        }
+        return new string(RandomChars);
+    }
+
     public override MembershipUser CreateUser(string username, string password, string email, string passwordQuestion, string passwordAnswer, bool isApproved, object providerUserKey, out MembershipCreateStatus status)
     {
         throw new NotImplementedException();
@@ -132,9 +144,10 @@ public class MyMembershipProvider : MembershipProvider
                 var iterations = (from p in passwords
                                   where p.ID == id.First()
                                   select p.Iterations).First();
-                var userPassword = (from p in passwords
+                var CorrectPassword = (from p in passwords
                                     where p.ID == id.First()
                                     select p.Value).First();
+
                 byte[] PasswordBytes = System.Text.Encoding.ASCII.GetBytes(password + salt);
                 byte[] EncryptedBites = ripemd160.ComputeHash(PasswordBytes);
                 string EncryptedPassword = System.Text.Encoding.ASCII.GetString(EncryptedBites);
@@ -143,12 +156,10 @@ public class MyMembershipProvider : MembershipProvider
                     EncryptedBites = ripemd160.ComputeHash(System.Text.Encoding.ASCII.GetBytes(EncryptedPassword));
                     EncryptedPassword = System.Text.Encoding.ASCII.GetString(EncryptedBites);
                 }
-                if (EncryptedPassword == userPassword)
-                {
-                    return true;
-                }
 
+                return EncryptedPassword == CorrectPassword;
             }
+
             return false;
         }
     }
