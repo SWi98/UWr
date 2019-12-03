@@ -16,9 +16,16 @@ namespace Zadanie2
             string[] roles = Roles.GetRolesForUser(User.Identity.Name);
             for(int i = 0; i < roles.Length; i++)
             {
+                Response.Write("Role:<br/>");
                 Response.Write(roles[i]);
                 Response.Write("<br/>");
             }
+        }
+
+        protected void Logout(object sender, EventArgs e)
+        {
+            FormsAuthentication.SignOut();
+            FormsAuthentication.RedirectToLoginPage();
         }
     }
 }

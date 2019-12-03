@@ -42,7 +42,8 @@ fn main() {
     println!("{}", decoder.decode_morse(".... . -.--   .--- ..- -.. ."));
 }
 
+#[test]
 fn test1(){
     let decoder = MorseDecoder::new();
-    assert_eq!(decoder.decode_morse(" "), "");
+    assert_eq!(decoder.decode_morse(""), "");
 }

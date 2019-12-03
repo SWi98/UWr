@@ -1,4 +1,4 @@
-﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="WebForm1.aspx.cs" Inherits="Zadanie2.WebForm1" %>
+﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="InsideFolder.aspx.cs" Inherits="Zadanie2.Administrator.InsideFolder" %>
 
 <!DOCTYPE html>
 
@@ -9,7 +9,7 @@
 <body>
     <form id="form1" runat="server">
         <div>
-            <asp:Button id="button1" runat="server" OnClick="Logout" Text="Wyloguj" />
+            Administrator/InsideFolder.aspx
         </div>
     </form>
 </body>
