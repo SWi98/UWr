@@ -34,5 +34,6 @@ def new_data(old_data):
     return res            
                         
 
+data = np.array([[]])
 print_game(200000, np.random.randint(0, 2, (40, 40)))
 
