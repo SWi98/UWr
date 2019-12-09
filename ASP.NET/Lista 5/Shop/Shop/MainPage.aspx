@@ -13,10 +13,20 @@
                 <a href="NewItem.aspx">Dodaj nowy przedmiot</a>
             </div>
         <%} %>
-        <div>
-
-        </div>
-
+        <asp:ListView runat="server" ID="ListView1" DataSourceID="ObjectDataSource1">
+            <ItemTemplate>
+                <%# ((Shop.Item)Container.DataItem).name %>
+            </ItemTemplate>
+        </asp:ListView>
+        <asp:ObjectDataSource runat="server" ID="ObjectDataSource1" TypeName="Item_DataProvider"
+            SelectMethod="Retrieve" StartRowIndexParameterName="StartRow" MaximumRowsParameterName="RowCount"
+            SortParameterName="OrderBy">
+            <SelectParameters>
+                <asp:Parameter Name="OrderBy" Type="String" />
+                <asp:Parameter Name="StartRow" Type="Int32" />
+                <asp:Parameter Name="RowCount" Type="Int32" />
+            </SelectParameters>
+        </asp:ObjectDataSource>
     </form>
 </body>
 </html>
