@@ -5,6 +5,7 @@ using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 using System.Configuration;
+using System.Web.Security;
 
 namespace Shop
 {
@@ -25,6 +26,16 @@ namespace Shop
             var cs = ConfigurationManager.AppSettings["ShopDB"];
             using(var ItemDC = new ItemDataContext(cs))
             {
+                var CurrentItems = ItemDC.Items.ToList();
+                var ItemWithTheSameName = (from i in CurrentItems
+                                           where i.name == ItemName
+                                           select i);
+                if (ItemWithTheSameName.Any())
+                {
+                    Response.Write("Przedmiot o tej nazwie już istnieje");
+                    return;
+                }
+
                 Item newItem = new Item();
 
                 newItem.name = ItemName;
@@ -34,6 +45,8 @@ namespace Shop
 
                 ItemDC.Items.InsertOnSubmit(newItem);
                 ItemDC.SubmitChanges();
+
+                HttpContext.Current.Session["item_model"] = new Item_Model();
             }
 
         }

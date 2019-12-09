@@ -14,7 +14,11 @@ public class Item_Model
         var cs = ConfigurationManager.AppSettings["ShopDB"];
         using(var ItemDC = new ItemDataContext(cs))
         {
-            Items = ItemDC.Items.ToList();
+            foreach(var item in ItemDC.Items.ToList())
+            {
+                var x = item.name;
+                Items.Add(item);
+            }
         }
     }
 
@@ -22,13 +26,13 @@ public class Item_Model
     {
         get 
         {
-            if(HttpContext.Current.Application["item_model"] == null)
+            if(HttpContext.Current.Session["item_model"] == null)
             {
                 Item_Model model = new Item_Model();
-                HttpContext.Current.Application["item_model"] = model;
+                HttpContext.Current.Session["item_model"] = model;
             }
 
-            return (Item_Model)HttpContext.Current.Application["item_model"];
+            return (Item_Model)HttpContext.Current.Session["item_model"];
         }
     }
 
