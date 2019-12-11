@@ -37,5 +37,10 @@ namespace Shop
                 }
             }
         }
+
+        protected void ListView1_ItemUpdating(object sender, ListViewUpdateEventArgs e)
+        {
+            Response.Write(e.OldValues.ToString());
+        }
     }
 }

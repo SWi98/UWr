@@ -31,6 +31,11 @@ public class Item_DataProvider
         return Item_Model.Instance.Items.Count;
     }
 
+    public static void Update(string OldID, string OldName, string NewName, double NewPrice, string NewDesc,
+         string NewUrl)
+    {
+    }
+
     /*public int SelectItemsCount(string OrderBy, int StartRow, int RowCount)
     {
         return Item_Model.Instance.Items.Count;

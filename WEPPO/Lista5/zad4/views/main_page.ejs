@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="eng">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title></title>
+    </head>
+    <body>
+    <form method="POST">
+        <table border="0">
+            <tr>
+                <td colspan="4">
+                    <input type="text" name="NameInput" value="Imię">
+                </td>
+            </tr>
+            <tr>
+                <td colspan="4">
+                    <input type="text" name="SurnameInput" value="Nazwisko">
+                </td>
+            </tr>
+            <tr>
+                <td colspan="4">
+                    <input type="text" name="ClassName" value="Nazwa przedmiotu">
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <pre style="display: inline; font-family: Times New Roman;">Data:  </pre>
+                </td>
+                <td colspan="4">
+                    <input type="date" name="DateInput">
+                </td>
+            </tr>
+        </table>
+        <br>
+        Zadania:
+        <br>
+        <table border="0">
+            <tr>
+                <%for(let i = 0; i < 10; i++){ %>
+                    <td>
+                        <%=(i+1).toString()%>
+                    </td>
+                <%}%>
+            </tr>
+            <tr>
+                <%for(let i = 0; i < 10; i++){ %>
+                    <td>
+                        <input type="number" name="<%='Exercise' + i.toString()%>" style="width: 40px">
+                    </td>
+                <%}%>
+            </tr>
+        </table>
+        <br>
+        <button>Wygeneruj deklarację</button>
+    </form>
+    </body>
+</html>

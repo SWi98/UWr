@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="eng">
+    <head>
+        <title>
+
+        </title>
+    </head>
+    <body>
+        <table style="border-collapse: collapse; width: 580px" border="1">
+            <tr>
+                <td colspan="4" style="width: 80px">
+                    <%= Name%>
+                </td>
+                <td colspan="5" style="width: 100px">
+                    <%= Surname%>
+                </td>
+                <td colspan="15" style="width: 300px">
+                    <%= ClassName%>
+                </td>
+                <td colspan="5" style="width: 100px">
+                    <%= Date%>
+                </td>
+            </tr>
+            <tr>
+                <td colspan = "3" style="width: 60px">
+                    Zadania:
+                </td>
+                <% for(let i = 0; i < 10; i++){ %>
+                    <td colspan = "2" style="width: 40px">
+                        <%= (i+1).toString()%>
+                    </td>
+                <%}%>
+                <td colspan = "5"></td>
+            </tr>
+            <tr>
+                <td colspan = "3" style="width: 60px">
+                    Punkty:
+                </td>
+                <% for(let i = 0; i < 10; i++){ %>
+                    <td colspan = "2">
+                        <%= Exercise[i]%>
+                    </td>
+                <%}%>
+                <td colspan = "3">
+                    Suma:
+                </td>
+                <td colspan = "2">
+                    <%= SumOfPoints %>
+                </td>
+            </tr>
+        </table>
+    </body>
+</html>

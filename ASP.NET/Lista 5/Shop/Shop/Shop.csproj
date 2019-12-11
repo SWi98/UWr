@@ -69,7 +69,6 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Cart.aspx" />
-    <Content Include="Default.aspx" />
     <Content Include="Login.aspx" />
     <Content Include="MainPage.aspx" />
     <Content Include="NewItem.aspx" />
@@ -77,12 +76,8 @@
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="App_Code\Miejscowosc.cs" />
-    <Content Include="App_Code\Model.cs" />
-    <Content Include="App_Code\Osoba.cs" />
-    <Content Include="App_Code\Osoba_DataProvider.cs" />
     <Compile Include="CartItem_Model.cs" />
-    <Compile Include="Item_DataProvider.cs" />
+    <Compile Include="App_Code\Item_DataProvider.cs" />
     <Content Include="App_Code\_Item.cs" />
     <Compile Include="Item_Model.cs" />
     <Compile Include="ShoppingCart_DataProvider.cs" />
@@ -92,13 +87,6 @@
     </Compile>
     <Compile Include="Cart.aspx.designer.cs">
       <DependentUpon>Cart.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="Default.aspx.cs">
-      <DependentUpon>Default.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="Default.aspx.designer.cs">
-      <DependentUpon>Default.aspx</DependentUpon>
     </Compile>
     <Compile Include="NewItem.aspx.cs">
       <DependentUpon>NewItem.aspx</DependentUpon>
