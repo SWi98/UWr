@@ -1,3 +1,4 @@
+//cd "d:\Documents\GitHub\UWr\WEPPO\Lista5"
 var fs = require('fs');
 var https = require('https');
 (async function () {

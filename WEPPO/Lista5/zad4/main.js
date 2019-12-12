@@ -27,6 +27,7 @@ app.post("/", (req, res) => {
         }
         SumOfPoints += parseInt(Exercise[i], 10);
     }
+    
     if (Validate(name, surname, class_name, date)){
         res.render("print", {Name:name, Surname:surname, ClassName:class_name, Date:date, Exercise:Exercise, 
                 SumOfPoints: SumOfPoints});

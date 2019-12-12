@@ -1,0 +1,1 @@
+cd "d:\Documents\GitHub\UWr\WEPPO\Lista5"
