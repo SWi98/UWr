@@ -26,11 +26,11 @@ int main(){
 
     complex<double> EG= EulerGamma(test, 100000);
     cout << EG << endl;
-    cout << arg(EG) << endl << endl;
+   // cout << arg(EG) << endl << endl;
 
     complex<double> EGI = EulerGammaInverse(test, 100000);
     cout << EGI << endl;
-    cout << arg(EGI) << endl << endl;
+   // cout << arg(EGI) << endl << endl;
 
     cout << EG * EGI<< endl;
     

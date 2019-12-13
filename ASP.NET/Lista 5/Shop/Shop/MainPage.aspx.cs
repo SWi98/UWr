@@ -42,5 +42,40 @@ namespace Shop
         {
             Response.Write(e.OldValues.ToString());
         }
+
+        protected void ObjectDataSource1_Updating(object sender, ObjectDataSourceMethodEventArgs e)
+        {
+            int ItemID = (int)e.InputParameters["id"];
+            var x = e;
+            string NewName = ((TextBox)ListView1.EditItem.FindControl("EditNameTextBox")).Text;
+            string NewDesc = ((TextBox)ListView1.EditItem.FindControl("EditDescTextBox")).Text;
+            string NewImage = ((TextBox)ListView1.EditItem.FindControl("EditImageTextBox")).Text;
+            double NewPrice = Double.Parse(((TextBox)ListView1.EditItem.FindControl("EditPriceTextBox")).Text);
+
+            Item item = new Item();
+            item.id = ItemID;
+            item.name = NewName;
+            item.description = NewDesc;
+            item.image = NewImage;
+            item.price = NewPrice;
+
+            e.InputParameters.Clear();
+            e.InputParameters.Add("UpdatedItem", item);
+        }
+
+        protected void ObjectDataSource1_Updated(object sender, ObjectDataSourceStatusEventArgs e)
+        {
+            ListView1.DataBind();
+        }
+
+        protected void Sort_Click(object sender, EventArgs e)
+        {
+            ListView1.Sort("price", SortDirection.Ascending);
+        }
+
+        protected void ObjectDataSource1_Deleting(object sender, ObjectDataSourceMethodEventArgs e)
+        {
+            int itemID = (int)e.InputParameters["id"];
+        }
     }
 }

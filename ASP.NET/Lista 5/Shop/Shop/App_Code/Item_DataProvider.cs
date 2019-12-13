@@ -9,6 +9,7 @@ using System.Web.UI.WebControls;
 using System.Web.UI.WebControls.WebParts;
 using System.Web.UI.HtmlControls;
 using Shop;
+using System.Linq;
 
 public class Item_DataProvider
 {
@@ -31,9 +32,20 @@ public class Item_DataProvider
         return Item_Model.Instance.Items.Count;
     }
 
-    public static void Update(string OldID, string OldName, string NewName, double NewPrice, string NewDesc,
-         string NewUrl)
-    {
+    public static void Update(Item UpdatedItem) {
+        var cs = ConfigurationManager.AppSettings["ShopDB"];
+        using(var ItemDC = new ItemDataContext(cs))
+        {
+            Item OldItem = (from i in ItemDC.Items
+                            where i.id == UpdatedItem.id
+                            select i).First();
+            //OldItem = UpdatedItem;
+            OldItem.name = UpdatedItem.name;
+            OldItem.description = UpdatedItem.description;
+            OldItem.price = UpdatedItem.price;
+            OldItem.image = UpdatedItem.image;
+            ItemDC.SubmitChanges();
+        }
     }
 
     /*public int SelectItemsCount(string OrderBy, int StartRow, int RowCount)

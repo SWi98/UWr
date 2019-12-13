@@ -26,13 +26,13 @@ public class Item_Model
     {
         get 
         {
-            if(HttpContext.Current.Session["item_model"] == null)
+            if(HttpContext.Current.Items["item_model"] == null)
             {
                 Item_Model model = new Item_Model();
-                HttpContext.Current.Session["item_model"] = model;
+                HttpContext.Current.Items["item_model"] = model;
             }
 
-            return (Item_Model)HttpContext.Current.Session["item_model"];
+            return (Item_Model)HttpContext.Current.Items["item_model"];
         }
     }
 

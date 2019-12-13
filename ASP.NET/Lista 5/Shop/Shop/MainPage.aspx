@@ -27,9 +27,10 @@
 </head>
 <body>
     <form id="form1" runat="server">
-        <table style="width: 100%">
-            <tr style="padding-bottom: 20px">                
-                <td style="width: 25%; padding-bottom: 20px">
+        <asp:Button runat="server" ID="Sort" OnClick="Sort_Click" />
+        <table style="width: 100%; padding-bottom: 20px">
+            <tr>                
+                <td style="width: 25%">
                     <a href ="Login.aspx">Strona logowania</a>
                 </td>
                 <td style="width: 25%">
@@ -51,13 +52,14 @@
         </table>
         <asp:ListView runat="server" ID="ListView1" 
             DataSourceID="ObjectDataSource1" 
-            OnItemCommand="ListView1_ItemCommand">
+            OnItemCommand="ListView1_ItemCommand"
+            DataKeyNames="id">
             <LayoutTemplate>
                 <div id="itemPlaceholderContainer" runat="server" >
                     <span runat="server" id="itemPlaceholder" />
                 </div>
                 <div>
-                    <asp:DataPager ID="DataPager1" runat="server">
+                    <asp:DataPager ID="DataPager1" runat="server" PageSize="8">
                         <Fields>
                             <asp:NextPreviousPagerField ButtonType="Button" ShowFirstPageButton="True" ShowLastPageButton="True" />
                         </Fields>
@@ -106,6 +108,12 @@
                                 CommandName="Edit" />
                             <%} %>
                         </td>
+                        <td>
+                            <%if (User.IsInRole("Admin")){ %>przedmiot
+                                <asp:Button ID="Button2" runat="server" Text="Usuń przedmiot"
+                                CommandName="Delete" />
+                            <%} %>
+                        </td>
                     </tr>
                 </table>
                 <br />
@@ -114,25 +122,25 @@
                 <table runat="server" style="margin-left: 5px; background-color: aquamarine; width: 30%" border="0">
                     <tr>
                         <td style="width: 30%">
-                            <asp:TextBox ID="NameTextBox" runat="server"
+                            <asp:TextBox ID="EditNameTextBox" runat="server"
                                 Text='<%# ((Shop.Item)Container.DataItem).name %>'></asp:TextBox>
                         </td>
                     </tr>
                     <tr>
                         <td>
-                            <asp:TextBox ID="PriceTextBox" runat="server" 
-                                Text='<%# ((Shop.Item)Container.DataItem).price.ToString() + " zł" %>' />
+                            <asp:TextBox ID="EditPriceTextBox" runat="server" 
+                                Text='<%# ((Shop.Item)Container.DataItem).price.ToString()%>' />
                         </td>
                     </tr>
                     <tr>
                         <td colspan="2">
-                            <asp:TextBox ID="DescTextBox" runat="server" Width="95%"
+                            <asp:TextBox ID="EditDescTextBox" runat="server" Width="95%"
                                 Text='<%# ((Shop.Item)Container.DataItem).description %>' />
                         </td>
                     </tr>
                     <tr>
                         <td style="word-wrap: break-word; overflow-wrap: break-word;" colspan="2">
-                            <asp:TextBox ID="ImageTextBox" runat="server" Width="95%"
+                            <asp:TextBox ID="EditImageTextBox" runat="server" Width="95%"
                                 Text='<%# ((Shop.Item)Container.DataItem).image %>'></asp:TextBox>
                         </td>
                     </tr>
@@ -152,15 +160,17 @@
         </asp:ListView>
         <asp:ObjectDataSource runat="server" ID="ObjectDataSource1" TypeName="Item_DataProvider" EnablePaging="true"
             SelectMethod="Retrieve" StartRowIndexParameterName="StartRow" MaximumRowsParameterName="RowCount"
-            SortParameterName="OrderBy" SelectCountMethod="SelectItemsCount" UpdateMethod="Update">
-            <UpdateParameters>
-                <asp:FormParameter Name="OldID" DefaultValue="<%((Shop.Item)Container.DataItem).id.ToString() %>"/>
-                <asp:FormParameter Name="OldName" DefaultValue="<%((Shop.Item)Container.DataItem).name.ToString() %>"/>
-                <asp:FormParameter Name="NewName" FormField="NameTextBox"/>
-                <asp:FormParameter Name="NewPrice" FormField="PriceTextBox"/>
-                <asp:FormParameter Name="NewDesc" FormField="DescTextBox"/>
-                <asp:FormParameter Name="NewUrl" FormField="ImageTextBox"/>
-            </UpdateParameters>
+            SortParameterName="OrderBy" SelectCountMethod="SelectItemsCount" UpdateMethod="Update"
+             OnUpdating="ObjectDataSource1_Updating" OnUpdated="ObjectDataSource1_Updated" 
+             OnDeleting="ObjectDataSource1_Deleting">
+            <%--<UpdateParameters>
+                <asp:FormParameter Name="OldID" DefaultValue="<%=((Shop.Item)Container.DataItem).id.ToString() %>"/>
+                <asp:FormParameter Name="OldName" DefaultValue="<%=((Shop.Item)Container.DataItem).name.ToString() %>"/>
+                <asp:FormParameter Name="NewName" FormField="NameTextBox" Type="String"/>
+                <asp:FormParameter Name="NewPrice" FormField="PriceTextBox" Type="String"/>
+                <asp:FormParameter Name="NewDesc" FormField="DescTextBox" Type="String"/>
+                <asp:FormParameter Name="NewUrl" FormField="ImageTextBox" Type="String"/>
+            </UpdateParameters>--%>
         </asp:ObjectDataSource>
     </form>
 </body>
