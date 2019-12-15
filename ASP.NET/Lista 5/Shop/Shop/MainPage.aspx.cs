@@ -65,7 +65,9 @@ namespace Shop
 
         protected void ObjectDataSource1_Updated(object sender, ObjectDataSourceStatusEventArgs e)
         {
-            ListView1.DataBind();
+            // Setting Session container containing list of Items to null forces Item_Model to refresh its value
+            // after accessing Item_Model.Instance
+            //HttpContext.Current.Session["item_model"] = null;
         }
 
         protected void Sort_Click(object sender, EventArgs e)
@@ -76,6 +78,9 @@ namespace Shop
         protected void ObjectDataSource1_Deleting(object sender, ObjectDataSourceMethodEventArgs e)
         {
             int itemID = (int)e.InputParameters["id"];
+
+            e.InputParameters.Clear();
+            e.InputParameters.Add("ItemID", itemID);
         }
     }
 }

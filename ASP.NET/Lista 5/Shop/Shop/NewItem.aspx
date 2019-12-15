@@ -6,6 +6,9 @@
 <head runat="server">
     <title></title>
     <style>
+        body{
+            margin: 0px;
+        }
         .name-field{
             width: 280px;
         }
@@ -19,12 +22,58 @@
           border-collapse: collapse;
           border: 1px black solid;
         }
+        .topbar{
+            background-color: #333344;
+            overflow: hidden;
+        }
+        .topbar a{
+            color: #f2f2f2;
+            text-align: center;
+            padding: 14px 16px;
+            text-decoration: none;
+            font-size: 17px;
+        }
+        .topbar a:hover {
+            background-color: #ddd;
+            color: black;
+        }
+        .topbar p{
+            color: #f2f2f2;
+            text-align: center;
+            text-decoration: none;
+            font-size: 17px;
+            display: inline;
+        }
     </style>
 </head>
 <body>
     <form id="form1" runat="server">
+        <div class="topbar">
+        <table style="width: 100%; padding-bottom: 20px">
+            <tr>                
+                <td style="width: 25%">
+                    <a href ="Login.aspx">Strona logowania</a>
+                </td>
+                <td style="width: 25%">
+                    <%if (User.Identity.IsAuthenticated){ %>
+                        <a href ="Cart.aspx">Koszyk</a>
+                    <%} %>
+                </td>
+                <td style="width: 25%">
+                    <%if (User.Identity.IsAuthenticated){ %>
+                        <p>Zalogowany użytkownik: <%=User.Identity.Name%></p>
+                    <%} %>
+                </td>
+                <td style="width: 25%">
+                    <%if (User.IsInRole("Admin")){ %>
+                    <a href="MainPage.aspx">Wróć do strony głównej</a>
+                    <%} %>
+                </td>
+            </tr>
+        </table>
+        </div>
         <div>
-            <table class="table1">
+            <table class="table1" style="margin-top: 10px; margin-left: 10px">
                 <tr>
                     <td>Nazwa przedmiotu: </td>
                     <td>
@@ -54,8 +103,10 @@
             </table>
         </div>
         <br />
-        <div>
+        <div style="margin-left: 10px;">
             <asp:Button runat="server" ID="SubmitItemButton" OnClick="SubmitItemButton_Click" Text="Dodaj przedmiot"/>
+            <br />
+            <asp:Label runat="server" ID="Label1"></asp:Label>
         </div>
     </form>
 </body>

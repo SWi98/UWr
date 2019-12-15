@@ -32,7 +32,7 @@ namespace Shop
                                            select i);
                 if (ItemWithTheSameName.Any())
                 {
-                    Response.Write("Przedmiot o tej nazwie już istnieje");
+                    Label1.Text="Przedmiot o tej nazwie już istnieje";
                     return;
                 }
 
@@ -45,8 +45,8 @@ namespace Shop
 
                 ItemDC.Items.InsertOnSubmit(newItem);
                 ItemDC.SubmitChanges();
-
-                HttpContext.Current.Session["item_model"] = new Item_Model();
+                Label1.Text = "Dodano przedmiot";
+                //HttpContext.Current.Session["item_model"] = new Item_Model();
             }
 
         }

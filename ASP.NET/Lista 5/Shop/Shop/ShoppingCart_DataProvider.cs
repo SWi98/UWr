@@ -13,18 +13,11 @@ public class ShoppingCart_DataProvider
 
     public List<Item> Retrieve(string OrderBy, int StartRow, int RowCount)
     {
-        if (RowCount > 0)
-        {
-            return CartItem_Model.Instance.Items.GetRange(StartRow, CartItem_Model.Instance.Items.Count - StartRow);
-        }
-        else
-        {
-            return new List<Item>(new Item[] { CartItem_Model.Instance.Items[StartRow] });
-        }
+        return ShoppingCart.Instance.ItemsInCart.GetRange(StartRow, ShoppingCart.Instance.ItemsInCart.Count - StartRow);
     }
 
     public int SelectItemsCount()
     {
-        return CartItem_Model.Instance.Items.Count;
+        return ShoppingCart.Instance.ItemsInCart.Count;
     }
 }

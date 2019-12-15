@@ -14,17 +14,23 @@ using System.Linq;
 public class Item_DataProvider
 {
     public Item_DataProvider() { }
-
+    private int PriceSort = 0;
+    private int NameSort = 0;
     public List<Item> Retrieve(string OrderBy, int StartRow, int RowCount)
     {
-        if(RowCount > 0)
+        List<Item> Res = Item_Model.Instance.Items;//.GetRange(StartRow, SelectItemsCount() - StartRow);
+        if(OrderBy == "price")
         {
-            return Item_Model.Instance.Items.GetRange(StartRow, SelectItemsCount() - StartRow);
+            Res.Sort((x, y) => x.price.CompareTo(y.price));
+        }
+        else if (OrderBy == "name")
+        {
+            Res.Sort((x, y) => x.name.CompareTo(y.name));
         }
         else
         {
-            return new List<Item>(new Item[] { Item_Model.Instance.Items[StartRow] });
         }
+        return Res.GetRange(StartRow, SelectItemsCount() - StartRow);
     }
 
     public int SelectItemsCount()
@@ -44,6 +50,20 @@ public class Item_DataProvider
             OldItem.description = UpdatedItem.description;
             OldItem.price = UpdatedItem.price;
             OldItem.image = UpdatedItem.image;
+            ItemDC.SubmitChanges();
+        }
+    }
+
+    public static void Delete(int ItemID)
+    {
+        var cs = ConfigurationManager.AppSettings["ShopDB"];
+        using (var ItemDC = new ItemDataContext(cs))
+        {
+            var ItemToDelete = (from i in ItemDC.Items
+                                where i.id == ItemID
+                                select i).First();
+
+            ItemDC.Items.DeleteOnSubmit(ItemToDelete);
             ItemDC.SubmitChanges();
         }
     }

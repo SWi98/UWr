@@ -78,7 +78,6 @@
   <ItemGroup>
     <Compile Include="CartItem_Model.cs" />
     <Compile Include="App_Code\Item_DataProvider.cs" />
-    <Content Include="App_Code\_Item.cs" />
     <Compile Include="Item_Model.cs" />
     <Compile Include="ShoppingCart_DataProvider.cs" />
     <Compile Include="Cart.aspx.cs">

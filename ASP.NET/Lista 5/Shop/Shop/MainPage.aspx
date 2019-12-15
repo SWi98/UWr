@@ -6,6 +6,9 @@
 <head runat="server">
     <title></title>
     <style>
+        body{
+            margin: 0;
+        }
         .content{
             /*background-color: #E0FFFF;*/ 
             color: #000000;
@@ -23,20 +26,37 @@
         .button-style{
             align-self: center;
         }
+        .topbar{
+            background-color: #333344;
+            overflow: hidden;
+        }
+        .topbar a{
+            color: #f2f2f2;
+            text-align: center;
+            padding: 14px 16px;
+            text-decoration: none;
+            font-size: 17px;
+        }
+        .topbar a:hover {
+            background-color: #ddd;
+            color: black;
+        }
+        .topbar p{
+            color: #f2f2f2;
+            text-align: center;
+            text-decoration: none;
+            font-size: 17px;
+            display: inline;
+        }
     </style>
 </head>
 <body>
     <form id="form1" runat="server">
-        <asp:Button runat="server" ID="Sort" OnClick="Sort_Click" />
+        <div class="topbar">
         <table style="width: 100%; padding-bottom: 20px">
             <tr>                
                 <td style="width: 25%">
                     <a href ="Login.aspx">Strona logowania</a>
-                </td>
-                <td style="width: 25%">
-                    <%if (User.IsInRole("Admin")){ %>
-                        <a href="NewItem.aspx">Dodaj nowy przedmiot</a>
-                    <%} %>
                 </td>
                 <td style="width: 25%">
                     <%if (User.Identity.IsAuthenticated){ %>
@@ -45,25 +65,51 @@
                 </td>
                 <td style="width: 25%">
                     <%if (User.Identity.IsAuthenticated){ %>
-                        Zalogowany użytkownik: <%=User.Identity.Name%>
+                        <p>Zalogowany użytkownik: <%=User.Identity.Name%></p>
+                    <%} %>
+                </td>
+                <td style="width: 25%">
+                    <%if (User.IsInRole("Admin")){ %>
+                        <a href="NewItem.aspx">Dodaj nowy przedmiot</a>
                     <%} %>
                 </td>
             </tr>
         </table>
+        </div>
         <asp:ListView runat="server" ID="ListView1" 
             DataSourceID="ObjectDataSource1" 
             OnItemCommand="ListView1_ItemCommand"
             DataKeyNames="id">
             <LayoutTemplate>
+                <div style="margin-left: 10px; margin-bottom: 10px; margin-top: 10px">
+                <div>
+                    <table>
+                        <tr>
+                            <td>
+                                Sortuj według:
+                            </td>
+                            <td>
+                                <asp:Button runat="server" ID="Sort1" CommandName="Sort" CommandArgument="price" 
+                                    Text="Ceny" />
+                            </td>
+                            <td>
+                                <asp:Button runat="server" ID="Button2" CommandName="Sort" CommandArgument="name" 
+                                    Text="Nazwy" />
+                            </td>
+                        </tr>
+                    </table>
+                </div>
                 <div id="itemPlaceholderContainer" runat="server" >
                     <span runat="server" id="itemPlaceholder" />
                 </div>
-                <div>
+                <div style="margin-bottom: 10px; margin-left: 10px">
                     <asp:DataPager ID="DataPager1" runat="server" PageSize="8">
                         <Fields>
-                            <asp:NextPreviousPagerField ButtonType="Button" ShowFirstPageButton="True" ShowLastPageButton="True" />
+                            <asp:NextPreviousPagerField ButtonType="Button" ShowFirstPageButton="True" 
+                                ShowLastPageButton="True" />
                         </Fields>
                     </asp:DataPager>
+                </div>
                 </div>
             </LayoutTemplate>
             <ItemTemplate>
@@ -109,7 +155,7 @@
                             <%} %>
                         </td>
                         <td>
-                            <%if (User.IsInRole("Admin")){ %>przedmiot
+                            <%if (User.IsInRole("Admin")){ %>
                                 <asp:Button ID="Button2" runat="server" Text="Usuń przedmiot"
                                 CommandName="Delete" />
                             <%} %>
@@ -162,15 +208,7 @@
             SelectMethod="Retrieve" StartRowIndexParameterName="StartRow" MaximumRowsParameterName="RowCount"
             SortParameterName="OrderBy" SelectCountMethod="SelectItemsCount" UpdateMethod="Update"
              OnUpdating="ObjectDataSource1_Updating" OnUpdated="ObjectDataSource1_Updated" 
-             OnDeleting="ObjectDataSource1_Deleting">
-            <%--<UpdateParameters>
-                <asp:FormParameter Name="OldID" DefaultValue="<%=((Shop.Item)Container.DataItem).id.ToString() %>"/>
-                <asp:FormParameter Name="OldName" DefaultValue="<%=((Shop.Item)Container.DataItem).name.ToString() %>"/>
-                <asp:FormParameter Name="NewName" FormField="NameTextBox" Type="String"/>
-                <asp:FormParameter Name="NewPrice" FormField="PriceTextBox" Type="String"/>
-                <asp:FormParameter Name="NewDesc" FormField="DescTextBox" Type="String"/>
-                <asp:FormParameter Name="NewUrl" FormField="ImageTextBox" Type="String"/>
-            </UpdateParameters>--%>
+             OnDeleting="ObjectDataSource1_Deleting" DeleteMethod="Delete">
         </asp:ObjectDataSource>
     </form>
 </body>
