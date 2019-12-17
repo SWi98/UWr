@@ -6,6 +6,15 @@
 <head runat="server">
     <title></title>
     <style>
+        img {
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            padding: 5px;
+            width: 305px;
+           }
+        .price{
+            font-size: 23px; 
+        }
         body{
             margin: 0;
         }
@@ -79,7 +88,7 @@
         <div>
             <asp:ListView runat="server" ID="ListView2" DataSourceID="ObjectDataSource2">
             <LayoutTemplate>
-                <div style="margin-left: 10px; margin-bottom: 10px; margin-top: 10px">
+                <div style="margin-left: 20px; margin-bottom: 10px; margin-top: 10px">
                 <div id="itemPlaceholderContainer" runat="server" >
                     <span runat="server" id="itemPlaceholder" />
                 </div>
@@ -93,40 +102,42 @@
                 </div>
             </LayoutTemplate>
             <ItemTemplate>
-                <table runat="server" style="margin-left: 5px;">
+                <div style="margin-bottom: 23px">
+                <img src='<%# ((Shop.Item)Container.DataItem).image %>' />
+                <table runat="server" style="margin-left: 5px; background-color: gainsboro">
                     <tr>
                         <td></td>
                         <td>
-                            <asp:Label CssClass="content" ID="nameLabel" runat="server" 
+                            <asp:Label ID="nameLabel" runat="server" 
                                 Text='<%# ((Shop.Item)Container.DataItem).name %>' />
                         </td>
                     </tr>
                     <tr>
                         <td></td>
                         <td>
-                            <asp:Label CssClass="content" ID="Label1" runat="server" 
+                            <asp:Label ID="Label1" runat="server" CssClass="price"
                                 Text='<%# ((Shop.Item)Container.DataItem).price.ToString() + " zł" %>' />
                         </td>
                     </tr>
                     <tr>
                         <td></td>
                         <td style="word-wrap: break-word; overflow-wrap: break-word; width: 300px">
-                            <asp:Label CssClass="content" ID="Label2" runat="server" 
-                                Text='<%# ((Shop.Item)Container.DataItem).description %>' />
+                            <asp:Label ID="Label2" runat="server" 
+                                Text='<%# ((Shop.Item)Container.DataItem).description.Replace(Environment.NewLine, "<br/>") %>' />
                         </td>
                     </tr>
-                    <tr>
+<%--                    <tr>
                         <td></td>
                         <td>
-                            <asp:Label CssClass="content" ID="Label3" runat="server">
+                            <asp:Label ID="Label3" runat="server">
                                 <a href='<%# ((Shop.Item)Container.DataItem).image %>'>
                                     Zdjęcie
                                 </a>
                             </asp:Label>
                         </td>
-                    </tr>
+                    </tr>--%>
                 </table>
-                <br />
+                </div>
             </ItemTemplate>
         </asp:ListView>
         <asp:ObjectDataSource runat="server" ID="ObjectDataSource2" TypeName="ShoppingCart_DataProvider" EnablePaging="true"

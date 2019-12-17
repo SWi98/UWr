@@ -1,0 +1,15 @@
+﻿@using MvcApplication3.Custom
+@using MvcApplication3.Models.CustomHelperBinder
+@model IndexModel
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Index</h2>
+
+@using ( var form = Html.BeginForm() ) {
+    @:Html.CustomTextBox: @Html.CustomTextBox( "bar", "qux" ) <br />
+    @:Html.CustomTextBoxFor: @Html.CustomTextBoxFor( m => m.Foo )
+
+    <button>wyślij</button>
+}

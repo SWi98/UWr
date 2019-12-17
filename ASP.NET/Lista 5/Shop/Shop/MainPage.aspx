@@ -6,6 +6,15 @@
 <head runat="server">
     <title></title>
     <style>
+        img {
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            padding: 5px;
+            width: 305px;
+           }
+        .price{
+            font-size: 23px; 
+        }
         body{
             margin: 0;
         }
@@ -81,25 +90,33 @@
             OnItemCommand="ListView1_ItemCommand"
             DataKeyNames="id">
             <LayoutTemplate>
-                <div style="margin-left: 10px; margin-bottom: 10px; margin-top: 10px">
+                <div style="margin-left: 20px; margin-bottom: 10px; margin-top: 10px" id="LTdiv">
                 <div>
-                    <table>
+                    <table style="margin-bottom: 8px">
                         <tr>
                             <td>
                                 Sortuj według:
                             </td>
                             <td>
-                                <asp:Button runat="server" ID="Sort1" CommandName="Sort" CommandArgument="price" 
-                                    Text="Ceny" />
+                                <asp:Button runat="server" ID="price" CommandName="Sort" CommandArgument="price" 
+                                    Text="Ceny" OnClick="Sort1_Click"/>
                             </td>
                             <td>
-                                <asp:Button runat="server" ID="Button2" CommandName="Sort" CommandArgument="name" 
-                                    Text="Nazwy" />
+                                <asp:Button runat="server" ID="name" CommandName="Sort" CommandArgument="name" 
+                                    Text="Nazwy" OnClick="Sort1_Click"/>
                             </td>
                         </tr>
+                        <%--<tr>
+                            <td>
+                                <asp:RadioButtonList ID="SortingParam" runat="server">
+                                    <asp:ListItem Value="A">Rosnąco</asp:ListItem>
+                                    <asp:ListItem Value="D">Malejąco</asp:ListItem>
+                                </asp:RadioButtonList>
+                            </td>
+                        </tr>--%>
                     </table>
                 </div>
-                <div id="itemPlaceholderContainer" runat="server" >
+                <div id="itemPlaceholderContainer" runat="server" style="margin-top: 6px">
                     <span runat="server" id="itemPlaceholder" />
                 </div>
                 <div style="margin-bottom: 10px; margin-left: 10px">
@@ -113,7 +130,9 @@
                 </div>
             </LayoutTemplate>
             <ItemTemplate>
-                <table runat="server" style="margin-left: 5px; background-color: aliceblue">
+                <div style="margin-bottom: 23px">
+                <img src='<%# ((Shop.Item)Container.DataItem).image %>' />
+                <table runat="server" style="margin-left: 5px; background-color: gainsboro">
                     <tr>
                         <td>
                             <b><asp:Label CssClass="content" ID="nameLabel" runat="server" 
@@ -122,17 +141,17 @@
                     </tr>
                     <tr>
                         <td>
-                            <asp:Label CssClass="content" ID="Label1" runat="server" 
+                            <asp:Label CssClass="price" ID="Label1" runat="server" 
                                 Text='<%# ((Shop.Item)Container.DataItem).price.ToString() + " zł" %>' />
                         </td>
                     </tr>
                     <tr>
                         <td style="word-wrap: break-word; overflow-wrap: break-word; width: 300px" colspan="2">
-                            <asp:Label CssClass="content" ID="Label2" runat="server" 
-                                Text='<%# ((Shop.Item)Container.DataItem).description %>' />
+                            <asp:Label CssClass="content" ID="Label2" runat="server"  
+                                Text='<%# ((Shop.Item)Container.DataItem).description.Replace(Environment.NewLine, "<br />") %>' />
                         </td>
                     </tr>
-                    <tr>
+<%--                    <tr>
                         <td>
                             <asp:Label CssClass="content" ID="Label3" runat="server">
                                 <a href='<%# ((Shop.Item)Container.DataItem).image %>'>
@@ -140,7 +159,7 @@
                                 </a>
                             </asp:Label>
                         </td>
-                    </tr>
+                    </tr>--%>
                     <tr style="padding-top: 2px;">
                         <td>
                             <%if (User.Identity.IsAuthenticated){%>
@@ -162,7 +181,7 @@
                         </td>
                     </tr>
                 </table>
-                <br />
+                </div>
             </ItemTemplate>
             <EditItemTemplate>
                 <table runat="server" style="margin-left: 5px; background-color: aquamarine; width: 30%" border="0">
@@ -210,6 +229,7 @@
              OnUpdating="ObjectDataSource1_Updating" OnUpdated="ObjectDataSource1_Updated" 
              OnDeleting="ObjectDataSource1_Deleting" DeleteMethod="Delete">
         </asp:ObjectDataSource>
+
     </form>
 </body>
 </html>

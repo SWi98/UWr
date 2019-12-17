@@ -76,7 +76,6 @@
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="CartItem_Model.cs" />
     <Compile Include="App_Code\Item_DataProvider.cs" />
     <Compile Include="Item_Model.cs" />
     <Compile Include="ShoppingCart_DataProvider.cs" />

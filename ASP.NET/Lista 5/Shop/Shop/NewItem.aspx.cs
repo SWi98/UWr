@@ -46,6 +46,11 @@ namespace Shop
                 ItemDC.Items.InsertOnSubmit(newItem);
                 ItemDC.SubmitChanges();
                 Label1.Text = "Dodano przedmiot";
+                ItemNameTextBox.Text = "";
+                ItemPriceTextBox.Text = "";
+                ItemDescTextBox.Text = "";
+                ItemImageURLTextBox.Text = "";
+
                 //HttpContext.Current.Session["item_model"] = new Item_Model();
             }
 

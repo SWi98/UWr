@@ -1,0 +1,25 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ordesignerObjectsDiagram dslVersion="1.0.0.0" absoluteBounds="0, 0, 11, 8.5" name="User">
+  <DataContextMoniker Name="/UserDataContext" />
+  <nestedChildShapes>
+    <classShape Id="4ffbdd0e-fb5e-4bc3-bae3-916e50c8c45d" absoluteBounds="3.75, 0.75, 2, 1.1939925130208333">
+      <DataClassMoniker Name="/UserDataContext/Miejscowosc" />
+      <nestedChildShapes>
+        <elementListCompartment Id="6c75b38a-695e-4982-bc89-7c65f0dbf35b" absoluteBounds="3.765, 1.21, 1.9700000000000002, 0.63399251302083326" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="77aebecf-b753-4877-abf9-f01cb43821ef" absoluteBounds="0.625, 0.625, 2, 1.7708968098958331">
+      <DataClassMoniker Name="/UserDataContext/User" />
+      <nestedChildShapes>
+        <elementListCompartment Id="63a50860-6c14-4b16-a59c-911ead5d7339" absoluteBounds="0.64000000000000012, 1.085, 1.9700000000000002, 1.2108968098958333" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <associationConnector edgePoints="[(3.75 : 1.34699625651042); (2.625 : 1.34699625651042)]" fixedFrom="Algorithm" fixedTo="Algorithm">
+      <AssociationMoniker Name="/UserDataContext/Miejscowosc/Miejscowosc_User" />
+      <nodes>
+        <classShapeMoniker Id="4ffbdd0e-fb5e-4bc3-bae3-916e50c8c45d" />
+        <classShapeMoniker Id="77aebecf-b753-4877-abf9-f01cb43821ef" />
+      </nodes>
+    </associationConnector>
+  </nestedChildShapes>
+</ordesignerObjectsDiagram>

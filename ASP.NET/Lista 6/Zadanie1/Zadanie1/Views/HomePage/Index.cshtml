@@ -1,0 +1,79 @@
+﻿@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+@{
+    ViewBag.Title = "Index";
+}
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title></title>
+</head>
+<body>
+    @*<div>
+        @model FormModel
+        @using (Html.BeginForm("CreateForm", "HomePage", FormMethod.Post))
+        {
+            @Html.TextBoxFor(model => model.Name)
+            @Html.ValidationMessageFor(model => model.Name)
+            <button type="submit">Submit</button>
+        }
+    </div>*@
+    <form action="/HomePage/Form">
+        <table>
+            <tr>
+                <td>
+                    Imię:
+                </td>
+                <td>
+                    <input type="text" name="name"/>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    Nazwisko:
+                </td>
+                <td>
+                    <input type="text" name="surname"/>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    Nazwa przedmiotu:
+                </td>
+                <td>
+                    <input type="text" name="class_name" />
+                </td>
+            </tr>
+        </table>
+        <table>
+            <tr>
+                <td>
+                    Zadania:
+                </td>
+                @for (int i = 1; i <= 10; i++)
+                {
+                    <td>
+                        @("Zad" + i.ToString())
+                    </td>
+                }
+            </tr>
+            <tr>
+                <td>
+                    Punkty:
+                </td>
+                @for(int i = 1; i <= 10; i++)
+                {
+                    <td>
+                        <input type="text" size="5" name= "@("Z" + i.ToString())" />
+                    </td>
+                }
+            </tr>
+        </table>
+        <button type="submit">Submit</button>
+    </form>
+</body>
+</html>

@@ -82,5 +82,20 @@ namespace Shop
             e.InputParameters.Clear();
             e.InputParameters.Add("ItemID", itemID);
         }
+
+        protected void Sort1_Click(object sender, EventArgs e)
+        {
+            /*var Template = ListView1.FindControl("SortingParam") as RadioButtonList;
+            Button clicked = (Button)sender;
+            string x = clicked.CommandArgument;
+            if(Template.SelectedIndex == 0)
+            {
+                clicked.CommandArgument = clicked.ID + "Ascending";
+            }
+            else if(Template.SelectedIndex == 1)
+            {
+                clicked.CommandArgument = clicked.ID + "Descending";
+            }*/
+        }
     }
 }

@@ -23,9 +23,17 @@ public class Item_DataProvider
         {
             Res.Sort((x, y) => x.price.CompareTo(y.price));
         }
+        else if(OrderBy == "price DESC")
+        {
+            Res.Sort((x, y) => y.price.CompareTo(x.price));
+        }
         else if (OrderBy == "name")
         {
             Res.Sort((x, y) => x.name.CompareTo(y.name));
+        }
+        else if (OrderBy == "name DESC")
+        {
+            Res.Sort((x, y) => y.name.CompareTo(x.name));
         }
         else
         {
