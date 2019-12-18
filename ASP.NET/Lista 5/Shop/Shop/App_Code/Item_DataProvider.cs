@@ -19,7 +19,24 @@ public class Item_DataProvider
     public List<Item> Retrieve(string OrderBy, int StartRow, int RowCount)
     {
         List<Item> Res = Item_Model.Instance.Items;//.GetRange(StartRow, SelectItemsCount() - StartRow);
-        if(OrderBy == "price")
+        switch (OrderBy)
+        {
+            case "price":
+                Res.Sort((x, y) => x.price.CompareTo(y.price));
+                break;
+            case "price DESC":
+                Res.Sort((x, y) => y.price.CompareTo(x.price));
+                break;
+            case "name":
+                Res.Sort((x, y) => x.name.CompareTo(y.name));
+                break;
+            case "name DESC":
+                Res.Sort((x, y) => y.name.CompareTo(x.name));
+                break;
+            default:
+                break;
+        }
+        /*if(OrderBy == "price")
         {
             Res.Sort((x, y) => x.price.CompareTo(y.price));
         }
@@ -37,7 +54,7 @@ public class Item_DataProvider
         }
         else
         {
-        }
+        }*/
         return Res.GetRange(StartRow, SelectItemsCount() - StartRow);
     }
 

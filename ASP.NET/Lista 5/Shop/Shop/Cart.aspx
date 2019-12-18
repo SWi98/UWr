@@ -12,6 +12,9 @@
             padding: 5px;
             width: 305px;
            }
+        img:hover{
+            box-shadow: 0 0 2px 1px rgba(0, 140, 186, 0.5);
+        }
         .price{
             font-size: 23px; 
         }
@@ -102,9 +105,11 @@
                 </div>
             </LayoutTemplate>
             <ItemTemplate>
-                <div style="margin-bottom: 23px">
-                <img src='<%# ((Shop.Item)Container.DataItem).image %>' />
-                <table runat="server" style="margin-left: 5px; background-color: gainsboro">
+                <div style="margin-bottom: 25px">
+                <a href='<%# ((Shop.Item)Container.DataItem).image %>' target="_blank">
+                    <img src='<%# ((Shop.Item)Container.DataItem).image %>' />
+                </a>
+                <table runat="server" style="margin-left: 5px; background-color: gainsboro; width: 310px">
                     <tr>
                         <td></td>
                         <td>
