@@ -33,7 +33,7 @@ app.post("/fileupload", (req, res) =>{
             console.log("done");
         }
     });
-    res.end("...");
+    res.end("File uploaded");
 })
 
 http.createServer(app).listen(3000);

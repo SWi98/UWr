@@ -19,7 +19,7 @@ regex date(string exp){
 
 regex town(string str)
 {
-    regex match("^(([A-Z][a-z]{2,}+)(([ ]+[A-Z][a-z]{2,})*)?)|([A-Z][a-z]{2,}([-][A-Z][a-z]{2,})?)$");
+    regex match("^(([A-Z][a-z]{2,})(([ ]+[A-Z][a-z]{2,})*)?)|([A-Z][a-z]{2,}([-][A-Z][a-z]{2,})?)$");
     return match;
 }
 
