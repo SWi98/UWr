@@ -1,0 +1,2 @@
+do foldera .nuget skopiowac aktualny nuget.exe
+bez tego projekt nie zbuduje się

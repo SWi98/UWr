@@ -1,0 +1,66 @@
+﻿@using DataLibrary
+@using MvcApplication3.Models
+@model UserPagedModel
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Lista użytkowników</h2>
+
+Własny grid:
+
+<table cellspacing="5">
+    <tr>
+        <th>@Html.ActionLink( "Nazwisko", this.ViewContext.RouteData.Values["action"].ToString(), new { OrderBy = Model.OrderBy == "Surname" ? "Surname DESC" : "Surname" }, null )</th>
+        <th>@Html.ActionLink( "Imię", this.ViewContext.RouteData.Values["action"].ToString(), new { OrderBy = "Name" }, null )</th>
+        <th>Miejscowość</th>
+        <th>Operacje</th>
+    </tr>
+    @foreach ( var user in Model.Items ) { 
+        <tr>
+            <td>
+                @user.Surname
+            </td>
+            <td>
+                @user.Name
+            </td>
+            <td>
+                @user.Miejscowosc.Nazwa
+            </td>
+            <td>
+                @Html.ActionLink( "Edycja", "Edit", new { id = @user.ID } )
+                @Html.ActionLink( "Pobierz kartotekę", "DownloadPDF", new { id = @user.ID } )
+            </td>
+        </tr>
+    }
+    <tr>
+        <td colspan="2">
+        @for ( int page = 1; page <= Model.TotalPages; page ++ ) {
+            if ( page == Model.CurrentPage )
+            {
+                @page.ToString()
+            }
+            else
+            { 
+                @Html.ActionLink( page.ToString(), this.ViewContext.RouteData.Values["action"].ToString(), new { CurrentPage = page, OrderBy = Model.OrderBy }, null )
+            }
+            @:&nbsp;
+        }
+        </td>
+    </tr>
+</table>
+
+WebGrid:
+
+@{
+    var grid = new System.Web.Helpers.WebGrid( null, canPage: true, canSort: true, rowsPerPage : 10, pageFieldName : "CurrentPage", sortFieldName : "OrderBy" );
+    grid.Bind( Model.Items, rowCount: Model.TotalItems, autoSortAndPage : false );
+}
+@grid.GetHtml( mode: WebGridPagerModes.All, columns : grid.Columns(
+                  grid.Column( "Surname", "Surname", item => item.Surname, null, true ),
+                  grid.Column( "Name", "Name", item => item.Name, null, true ),
+                  grid.Column( "Miejscowosc", "Miejscowosc", item => item.Miejscowosc.Nazwa, null, false )
+               ) 
+              )
+
+

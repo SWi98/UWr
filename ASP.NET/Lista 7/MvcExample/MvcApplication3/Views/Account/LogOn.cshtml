@@ -1,0 +1,40 @@
+﻿@using MvcApplication3.Models.Account
+@model LogOnModel
+@{
+    ViewBag.Title = "LogOn";
+}
+
+<h2>LogOn</h2>
+
+@using ( var form = Html.BeginForm() )
+{ 
+    <table cellspacing="5">
+        <tr>
+            <td>Username</td>
+            <td>@Html.TextBoxFor( m => m.UserName )</td>
+        </tr>
+        <tr>
+            <td>Password</td>
+            <td>@Html.PasswordFor( m => m.Password )</td>
+        </tr>
+        <tr>
+            <td colspan="2">
+                @Html.ValidationSummary()
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2" align="right">
+                <button>Zaloguj</button>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2">
+                @{ 
+                    Html.JQueryDatePickerGlobalizationScript( cultureName: "pl" );
+                    var dts = Html.DateTimeFor( m => m.TheDate, DateTime.Now, dateInCalendar : true ); 
+                }
+                @dts.DateCalendar( new CalendarOptions() { ChangeMonth = true }, inLine : false )
+            </td>
+        </tr>
+    </table>
+}

@@ -1,0 +1,40 @@
+﻿@using MvcApplication3.Models
+@model UserEditModel
+@{
+    ViewBag.Title = "Edit";
+}
+
+<h2>Edycja konta użytkownika @Model.Surname @Model.Name</h2>
+
+@using ( var form = Html.BeginForm() ) { 
+<table cellspacing="5">
+    <tr>
+        <td>Nazwisko</td>
+        <td>@Html.TextBoxFor( m => m.Surname )
+        </td>
+    </tr>
+    <tr>
+        <td>Imie</td>
+        <td>@Html.EditorFor( m => m.Name )
+
+        </td>
+    </tr>
+    <tr>
+        <td>Miejscowosc</td>
+        <td>@Html.DropDownListFor( m => m.IDMiejscowosc, Model.Miejscowosci )
+
+        </td>
+    </tr>
+    <tr>
+        <td colspan="2">
+            @Html.ValidationSummary()
+        </td>
+
+    </tr>
+    <tr>
+        <td colspan="2" align="right">
+            <button>Zapisz</button>
+        </td>
+    </tr>
+</table>
+}

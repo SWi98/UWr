@@ -1,0 +1,59 @@
+﻿USE [master]
+GO
+/****** Object:  Database [UserList]    Script Date: 2013-12-03 12:34:43 ******/
+CREATE DATABASE [UserList]
+
+GO
+/****** Object:  Table [dbo].[Password]    Script Date: 2013-12-03 12:34:43 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[Password](
+	[ID] [int] IDENTITY(1,1) NOT NULL,
+	[ID_USER] [int] NOT NULL,
+	[Hash] [nvarchar](1500) NOT NULL,
+	[Salt] [nvarchar](100) NOT NULL,
+	[Rounds] [int] NOT NULL,
+	[Date] [datetime] NOT NULL,
+ CONSTRAINT [PK_Password] PRIMARY KEY CLUSTERED 
+(
+	[ID] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+
+GO
+/****** Object:  Table [dbo].[Users]    Script Date: 2013-12-03 12:34:43 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[Users](
+	[ID] [int] IDENTITY(1,1) NOT NULL,
+	[Name] [nvarchar](150) NOT NULL,
+	[Surname] [nvarchar](150) NOT NULL,
+	[ID_MIEJSCOWOSC] [int] NOT NULL,
+	[Login] [nvarchar](150) NULL,
+ CONSTRAINT [PK_Users] PRIMARY KEY CLUSTERED 
+(
+	[ID] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+
+GO
+ALTER TABLE [dbo].[Users] ADD  CONSTRAINT [DF_Users_ID_MIEJSCOWOSC]  DEFAULT ((1)) FOR [ID_MIEJSCOWOSC]
+GO
+ALTER TABLE [dbo].[Password]  WITH CHECK ADD  CONSTRAINT [FK_Password_Users] FOREIGN KEY([ID_USER])
+REFERENCES [dbo].[Users] ([ID])
+GO
+ALTER TABLE [dbo].[Password] CHECK CONSTRAINT [FK_Password_Users]
+GO
+ALTER TABLE [dbo].[Users]  WITH CHECK ADD  CONSTRAINT [FK_Users_Miejscowosc] FOREIGN KEY([ID_MIEJSCOWOSC])
+REFERENCES [dbo].[Miejscowosc] ([ID])
+GO
+ALTER TABLE [dbo].[Users] CHECK CONSTRAINT [FK_Users_Miejscowosc]
+GO
+USE [master]
+GO
+ALTER DATABASE [UserList] SET  READ_WRITE 
+GO

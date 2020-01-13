@@ -1,0 +1,20 @@
+﻿<?xml version="1.0" encoding="utf-8"?><Database Name="UserList" Class="UserDataContext" xmlns="http://schemas.microsoft.com/linqtosql/dbml/2007">
+  <Connection Mode="AppSettings" ConnectionString="Data Source=.\sql2012;Initial Catalog=UserList;Integrated Security=True" SettingsObjectName="DataLibrary.Properties.Settings" SettingsPropertyName="UserListConnectionString" Provider="System.Data.SqlClient" />
+  <Table Name="dbo.Miejscowosc" Member="Miejscowoscs">
+    <Type Name="Miejscowosc">
+      <Column Name="ID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="Nazwa" Type="System.String" DbType="NVarChar(150) NOT NULL" CanBeNull="false" />
+      <Association Name="Miejscowosc_User" Member="Users" ThisKey="ID" OtherKey="ID_MIEJSCOWOSC" Type="User" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Users" Member="Users">
+    <Type Name="User">
+      <Column Name="ID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="Name" Type="System.String" DbType="NVarChar(150) NOT NULL" CanBeNull="false" />
+      <Column Name="Surname" Type="System.String" DbType="NVarChar(150) NOT NULL" CanBeNull="false" />
+      <Column Name="ID_MIEJSCOWOSC" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="Login" Type="System.String" DbType="NVarChar(150)" CanBeNull="true" />
+      <Association Name="Miejscowosc_User" Member="Miejscowosc" ThisKey="ID_MIEJSCOWOSC" OtherKey="ID" Type="Miejscowosc" IsForeignKey="true" />
+    </Type>
+  </Table>
+</Database>
