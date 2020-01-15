@@ -62,4 +62,14 @@ int main(){
     cout << "Posortowane wg BMI: \n";
     print(reg);
 
+    cout << "Osoba o maks. wadze: " << *max_element(reg.begin(), reg.end(), [](Person one, Person two){
+        return one.weight < two.weight;
+    }) << endl;
+    cout << "Osoba o maks. wzroscie: " << *max_element(reg.begin(), reg.end(), [](Person one, Person two){
+        return one.height < two.height;
+    }) << endl;
+    cout << "Osoba o maks. wieku: " << *max_element(reg.begin(), reg.end(), [](Person one, Person two){
+        return one.age < two.age;
+    }) << endl;
+
 }
