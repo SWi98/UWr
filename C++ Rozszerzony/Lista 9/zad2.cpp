@@ -30,6 +30,12 @@ double Luma(int r, int g, int b){
     return 0.299 * r + 0.587 * g + 0.114 * b; 
 }
 
+bool comp(Point one, Point two){
+    bool first_smaller = Luma(one.R, one.G, one.B) < Luma(two.R, two.G, two.B);
+    cout << one << " smaller than " << two << " = " << first_smaller << endl;
+    return first_smaller;
+}
+
 int main(){
     list<Point> points;
     points.push_back(Point("A", 1, 1, 100, 200, 300));
@@ -72,8 +78,8 @@ int main(){
     print(fourth);
 
     auto minmax = minmax_element(points.begin(), points.end(), [](Point one, Point two){
-        return Luma(one.R, one.G, one.B) > Luma(two.R, two.G, two.B);
+        return Luma(one.R, one.G, one.B) < Luma(two.R, two.G, two.B);
     });
-    cout << "Najjasniejszy punkt: " << *minmax.first << endl;
-    cout << "Najciemniejszy punkt: " << *minmax.second << endl;
+    cout << "Najjasniejszy punkt: " << *minmax.second << endl;
+    cout << "Najciemniejszy punkt: " << *minmax.first << endl;
 }
