@@ -1,3 +1,5 @@
+use std::vec;
+
 fn game(n: u64) -> Vec<u64> {
     if n%2==0{
         return vec![n * n / 2];
@@ -7,7 +9,6 @@ fn game(n: u64) -> Vec<u64> {
     }
 }
 fn main() {
-    println!("Hello, world!");
 }
 #[test]
 fn test1(){
