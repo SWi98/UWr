@@ -1,0 +1,15 @@
+{
+  "name": "lista8",
+  "version": "1.0.0",
+  "description": "",
+  "main": "zad2.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "mssql": "^6.0.1",
+    "npm": "^6.13.7"
+  }
+}

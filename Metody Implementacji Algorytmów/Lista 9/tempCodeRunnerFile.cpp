@@ -1,23 +1,16 @@
-#include<iostream>
+#include <iostream>
 using namespace std;
 int main(){
-    string word;
-    cin >> word;
-    int odd_letters = 0;
-    int number_of_letters[26];
-    fill(begin(number_of_letters), end(number_of_letters), 0);
-    for(int i = 0; i < word.length(); i++){
-        number_of_letters[word[i] - 'a']++;
-    }
-    for(int i = 0; i < 26; i++){
-        if(number_of_letters[i] % 2 != 0){
-            odd_letters++;
+    int n, x, m;
+    cin >> n;
+    int sum = 0;
+    long long int res = 0;
+    for(int i = 0; i < n; i++){
+        cin >> x >> m;
+        for(int j = 0; j < m; j++){
+            res ^= x;
+            x++;
         }
     }
-    if(odd_letters <= 1 || odd_letters % 2 != 0){
-        cout << "First";
-    }
-    else{
-        cout << "Second";
-    }
+    cout << ((x == 0) ? "bolik" : "tolik") << endl;
 }
