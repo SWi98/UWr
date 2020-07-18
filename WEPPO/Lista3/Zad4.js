@@ -24,3 +24,10 @@ console.log( myfs[2]() ); // druga miała zwrócić 2
 console.log( myfs[7]() );
 
 // 10 10 10
+
+function sum(...args){
+    let x = Array.prototype.slice.call(arguments);
+    return x.reduce((x, y) => {return x + y});
+}
+
+console.log(sum(1, 2, 3, 4, 5))

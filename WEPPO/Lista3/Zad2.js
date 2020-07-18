@@ -31,7 +31,7 @@ function rec_mem_fib(n){
         }
     }
 
-    return _fib(n);
+     _fib(n);
 }
 
 function auto_mem(fn){
@@ -96,6 +96,14 @@ function test_auto_mem(n){
     console.log("\n\n");
 }
 
-test_auto_mem(42);
+function foo(y, z){
+    return this.A + y + z;
+}
+
+let context = {
+    A : 5
+}
+var _foo = foo.bind(context);
+console.log(_foo(1, 2));
 
 //IE dla 35

@@ -1,8 +1,8 @@
 function z1(){
     var res = [];
     
-    for(var i = 1; i < 100000; i += 1){
-        var digits = i.toString().split('').map(x => parseInt(x));
+    for(var i = 1; i < 1000; i += 1){
+        var digits = i.toString().split('').map((x) => parseInt(x));
         var sum = digits.reduce( (x, y) => x + y);
         var add = true;
         if (i % sum != 0) {
@@ -36,8 +36,8 @@ function z2(){
 
     for (var i = 2; i < Math.sqrt(n); i += 1){
         if (is_prime[i]){
-            for (var j = i * 2; j < n; j += i){
-                is_prime[j] = false;
+            for (var j = 2; (j * i) < n; j += 1){
+                is_prime[j * i] = false;
             }
         }
     }
@@ -51,5 +51,4 @@ function z2(){
     console.log(primes);
 }
 
-console.log(5 % 0 == 10 % 0);
 z1();

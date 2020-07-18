@@ -1,4 +1,4 @@
-module.exports = {FooFirst};
+module.exports = {FooFirst, Display};
 
 function FooFirst(n){
     if(n > 0){
@@ -6,4 +6,8 @@ function FooFirst(n){
         let s = require("./second");
         s.FooSecond(n-1);
     }
+}
+
+function Display(){
+    console.log("Displayed from first");
 }

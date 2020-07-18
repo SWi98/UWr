@@ -14,7 +14,7 @@ function fib() {
     }
 }
 
-function *fib2() {
+function* fib2() {
     let  _prev = 0;
     let _current = 1;
     while(true){
@@ -35,7 +35,7 @@ function* take(it, top) {
 for (let num of take( fib2(), 10 ) ) {
     console.log(num["value"]);
 }
-    
+
 
 /*var _it1 = {
     [Symbol.iterator] : fib

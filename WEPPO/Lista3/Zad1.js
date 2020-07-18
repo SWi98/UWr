@@ -39,3 +39,24 @@ ob.str = "xxx";
 console.log(ob.str);
 ob.add("yyyy");
 console.log(ob.str);
+
+function createIterator(){
+    let state = 0
+    return {
+        next: function(){
+            state += 1;
+            return{
+                value: state,
+                done: state >= 10,
+            }
+        }
+    }
+}
+
+let it = createIterator();
+let _res = it.next();
+for (;!_res.done; _res = it.next()) {
+    console.log( _res.value );
+   } 
+
+   console.log(ob._value);

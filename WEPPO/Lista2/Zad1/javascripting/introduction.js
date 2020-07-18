@@ -1,1 +1,6 @@
-console.log("hello");
+
+{
+    var x = "global"
+}
+
+console.log(x)

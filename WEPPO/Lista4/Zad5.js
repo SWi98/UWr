@@ -16,4 +16,4 @@ function _on(){
     })
 }
 
-_once();
+_on();
