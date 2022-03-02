@@ -1,0 +1,422 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+```{r}
+require("car")
+library(MASS)
+library(ggplot2)
+library(gridExtra)
+library(cowplot)
+```
+```{r}
+qt(0.975, 17)
+```
+
+```{r}
+qf(0.95, 1, 20)
+```
+```{r}
+qf(0.95, 3, 20)
+```
+
+```{r}
+qf(0.95, 1, 20)
+```
+
+Zadanie 3
+
+Tworzenie macierzy 100x2
+```{r}
+sigma = matrix(c(1, 0.9, 0.9, 1), 2, 2)
+X = mvrnorm(100, c(0, 0), sigma/100)
+```
+
+Generowanie wektora odpowiedzi Y.
+```{r}
+B1 = 3
+Y = B1 * X[,1] + rnorm(100)
+```
+
+Przedziały ufności:
+
+]
+```{r}
+base_model = lm(Y~X[,1])
+confint(base_model)
+```
+```{r}
+full_model = lm(Y~X[,1] + X[,2])
+confint(full_model)
+```
+
+
+Odchylenie standardowe modeli:
+
+```{r}
+s2 = 1/(100-2)*sum(base_model$residuals^2)
+v = sum((X[,1] - mean(X[,1]))^2)
+sigma_base = sqrt(s2/v)
+sigma_base
+```
+
+```{r}
+s2 = 1/(100-3)*sum((Y-predict(full_model))^2)
+v = s2 * solve(t(X)%*%X)
+sigma_full = sqrt(v[2,2])
+sigma_full
+```
+Moce testów:
+
+```{r}
+delta = B1/sigma_base
+tc = qt(1-0.05/2, 100-2)
+power_base = pt(-tc, 100-2, delta) + 1 - pt(tc, 100-2, delta)
+power_base
+```
+```{r}
+delta = B1/sigma_full
+tc = qt(1-0.05/2, 100-2)
+power_base = pt(-tc, 100-2, delta) + 1 - pt(tc, 100-2, delta)
+power_base
+```
+Generowanie losowych błędów 1000 razy:
+
+```{r}
+base_model_b1_rejections = 0
+full_model_b1_rejections = 0
+b1s_base = c()
+b1s_full = c()
+
+for (i in 1:1000){
+  error = rnorm(100, 0, 1)
+  Y = 3 * X[, 1] + error
+  base_model = lm(Y~X[, 1])
+  full_model = lm(Y~X[, 1] + X[, 2])
+  interval_base = confint(base_model)
+  interval_full = confint(full_model)
+  if(interval_base[2,1] >= 0 | interval_base[2,2] <=0 ){
+    base_model_b1_rejections = base_model_b1_rejections + 1
+  }
+  if(interval_full[2,1] >= 0 | interval_full[2,2] <=0 ){
+    full_model_b1_rejections = full_model_b1_rejections + 1
+  }
+  b1s_base[i] = base_model$coefficients[2]
+  b1s_full[i] = full_model$coefficients[2]
+}
+```
+
+```{r}
+base_model_b1_rejections / 1000
+full_model_b1_rejections / 1000
+
+sd(b1s_base)
+sd(b1s_full)
+```
+Zadanie 4
+
+Generowanie macierzy X
+```{r}
+X = matrix(rnorm(1000*950, 0, 0.1), 1000, 950)
+```
+
+Generowanie wektora odpowiedzi Y
+```{r}
+B = rep(0, 950)
+B[1:5] = 3
+Y = X%*%B + rnorm(1000)
+```
+
+Tworzenie różnych modeli regresji liniowej
+```{r}
+k = c(1, 2, 5, 10, 50, 100, 500, 950)
+SSE = rep(0, length(k))
+MSE = rep(0, length(k))
+AIC = rep(0, length(k))
+p_vals = matrix(0, length(k), 2)
+FD = rep(0, length(k))
+
+for(i in 1:length(k)){
+  model = lm(Y~X[,1:k[i]])
+  SSE[i] = sum(model$residuals^2)
+  MSE[i] = sum((model$fit - X%*%B)^2)
+  AIC[i] = AIC(model)
+  if (i==1){
+    p_vals[i, 1] = summary(model)$coefficient[2,4]
+  }
+  else{
+    p_vals[i,] = summary(model)$coefficient[2:3, 4]
+  }
+  if(k[i] > 5){
+    FD[i] = sum(summary(model)$coefficient[7:k[i], 4] < 0.05)
+  }
+}
+```
+
+
+```{r}
+SSE
+MSE
+AIC
+FD
+round(p_vals, digits=4)
+```
+
+
+```{r}
+model = lm(Y~X[,1:950])
+best_vars_idxs = order(abs(summary(model)$coefficient[2:951]), decreasing=TRUE)
+```
+
+```{r}
+k = c(1, 2, 5, 10, 50, 100, 500, 950)
+SSE = rep(0, length(k))
+MSE = rep(0, length(k))
+AIC = rep(0, length(k))
+p_vals = matrix(0, length(k), 2)
+FD = rep(0, length(k))
+
+for(i in 1:length(k)){
+  model = lm(Y~X[,best_vars_idxs[1:k[i]]])
+  SSE[i] = sum(model$residuals^2)
+  MSE[i] = sum((model$fit - X%*%B)^2)
+  AIC[i] = AIC(model)
+  if (i==1){
+    p_vals[i, 1] = summary(model)$coefficient[2,4]
+  }
+  else{
+    p_vals[i,] = summary(model)$coefficient[2:3, 4]
+  }
+  if(k[i] > 5){
+    FD[i] = sum(summary(model)$coefficient[7:k[i], 4] < 0.05)
+  }
+}
+```
+
+```{r}
+SSE
+MSE
+AIC
+FD
+round(p_vals, digits=4)
+```
+
+
+CH06PR15.txt
+```{r}
+data = read.table("CH06PR15.txt", header=FALSE)
+colnames(data) = c("age", "severity", "anxiety", "satisfaction")
+```
+
+```{r}
+model = lm(satisfaction ~ age + severity + anxiety, data)
+summary(model)
+```
+Testowanie hipotezy:
+```{r}
+msm = sum((model$fit - mean(data$satisfaction))^2)/3
+mse = sum(model$residuals^2) / 42
+f_stat = msm/mse
+f_stat
+tc = qf(1-0.05, 3, 42)
+tc
+```
+
+Przedziały ufności:
+```{r}
+confint(model)[2:4,]
+```
+Jedynie "anxiety" nie zawiera w sobie 0, a w teście w summary jego p-wartość jako jedyna jest mniejsza od 0.05.
+
+
+Residua vs predykcje satysfakcji/zmienne objaśniające
+```{r}
+data$residuals = model$residuals
+data$prediction = model$fit
+satisfaction_plot = ggplot(data) + geom_point(aes(prediction, residuals), shape = 1, size = 2, )
+age_plot = ggplot(data) + geom_point(aes(age, residuals), shape = 1, size = 2)
+severity_plot = ggplot(data) + geom_point(aes(severity, residuals), shape = 1, size = 2)
+anxiety_plot = ggplot(data) + geom_point(aes(anxiety, residuals), shape = 1, size = 2)
+```
+```{r}
+satisfaction_plot
+age_plot
+severity_plot
+anxiety_plot
+```
+
+```{r}
+shapiro.test(model$residuals)
+```
+```{r}
+qqnorm(model$residuals)
+qqline(model$residuals)
+```
+csdata:
+
+```{r}
+data = read.table("csdata.txt", header=FALSE)
+colnames(data) = c("id", "GPA", "HSM", "HSS", "HSE", "SATM", "SATV", "SEX")
+length(data$id)
+```
+```{r}
+reduced_model = lm(GPA ~ HSM + HSS + HSE, data)
+full_model = lm(GPA ~ HSM + HSS + HSE + SATM + SATV, data)
+```
+
+```{r}
+
+sse_r = sum(reduced_model$residuals^2)
+sse_f = sum(full_model$residuals^2)
+dfe_r = length(data$id) - 4
+dfe_f = length(data$id) - 6
+mse_f = sse_f / dfe_f
+
+F_stat = (sse_r - sse_f) / (dfe_r - dfe_f) / mse_f
+F_stat
+fc = qf(1-0.05, 2, dfe_f)
+fc
+```
+```{r}
+anova(reduced_model, full_model)
+```
+Sumy typu I i II
+
+```{r}
+model = lm(GPA ~ SATM + SATV + HSM + HSE + HSS, data)
+anova(model)
+Anova(model)
+```
+Weryfikacja sumy typu I dla HSM
+```{r}
+sat_hsm_model = lm(GPA ~ SATM + SATV + HSM, data)
+sat_model = lm(GPA ~ SATM + SATV, data)
+
+hsm_ssm = sum((mean(data$GPA) - sat_hsm_model$fit)^2) - sum((mean(data$GPA)-sat_model$fit)^2)
+hsm_ssm
+```
+Zadanie 11
+```{r}
+data$SAT = data$SATM + data$SATV
+model = lm(GPA ~ SATM + SATV + SAT, data)
+summary(model)
+anova(model)
+```
+
+```{r}
+model = lm(GPA ~ SAT + SATM + SATV, data)
+summary(model)
+anova(model)
+```
+Zadanie 12
+```{r}
+model = lm(GPA~HSM + HSS + HSE + SATM + SATV + SEX, data)
+summary(model)
+
+```
+
+
+```{r}
+
+# HSM
+gpa = lm(GPA ~ HSS + HSE + SATM + SATV + SEX, data)
+hsm = lm(HSM ~ HSS + HSE + SATM + SATV + SEX, data)
+plot(hsm$residuals, gpa$residuals, main="HSM vs GPA")
+```
+
+```{r}
+
+# HSS
+gpa = lm(GPA ~ HSM + HSE + SATM + SATV + SEX, data)
+hss = lm(HSS ~ HSM + HSE + SATM + SATV + SEX, data)
+plot(hss$residuals, gpa$residuals, main="HSS vs GPA")
+
+# HSE
+gpa = lm(GPA ~ HSM + HSS + SATM + SATV + SEX, data)
+hse = lm(HSE ~ HSM + HSS + SATM + SATV + SEX, data)
+plot(hse$residuals, gpa$residuals, main="HSE vs GPA")
+
+# SATM
+gpa = lm(GPA ~ HSM + HSS + HSE + SATV + SEX, data)
+satm = lm(SATM ~ HSM + HSS + HSE + SATV + SEX, data)
+plot(satm$residuals, gpa$residuals, main="SATM vs GPA")
+
+# SATV
+gpa = lm(GPA ~ HSM + HSS + HSE + SATM + SEX, data)
+satv = lm(SATV ~ HSM + HSS + HSE + SATM + SEX, data)
+plot(satv$residuals, gpa$residuals, main="SATV vs GPA")
+
+# SEX
+gpa = lm(GPA ~ HSM + HSS + HSE + SATM + SATV, data)
+sex = lm(SEX ~ HSS + HSE + SATM + SATM + SATV, data)
+plot(sex$residuals, gpa$residuals, main="SEX vs GPA")
+
+```
+
+
+Studentized deleted residuals
+```{r}
+model = lm(GPA~HSM + HSS + HSE + SATM + SATV + SEX, data)
+p = 1:224
+r  = residuals(model)
+r1 = rstandard(model) # studentyzacja wewnętrzna
+r2 = rstudent(model)  # studentyzacja zewnętrzna
+cbind(r, r1, r2)
+plot(p, r1)
+plot(p, r2)
+```
+
+
+DFFITS
+```{r}
+Observation = 1:224
+DFFITS = dffits(model)
+threshold = 2*sqrt(7/224)
+plot(Observation, DFFITS, main="DFFITS value for every observation")
+abline(h=threshold)
+abline(h=-threshold)
+```
+
+Tolerance
+```{r}
+vif_val = vif(model)
+tolerance = 1/vif_val
+tolerance
+```
+
+Choosing the best regression model using BIC and AIC
+
+BIC:
+```{r}
+require("leaps")
+b<- regsubsets(GPA~HSM+HSS+HSE+SATM+SATV+SEX, nbest=1, data);
+u<-summary(b);
+cbind(u$bic, u$which)
+```
+AIC:
+```{r}
+require(MuMIn)
+
+options(na.action="na.fail")
+combinations <- dredge(model)
+
+print(combinations)
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

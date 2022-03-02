@@ -1,0 +1,50 @@
+```{r}
+x = rnorm(100)
+y = rnorm(100)
+plot(x, y, asp=1)
+```
+```{r}
+
+zad2 <- function(B, sigma, x, y){
+  X = rbind(x, y)
+  A = chol(sigma)
+  transformed_X = A %*% X + B
+  plot(transformed_X[1,], transformed_X[2,], asp=1, xlab="X", ylab="Y")
+}
+
+B = c(4, 2)
+sigma = rbind(c(1, 0.9), c(0.9, 1))
+zad2(B, sigma, x, y)
+```
+```{r}
+B = c(4, 2)
+sigma = rbind(c(1, -0.9), c(-0.9, 1))
+zad2(B, sigma, x, y)
+```
+```{r}
+B = c(4, 2)
+sigma = rbind(c(9, 0), c(0, 1))
+zad2(B, sigma, x, y)
+```   
+```{r}
+nrow = 200
+ncol = 100
+X = matrix(rnorm(100*200, mean=0, sd=1), nrow=nrow, ncol=ncol)
+sigma = matrix(0.9, ncol, ncol) + diag(0.1, ncol, ncol)
+A = chol(sigma)
+X_dash = X %*% A
+cov_matrix = cov(X_dash)
+```
+
+```{r}
+variance = diag(cov_matrix)
+print(mean(variance))
+hist(variance)
+```
+```{r}
+covariance = cov_matrix[lower.tri(cov_matrix, diag=FALSE)]
+print(mean(covariance, na.rm=TRUE))
+hist(covariance)
+```
+
+ 

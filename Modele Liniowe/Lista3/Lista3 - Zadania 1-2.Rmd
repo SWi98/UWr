@@ -1,0 +1,333 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+```{r}
+library(ggplot2)
+```
+
+Zadanie1
+
+```{r}
+tc = qt(0.975, 10)
+```
+```{r}
+tc
+```
+
+```{r}
+Fc = qf(1 - 0.05, 1, 10)
+Fc
+```
+
+```{r}
+tc * tc
+```
+Zadanie 2
+```{r}
+Fc = qf(1 - 0.05, 1, 20)
+Fc
+```
+
+
+
+Zadanie 3 
+```{r}
+data <- read.table("tabela1_6.txt", header = FALSE)[, -1]
+colnames(data) <- c("GPA", "IQ", "Gender", "PHCSCS")
+data
+```
+a)
+
+```{r}
+model = lm(GPA ~ IQ, data)
+summary(model)
+```
+```{r}
+preds = predict(model, data, interval = "prediction")[, 1]
+
+n = 78 
+dfm = 1
+dfe = n-2
+dft = n-1
+ssm = sum((preds - mean(data$GPA))^2)
+sse = sum((data$GPA - preds)^2)
+sst = ssm + sse
+msm = ssm/dfm
+mse = sse/dfe
+mst = sst/dft
+F_statistic = msm/mse
+R2 = ssm/sst
+
+B1 = cov(data$GPA, data$IQ) / var(data$IQ)
+B0 = mean(data$GPA) - mean(data$IQ) * B1
+s2 = 1 / dfe * sum((data$GPA - B1 * data$IQ - B0)^2)
+s2_B1 = s2 / sum((data$IQ - mean(data$IQ))^2)
+T = B1 / sqrt(s2_B1)
+p_value = pt(q=T, df=dfe, lower.tail=FALSE) + pt(q=-T, df=dfe, lower.tail=TRUE)
+```
+
+```{r}
+p_value
+```
+
+```{r}
+F_statistic
+```
+```{r}
+R2
+```
+```{r}
+qf(1 - 0.05, 1, 76)
+```
+
+b)
+```{r}
+test_sample = data.frame(IQ=100)
+predict(model, test_sample, interval="prediction", level=0.9)
+```
+c)
+```{r}
+lwr = predict(model, data, interval = "prediction")[, 2]
+upr = predict(model, data, interval = "prediction")[, 3]
+pred_intervals = ggplot(data, aes(IQ, GPA)) + geom_point(aes(IQ, GPA), shape = 1, size = 2)  + geom_line(aes(IQ, upr)) + geom_line(aes(IQ, lwr))
+pred_intervals
+```
+Zadanie 4
+
+```{r}
+model = lm(GPA ~ PHCSCS, data)
+summary(model)
+```
+```{r}
+preds = predict(model, data, interval = "prediction")[, 1]
+
+n = 78 
+dfm = 1
+dfe = n-2
+dft = n-1
+ssm = sum((preds - mean(data$GPA))^2)
+sse = sum((data$GPA - preds)^2)
+sst = ssm + sse
+msm = ssm/dfm
+mse = sse/dfe
+mst = sst/dft
+F_statistic = msm/mse
+R2 = ssm/sst
+
+B1 = cov(data$GPA, data$PHCSCS) / var(data$PHCSCS)
+B0 = mean(data$GPA) - mean(data$PHCSCS) * B1
+s2 = 1 / dfe * sum((data$GPA - B1 * data$PHCSCS - B0)^2)
+s2_B1 = s2 / sum((data$PHCSCS - mean(data$PHCSCS))^2)
+T = B1 / sqrt(s2_B1)
+p_value = pt(q=T, df=dfe, lower.tail=FALSE) + pt(q=-T, df=dfe, lower.tail=TRUE)
+```
+```{r}
+p_value
+```
+
+
+```{r}
+F_statistic
+```
+```{r}
+R2
+```
+```{r}
+qf(1 - 0.05, 1, 76)
+```
+b)
+
+```{r}
+qf(1 - 0.05, 1, 76)
+```
+c)
+```{r}
+test_sample = data.frame(PHCSCS=60)
+predict(model, test_sample, interval="prediction", level=0.9)
+```
+d)
+```{r}
+lwr = predict(model, data, interval = "prediction")[, 2]
+upr = predict(model, data, interval = "prediction")[, 3]
+pred_intervals = ggplot(data, aes(PHCSCS, GPA)) + geom_point(aes(PHCSCS, GPA), shape = 1, size = 2)  + geom_line(aes(PHCSCS, upr)) +
+  geom_line(aes(PHCSCS, lwr))
+pred_intervals
+```
+Zadanie 5
+
+```{r}
+data = read.table("CH01PR20.txt", header=FALSE, col.names=c("time", "copiers"))
+model = lm(time ~ copiers, data)
+summary(model)
+```
+
+a)
+
+```{r}
+sum(model$residuals)
+```
+b)
+```{r}
+residuals_data <- data.frame(copiers = data$copiers, residual = model$residuals, order = c(1:45))
+
+ggplot(residuals_data) + geom_point(aes(copiers, residual), shape = 1, size = 2) 
+```
+
+
+
+c)
+```{r}
+ggplot(residuals_data) + geom_point(aes(order, residual), shape = 1, size = 2) 
+```
+d)
+```{r}
+xs = seq(-25, 25, by = .1)
+hist(model$residuals, probability=TRUE)
+lines(xs, dnorm(xs, 0, sd(model$residuals)))
+```
+```{r}
+qqnorm(model$residuals, main = "")
+qqline(model$residuals, main = "")
+```
+Zadanie 6
+
+```{r}
+changed_data = data
+changed_data$time[1] = 2000
+```
+
+a)
+```{r}
+new_model = lm(time ~ copiers, changed_data)
+summary(new_model)
+```
+b)
+```{r}
+residuals_data <- data.frame(copiers = changed_data$copiers, residual = new_model$residuals, order = c(1:45))
+ggplot(residuals_data) + geom_point(aes(copiers, residual), shape = 1, size = 2) 
+```
+
+
+```{r}
+ggplot(residuals_data) + geom_point(aes(order, residual), shape = 1, size = 2) 
+```
+
+```{r}
+xs = seq(-250, 25000, by = .1)
+hist(new_model$residuals, probability=TRUE, nclass=20)
+lines(xs, dnorm(xs, 0, sd(new_model$residuals)))
+```
+```{r}
+qqnorm(new_model$residuals, main = "")
+qqline(new_model$residuals, main = "")
+```
+
+
+```{r}
+data = read.table("CH03PR15.txt", header=FALSE, col.names=c("concentration", "time"))
+```
+
+Zadanie 7
+
+```{r}
+model = lm(concentration ~ time, data)
+summary(model)
+```
+```{r}
+qf(1-0.05, 1, 13)
+```
+
+Zadanie 8
+
+```{r}
+
+upr = predict(model, data, interval = "prediction")[, 3]
+lwr = predict(model, data, interval = "prediction")[, 2]
+
+
+ggplot(data, aes(time, concentration)) + geom_point(shape=1) +
+  geom_abline(slope=coef(model)[2][1], intercept=coef(model)[1][1]) + 
+  geom_line(aes(time, upr), col="red") + geom_line(aes(time, lwr), col="red")
+  
+```
+
+```{r}
+preds = predict(model, data, interval = "prediction")[, 1]
+cor(preds, data$concentration)
+```
+
+Zadanie 9
+
+```{r}
+library(MASS)
+boxcox(data$concentration ~ data$time)
+```
+
+Zadanie 10
+```{r}
+data$concentration = log(data$concentration)
+```
+
+
+```{r}
+model = lm(concentration ~ time, data)
+summary(model)
+```
+```{r}
+upr = predict(model, data, interval = "prediction")[, 3]
+lwr = predict(model, data, interval = "prediction")[, 2]
+
+
+ggplot(data, aes(time, concentration)) + geom_point(shape=1) +
+  geom_abline(slope=coef(model)[2][1], intercept=coef(model)[1][1]) + 
+  geom_line(aes(time, upr), col="red") + geom_line(aes(time, lwr), col="red")
+  
+```
+
+```{r}
+preds = predict(model, data, interval = "prediction")[, 1]
+cor(preds, data$concentration)
+```
+
+
+Zadanie 12
+
+```{r}
+data = read.table("CH03PR15.txt", header=FALSE, col.names=c("concentration", "time"))
+data$time = 1 / sqrt(data$time)
+```
+
+
+```{r}
+model = lm(concentration ~ time, data)
+summary(model)
+
+```
+
+```{r}
+upr = predict(model, data, interval = "prediction")[, 3]
+lwr = predict(model, data, interval = "prediction")[, 2]
+
+
+ggplot(data, aes(time, concentration)) + geom_point(shape=1) +
+  geom_abline(slope=coef(model)[2][1], intercept=coef(model)[1][1]) + 
+  geom_line(aes(time, upr), col="red") + geom_line(aes(time, lwr), col="red")
+  
+```
+
+```{r}
+preds = predict(model, data, interval = "prediction")[, 1]
+cor(preds, data$concentration)
+```
+
+
+
+
+
+
+
+
+
+
+

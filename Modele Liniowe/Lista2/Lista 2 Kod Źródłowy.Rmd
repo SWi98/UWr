@@ -1,0 +1,254 @@
+
+
+```{r}
+library(ggplot2)
+```
+
+-------------------------------------------------------------------------------
+
+Zadanie1:
+
+```{r}
+data = read.table("CH01PR20.txt", header=FALSE, col.names=c("time", "copiers"))
+length(data$time)
+```
+
+
+```{r}
+ggplot(data, aes(copiers, time)) + geom_point(shape=1)
+```
+
+-------------------------------------------------------------------------------
+
+Zadanie 2:
+
+```{r}
+regression = lm(time~copiers, data=data)
+coef(regression)
+```
+```{r}
+summary(regression)
+```
+```{r}
+data$copiers
+```
+```{r}
+anova(regression, regression)
+```
+Obliczanie części powyższych statystyk:
+
+```{r}
+B1 = cov(data$copiers, data$time) / var(data$copiers)
+B0 = mean(data$time) - mean(data$copiers) * B1
+sprintf("B0: %f, B1: %f", B0, B1)
+```
+
+```{r}
+s2 = 1 / 43 * sum((data$time - B1 * data$copiers - B0)^2) # residual standard error ^ 2
+s2
+```
+```{r}
+s2_B1 = s2 / sum((data$copiers - mean(data$copiers))^2)
+s2_B1
+```
+
+```{r}
+T = B1 / sqrt(s2_B1)
+T
+```
+```{r}
+p_value = pt(q=T, df=43, lower.tail=FALSE) + pt(q=-T, df=43, lower.tail=TRUE)
+p_value
+```
+Wykres prostej uzyskanej z regresji liniowej:
+
+```{r}
+ggplot(data, aes(copiers, time)) + geom_point(shape=1) + geom_abline(slope=coef(regression)[2][1], intercept=coef(regression)[1][1])
+```
+```{r}
+confint(regression, level=0.95)
+```
+```{r}
+upper_B1 = B1 + qt(1-0.05/2, 43) * sqrt(s2_B1)
+lower_B1 = B1 - qt(1-0.05/2, 43) * sqrt(s2_B1)
+sprintf("Lower: %f, Upper: %f", lower_B1, upper_B1)
+```
+
+-------------------------------------------------------------------------------
+
+Zadanie 3:
+
+```{r}
+x = 11
+prediction = B0 + B1 * x
+
+s2_x = s2 * (1/45 + (x - mean(data$copiers))^2/sum((data$copiers - mean(data$copiers))^2))
+diff = qt(1-0.05/2, 43) * sqrt(s2_x)
+lower = prediction - diff
+upper = prediction + diff
+sprintf("Prediction: %f, Lower: %f, Upper: %f", prediction, lower, upper)
+```
+
+```{r}
+predict(regression, data.frame(copiers = c(x)), interval = 'confidence')
+```
+
+-------------------------------------------------------------------------------
+
+Zadanie 4:
+
+```{r}
+s2_x = s2 * (1 + 1/45 + (x - mean(data$copiers))^2/sum((data$copiers - mean(data$copiers))^2))
+diff = qt(1-0.05/2, 43) * sqrt(s2_x)
+lower = prediction - diff
+upper = prediction + diff
+sprintf("Prediction: %f, Lower: %f, Upper: %f", prediction, lower, upper)
+```
+
+```{r}
+predict(regression, data.frame(copiers = c(x)), interval = 'prediction')
+```
+
+
+-------------------------------------------------------------------------------
+
+Zadanie 5:
+
+```{r}
+options(warn=-1)
+preds = predict(regression, interval='prediction')
+xs = preds[,1]
+lower_xs = preds[,2]
+upper_xs = preds[,3]
+
+confidence_data = data.frame(data$copiers, data$time, lower_xs, xs, upper_xs)
+
+ggplot(confidence_data) + geom_point(aes(data.copiers, data.time), shape = 1, size=1) +
+  geom_line(aes(data.copiers, upper_xs)) + 
+  geom_line(aes(data.copiers, lower_xs)) +
+  xlab('copiers') + ylab('time')
+```
+
+-------------------------------------------------------------------------------
+
+Zadanie 6:
+
+```{r}
+n = 40
+sigma2 = 120
+ssx = 1000
+```
+
+Find the power for rejecting the null hypothesis that the regression
+slope is zero using a α = 0.05 significance test when the true slope
+is β1 = 1:
+
+```{r}
+B1 = 1
+alpha = 0.05
+sigma2_B1 = sigma2 / ssx
+delta = B1 / sqrt(sigma2_B1)
+tc = qt(1-alpha/2, n-2)
+hypothesis_power = pt(-tc, n-2, delta) + 1 - pt(tc, n-2, delta)
+hypothesis_power
+```
+
+Plot the power as a function of β1 for values of β1 between −2 and 2:
+
+```{r}
+beta_to_power = function(val){
+  sigma2_val = sigma2 / ssx
+  delta = val / sqrt(sigma2_val)
+  tc = qt(1-alpha/2, n-2)
+  hypothesis_power = pt(-tc, n-2, delta) + 1 - pt(tc, n-2, delta)
+  return(hypothesis_power)
+}
+  
+options(warn=-1)
+
+vals = seq(-2, 2, by = 0.01)
+power_data = data.frame(B1=vals, Power=sapply(vals, beta_to_power))
+
+ggplot(power_data) + geom_line(aes(B1, Power))
+```
+
+-------------------------------------------------------------------------------
+
+Zadanie 7:
+Generate the vector X = (X1, . . . , X200)^T
+from the multivariate normal distribution N(0,1/200 I). 
+
+```{r}
+X = rnorm(200, 0, sqrt(1/200))
+```
+
+Then generate 1000 vectors Y from the model Y = 5 + β1X + epsilon.
+For each replication of the experiment test the hypothesis that β1 = 0
+and estimate the probability of rejection by the frequency of rejections
+in your sample (separately for each of the points (a)-(d)). Compare
+these estimated probabilities to the theoretical probability of the type
+I error (a and b) and the theoretical power (c and d) calculated under
+the assumption that the noise epsilon has the normal distribution. 
+Summarize the results.
+
+```{r}
+estimate_p = function(fun, X, B1=0, iters=2000){
+  counter = 0 
+  powers_sum = 0
+  for (i in 1:iters){
+    Y = fun(X)
+    data = data.frame(X, Y)
+    model = lm(Y~X, data)
+    confidence = confint(model, "X")
+    if (confidence[1] > 0 || confidence[2] < 0){
+      counter = counter + 1
+    }
+    
+    # calculating power for c) and d)
+    s = sd(model$residuals) * sqrt(199/198)
+    sigma_B1 = s/sum((X - mean(X))^2)
+    delta = B1/sigma_B1
+    tc = qt(1-0.05/2, 198)
+    powers_sum = powers_sum + pt(-tc, 198, delta) + 1 - pt(tc, 198, delta)
+  }
+  return (c(counter/iters, powers_sum/iters))
+}
+```
+a)
+```{r}
+case_a = function(X){
+  return (sapply(X, function(x) 5 + rnorm(1, 0, 1)))
+}
+
+estimate_p(case_a, X, 1)[1]
+```
+b)
+```{r}
+case_b = function(X){
+  return (sapply(X, function(x) 5 + rexp(1, 1)))
+}
+
+estimate_p(case_b, X)[1]
+```
+c)
+```{r}
+case_c = function(X){
+  return (sapply(X, function(x) 5 + 1.5 * x + rnorm(1, 0, 1)))
+}
+
+estimate_p(case_c, X, B1=1.5)
+```
+```{r}
+case_c = function(X){
+  return (sapply(X, function(x) 5 + 1.5 * x + rexp(1, 1)))
+}
+
+estimate_p(case_c, X, B1=1.5)
+```
+Zadanie 8:
+```{r}
+qt(0.975, 18)
+```
+
+
+
