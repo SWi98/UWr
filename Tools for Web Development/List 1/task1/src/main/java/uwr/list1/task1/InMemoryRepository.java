@@ -5,13 +5,9 @@ import java.util.stream.Collectors;
 
 public record InMemoryRepository() {
     private final static Map<String, Integer> users = new HashMap<String, Integer>();
-    private final static Map<String, Integer> usersIgnoredCase = new HashMap<String, Integer>();
 
     public void addUser(String userName){
         users.put(userName, users.getOrDefault(userName, 0) + 1);
-       // String ignoredCaseUserName = userName.substring(0, 1).toUpperCase() + userName.substring(1).toLowerCase();
-       // System.out.println(ignoredCaseUserName);
-       // usersIgnoredCase.put(ignoredCaseUserName, usersIgnoredCase.getOrDefault(ignoredCaseUserName, 0) + 1);
     }
 
     public Integer getUserCount(String userName){
@@ -19,15 +15,13 @@ public record InMemoryRepository() {
     }
 
     public void removeUser(String userName){
-        //Integer count = users.get(userName);
         users.remove(userName);
-       // String ignoredCaseUserName = userName.substring(0, 1).toUpperCase() + userName.substring(1).toLowerCase();
-       // usersIgnoredCase.put(ignoredCaseUserName, usersIgnoredCase.get);
     }
 
     private Map<String, Integer> sortMap(Map<String, Integer> mapToSort){
         return mapToSort.entrySet().stream()
-                .sorted(Collections.reverseOrder(Map.Entry.comparingByValue()))
+                .sorted(Map.Entry.comparingByKey())  // sort alphabetically
+                .sorted(Collections.reverseOrder(Map.Entry.comparingByValue()))  // sort by count number
                 .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue,
                         (oldValue, newValue) -> null, LinkedHashMap::new));
     }
