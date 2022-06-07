@@ -1,0 +1,86 @@
+```{r}
+library("pracma")
+library("Dict")
+```
+
+```{r}
+n <- 1000
+p <- 950
+ks <- c(20, 100, 200)
+num_repeats = 1
+true_beta = 3.5
+```
+
+```{r}
+X = randortho(n)[1:n, 1:p]
+size(X)
+```
+
+
+i) To be done by hand: Calculate the value of the tuning parameter λ for the ridge regression,
+so as to minimize the mean square error of the estimation of β.
+```{r}
+lambdas = p / (ks * true_beta ^ 2)
+lambdas
+```
+
+ii) To be done by hand: Calculate the bias, the variance and the mean squared error of this
+optimal estimator.
+```{r}
+biases = true_beta * (1 / (1 + lambdas) - 1)
+biases
+```
+
+```{r}
+variances = 1 / (1 + lambdas) ^ 2
+variances
+```
+
+```{r}
+mse = p / (1 + lambdas)^2 + (lambdas^2 * ks * true_beta^2) / (1 + lambdas)^2
+mse
+```
+
+iii) Generate 200 replicates of the above model and analyze the data using ridge regression and
+OLS. Compare empirical bias, variance, mse of the ridge regression with the theoretical
+values of these parameters, calculated above, and with the corresponding parameters of
+OLS.
+
+```{r}
+biases_ridge <- matrix(rep(0, 6), nrow = 2)
+biases_ols <- matrix(rep(0, 6), nrow = 2)
+
+variances_ridge = rep(0, 3)
+variances_ols = rep(0, 3)
+
+num_repeats = 200
+```
+
+```{r}
+for (i in c(1:num_repeats)){
+  epsilon = rnorm(n)
+  for(j in c(1:3)){
+    k = ks[j]
+    j_as_char = as.character(j)
+    Beta = c(rep(true_beta, k), rep(0, p - k))
+    Y = X %*% Beta + epsilon 
+    ridge_beta = 1 / (1 + lambdas[j]) * t(X) %*% Y
+    ols_beta = t(X) %*% Y
+    biases_ridge[1, j] = biases_ridge[1, j] + mean(c(ridge_beta[1:k] - true_beta))
+    biases_ridge[2, j] = biases_ridge[2, j] + mean(ridge_beta[(k+1):p])
+    
+    biases_ols[1, j] = biases_ols[1, j] + mean(c(ols_beta[1:k]) - true_beta)
+    biases_ols[2, j] = biases_ols[2, j] + mean(ols_beta[(k+1):p])
+    
+    variances_ridge[j] = variances_ridge[j] + var(ridge_beta)
+    variances_ols[j] = variances_ols[j] + var(ols_beta)
+  }
+}
+```
+```{r}
+variances_ridge[3] / 200
+```
+
+
+
+

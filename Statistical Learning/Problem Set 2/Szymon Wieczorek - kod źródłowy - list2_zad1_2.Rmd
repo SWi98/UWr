@@ -1,0 +1,421 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+```{r}
+library(bigstep)
+library(Dict)
+```
+
+```{r}
+set.seed(2022)
+N = 1000
+P = 950
+SIGMA_SQ = 1/N
+NUM_FEATURES = c(2, 5, 10, 100, 500, 950)
+NUM_REPS = 10
+```
+
+```{r}
+generate_data = function (){
+  # Returns:
+  #   matrix X with the data (num_samples x num_features)
+  #   vector of betas
+  #   vector of responses
+  X = matrix(rnorm(N*P, 0, sqrt(SIGMA_SQ)), N, P)
+  B = rep(0, P)
+  B[1:5] = 3
+  Y = X%*%B + rnorm(N)
+  return (list("X" = X, "B" = B, "Y" = Y))
+}
+```
+
+```{r}
+data = generate_data()
+X = data$X; B = data$B; Y = data$Y
+```
+
+```{r}
+# AIC 
+aic_known_sigma = function(loglik, k, n){
+  return (n * exp(-2 * loglik / n) + 2 * k)
+}
+
+# RIC 
+ric = function(loglik, k, p){
+  return (2 * k * log(p) - 2 * loglik)
+}
+
+get_discoveries = function(stepwise_results){
+  coeffs <- stepwise_results$model
+  td = 0
+  fd = 0
+  for(coeff in coeffs){
+    coeff_integer = as.integer(gsub("`", "", coeff))
+    if(coeff_integer >= 1 & coeff_integer <= 5){
+      td = td + 1
+    }
+    else{
+      fd = fd + 1
+    }
+  }
+  
+  return(list(td, fd))
+}
+```
+
+```{r}
+run_simulation = function(p, show_output=TRUE, generate_fresh_data=TRUE){
+  if(generate_fresh_data){
+    data = generate_data()
+    X = data$X; B = data$B; Y = data$Y
+  }
+  
+  if (show_output)
+    cat("\nNUM FEATURERS:", p, "\n")
+  
+  true_B = c(0, B[1:p])
+  model = lm(Y ~ X[, 1:p])
+  B_hat = model$coefficients
+  new_X = cbind(rep(1, N), X[, 1:p])
+  Y_hat = new_X%*%B_hat
+  # residual sum of squares
+  RSS = sum((Y - Y_hat)^2)
+  if (show_output)
+    cat("RSS: ", RSS, "\n")
+  
+  # true expected value of the prediction error
+  theoretical_PE = SIGMA_SQ * (N - p) + N
+  # theoretical_PE = RSS + N * SIGMA_SQ
+  # theoretical_PE = sum((new_X %*% (true_B - B_hat))^2) + N
+  if(show_output)
+    cat("PE: ", theoretical_PE, "\n")
+  
+  #  estimate PE assuming that σ is known and replacing σ with its regular unbiased estimator
+  s2 = RSS / (N - p)
+  estim_PE_sigma = RSS + 2 * SIGMA_SQ * p
+  estim_PE_estim_sigma = RSS + 2 * s2 * p
+  if (show_output){
+    cat("estimated sigma: ", s2, "\n")
+    cat("estimated PE with known sigma: ", estim_PE_sigma, "\n")
+    cat("estimated PE by replacing sigma: ", estim_PE_estim_sigma, "\n")
+  }
+  
+  # estimating PE using closed formula for cross-validation
+  M = new_X %*% solve(t(new_X) %*% new_X) %*% t(new_X)
+  estim_PE_CV = sum(((Y-Y_hat)/(1-diag(M)))^2)
+  if (show_output)
+    cat("Cross validation PE: ", estim_PE_CV, "\n")
+  
+  # using AIC criterion for known σ
+  aic_sigma = fast_forward(data=prepare_data(Y, new_X), crit=aic_known_sigma)
+  aic_sigma_res = get_discoveries(aic_sigma)
+  aic_sigma_td = aic_sigma_res[[1]]
+  aic_sigma_fd = aic_sigma_res[[2]]
+  if (show_output){
+    aic_ = RSS + 2*SIGMA_SQ*p
+    cat("AIC for known sigma: ", aic_, "\n")
+  }
+  
+  # using AIC criterion for unknown σ
+  aic_unknown_sigma = fast_forward(data=prepare_data(Y, new_X), crit=aic)
+  aic_unknown_sigma_res = get_discoveries(aic_unknown_sigma)
+  aic_unknown_sigma_td = aic_unknown_sigma_res[[1]]
+  aic_unknown_sigma_fd = aic_unknown_sigma_res[[2]]
+  if (show_output){
+    aic_ = N * log(RSS) + 2*p
+    cat("AIC for unknown sigma: ", aic_, "\n")
+  }
+  
+  return (
+    list(
+      theoretical_PE,
+      estim_PE_sigma,
+      estim_PE_estim_sigma,
+      estim_PE_CV,
+      aic_sigma_td,
+      aic_sigma_fd,
+      aic_unknown_sigma_td,
+      aic_unknown_sigma_fd
+      )
+    )
+}
+```
+
+```{r}
+NUM_FEATURES = c(2, 5, 10, 100, 500, 950)
+for (p in NUM_FEATURES){
+  results = run_simulation(p, TRUE, FALSE)
+}
+```
+
+```{r}
+NUM_REPS = 100
+
+generate_dict = function(){
+  return (Dict$new("2"=c(), "5"=c(), "10"=c(), "100"=c(), "500"=c(), "950"=c()))
+}
+
+PEs = generate_dict()
+estim_PEs_sigma = generate_dict()
+estim_PEs_estim_sigma = generate_dict()
+estim_PEs_CV = generate_dict()
+aic_sigma_tds = generate_dict()
+aic_sigma_fds = generate_dict()
+aic_unknown_sigma_tds = generate_dict()
+aic_unknown_sigma_fds = generate_dict()
+
+for (p in NUM_FEATURES){
+  cat("\nNUM FEATURES: ", p,  "\n")
+  p_key = as.character(p)
+  for (i in 1:NUM_REPS){
+    results = run_simulation(p, FALSE)
+    PEs[p_key] = append(PEs[p_key], results[[1]])
+    estim_PEs_sigma[p_key] = append(estim_PEs_sigma[p_key], results[[2]])
+    estim_PEs_estim_sigma[p_key] = append(estim_PEs_estim_sigma[p_key], results[[3]])
+    estim_PEs_CV[p_key] = append(estim_PEs_CV[p_key], results[[4]])
+    aic_sigma_tds[p_key] = append(aic_sigma_tds[p_key], results[[5]])
+    aic_sigma_fds[p_key] = append(aic_sigma_fds[p_key], results[[6]])
+    aic_unknown_sigma_tds[p_key] = append(aic_unknown_sigma_tds[p_key], results[[7]])
+    aic_unknown_sigma_fds[p_key] = append(aic_unknown_sigma_fds[p_key], results[[8]])
+  }
+}
+cat("\014")
+```
+
+```{r}
+plot_discoveries = function(data, title){
+  hist(data, main=title, xlab="Value", border="black", xlim=c(0, max(data)))
+}
+
+plot_pes = function(data, title){
+  boxplot(data, main=title)
+}
+
+for (p in NUM_FEATURES){
+  p_key = as.character(p)
+  plot_discoveries(aic_sigma_tds[p_key], sprintf("True Discoveries of AIC (%s columns)", p_key))
+  plot_discoveries(aic_sigma_fds[p_key], sprintf("False Discoveries of AIC (%s columns)", p_key))
+  plot_discoveries(aic_unknown_sigma_tds[p_key], sprintf("True Discoveries of AIC for unknown sigma (%s columns)", p_key))
+  plot_discoveries(aic_unknown_sigma_fds[p_key], sprintf("False Discoveries of AIC for unknown sigma (%s columns)", p_key))
+}
+
+for (p in NUM_FEATURES){
+  p_key = as.character(p)
+  data = data.frame(
+    known_sigma = estim_PEs_sigma[p_key] - PEs[p_key],
+    estimated_sigma = estim_PEs_estim_sigma[p_key] - PEs[p_key],
+    cross_validation = estim_PEs_CV[p_key] - PEs[p_key]
+  )
+  boxplot(data, main=sprintf("Estimated PE using %s columns", p_key))
+}
+```
+```{r}
+estim_PEs_sigma["950"] - PEs
+```
+```{r}
+run_criterions = function(p, show_output=TRUE, generate_fresh_data=FALSE){
+  if(generate_fresh_data){
+    data = generate_data()
+    X = data$X; B = data$B; Y = data$Y
+  }
+  
+  true_B = B[1:p]
+  new_X = X[, 1:p]
+  
+  if(show_output)
+    print("AIC")
+  aic_model = fast_forward(prepare_data(Y, new_X), crit = aic)
+  td_fd = get_discoveries(aic_model)
+  aic_td = td_fd[[1]]
+  aic_fd = td_fd[[2]]
+  selected_cols <- as.integer(aic_model$model)
+  if(length(selected_cols) == 0){
+    model = lm(Y ~ new_X)
+    aic_RSS = sum(model$residuals^2)
+  }
+  else{
+    aic_RSS = -1000
+  }
+  
+  if(show_output)
+    print("BIC")
+  bic_model = fast_forward(prepare_data(Y, new_X), crit = bic)
+  td_fd = get_discoveries(bic_model)
+  bic_td = td_fd[[1]]
+  bic_fd = td_fd[[2]]
+  selected_cols <- as.integer(bic_model$model)
+  if(length(selected_cols) == 0){
+    model = lm(Y ~ new_X)
+    bic_RSS = sum(model$residuals^2)
+  }
+  else{
+    bic_RSS = -1000
+  }
+  
+  
+  if(show_output)
+    print("RIC")
+  ric_model = fast_forward(prepare_data(Y, new_X),crit = ric)
+  td_fd = get_discoveries(ric_model)
+  ric_td = td_fd[[1]]
+  ric_fd = td_fd[[2]]
+  selected_cols <- as.integer(ric_model$model)
+  if(length(selected_cols) == 0){
+    model = lm(Y ~ new_X)
+    ric_RSS = sum(model$residuals^2)
+  }
+  else{
+    ric_RSS = -1000
+  }
+  
+  if(show_output)
+    print("mBIC")
+  mbic_model = fast_forward(prepare_data(Y, new_X), crit = mbic)
+  td_fd = get_discoveries(mbic_model)
+  mbic_td = td_fd[[1]]
+  mbic_fd = td_fd[[2]]
+  selected_cols <- as.integer(mbic_model$model)
+  if(length(selected_cols) == 0){
+    model = lm(Y ~ new_X)
+    mbic_RSS = sum(model$residuals^2)
+  }
+  else{
+    mbic_RSS = -1000
+  }
+  
+  if(show_output)
+    print("mBIC2")
+  mbic2_model = fast_forward(prepare_data(Y, new_X), crit = mbic2)
+  td_fd = get_discoveries(mbic2_model)
+  mbic2_td = td_fd[[1]]
+  mbic2_fd = td_fd[[2]]
+  selected_cols <- as.integer(mbic2_model$model)
+  if(length(selected_cols) == 0){
+    model = lm(Y ~ new_X)
+    mbic2_RSS = sum(model$residuals^2)
+  }
+  else{
+    mbic2_RSS = -1000
+  }
+  
+  return(
+    list(
+    aic_td, aic_fd, aic_RSS,
+    bic_td, bic_fd, bic_RSS,
+    ric_td, ric_fd, ric_RSS,
+    mbic_td, mbic_fd, mbic_RSS,
+    mbic2_td, mbic2_fd, mbic2_RSS
+    )
+  )
+}
+```
+
+```{r}
+m = lm(Y ~ X)
+length(summary(m)$coefficient)
+```
+```{r}
+data = generate_data()
+X = data$X; B = data$B; Y = data$Y
+NUM_FEATURES = c(20, 100, 500, 950)
+
+# 2a) - Single Simulation
+
+log_results = function(results, method){
+  cat("\n", method, ": TD - ", results[[1]], "; FD - ", results[[2]], "; RSS - ", results[[3]], "\n")
+}
+
+for(p in NUM_FEATURES){
+  cat("\nNUM FEATURES: ", p, "\n")
+  results = run_criterions(p)
+  log_results(results[1:3], "AIC")
+  log_results(results[4:6], "BIC")
+  log_results(results[7:9], "RIC")
+  log_results(results[10:12], "mBIC")
+  log_results(results[13:15], "mBIC2")
+}
+```
+
+
+```{r}
+data = generate_data()
+X = data$X; B = data$B; Y = data$Y
+NUM_REPS = 100
+NUM_FEATURES = c(20, 100, 500, 950)
+generate_dict = function(){
+  return (Dict$new("20"=0, "100"=0, "500"=0, "950"=0))
+}
+aic_power = generate_dict()
+bic_power = generate_dict() 
+ric_power = generate_dict() 
+mbic_power = generate_dict() 
+mbic2_power = generate_dict() 
+
+aic_fdr = generate_dict()
+bic_fdr = generate_dict() 
+ric_fdr = generate_dict() 
+mbic_fdr = generate_dict() 
+mbic2_fdr = generate_dict() 
+
+aic_rss = generate_dict()
+bic_rss = generate_dict() 
+ric_rss = generate_dict() 
+mbic_rss = generate_dict() 
+mbic2_rss = generate_dict() 
+
+for(i in 1:NUM_REPS){
+  for(p in NUM_FEATURES){
+    p_key = as.character(p)
+    results = run_criterions(p, FALSE, TRUE)
+    
+    aic_power[p_key] = aic_power[p_key] + (results[[1]] / (5 * NUM_REPS))
+    bic_power[p_key] = bic_power[p_key] + (results[[4]] / (5 * NUM_REPS))
+    ric_power[p_key] = ric_power[p_key] + (results[[7]] / (5 * NUM_REPS))
+    mbic_power[p_key] = mbic_power[p_key] + (results[[10]] / (5 * NUM_REPS))
+    mbic2_power[p_key] = mbic2_power[p_key] + (results[[13]] / (5 * NUM_REPS))
+    
+    aic_fdr[p_key] = aic_fdr[p_key] + (results[[2]] / (1e-10 + (results[[1]] + results[[2]]) * NUM_REPS))
+    bic_fdr[p_key] = bic_fdr[p_key] + (results[[5]] / (1e-10 + (results[[4]] + results[[5]]) * NUM_REPS))
+    ric_fdr[p_key] = ric_fdr[p_key] + (results[[8]] / (1e-10 + (results[[7]] + results[[8]]) * NUM_REPS))
+    mbic_fdr[p_key] = mbic_fdr[p_key] + (results[[11]] / (1e-10 + (results[[10]] + results[[11]]) * NUM_REPS))
+    mbic2_fdr[p_key] = mbic2_fdr[p_key] + (results[[14]]/ (1e-10 + (results[[13]] + results[[14]]) * NUM_REPS))
+    
+    
+    if(results[[1]] != 0 || results[[2]] != 0)
+      aic_rss[p_key] = aic_rss[p_key] + (results[[3]] / NUM_REPS)
+    
+    if(results[[4]] != 0 || results[[5]] != 0)
+      bic_rss[p_key] = bic_rss[p_key] + (results[[6]] / NUM_REPS)
+    
+    if(results[[7]] != 0 || results[[8]] != 0)
+      ric_rss[p_key] = ric_rss[p_key] + (results[[9]] / NUM_REPS)
+    
+    if(results[[10]] != 0 || results[[11]] != 0)
+      mbic_rss[p_key] = mbic_rss[p_key] + (results[[12]] / NUM_REPS)
+      
+    if(results[[13]] != 0 || results[[14]] != 0)
+      mbic2_rss[p_key] = mbic2_rss[p_key] + (results[[15]] / NUM_REPS)
+    
+  }
+}
+
+cat("\014")
+```
+
+```{r}
+log_second_task = function(method, power, fdr, rss){
+  print(method)
+  cat("power: ", power, "\nfdr: ", fdr, "\nrss: ", rss, "\n\n")
+}
+
+for (p in NUM_FEATURES){
+  cat("\nNUM FEATURES ", p, "\n")
+  p_key = as.character(p)
+  log_second_task("AIC", aic_power[p_key], aic_fdr[p_key], aic_rss[p_key])
+  log_second_task("BIC", bic_power[p_key], bic_fdr[p_key], bic_rss[p_key])
+  log_second_task("RIC", ric_power[p_key], ric_fdr[p_key], ric_rss[p_key])
+  log_second_task("mBIC", mbic_power[p_key], mbic_fdr[p_key], mbic_rss[p_key])
+  log_second_task("mBIC2", mbic2_power[p_key], mbic2_fdr[p_key], mbic2_rss[p_key])
+}
+```

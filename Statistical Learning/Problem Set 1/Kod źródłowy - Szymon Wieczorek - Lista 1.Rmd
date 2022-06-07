@@ -1,0 +1,293 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+```{r}
+set.seed(2022)
+library(Dict)
+library(ggplot2)
+```
+
+```{r}
+generate_data = function (){
+  # Returns:
+  #   matrix X with the data (num_samples x num_features)
+  #   vector of betas
+  #   vector of responses
+  X = matrix(rnorm(1000*950, 0, sqrt(1/1000)), 1000, 950)
+  B = rep(0, 950)
+  B[1:5] = 3
+  Y = X%*%B + rnorm(1000)
+  return (list("X" = X, "BETA" = B, "Y" = Y))
+}
+```
+
+```{r}
+# res = generate_data()
+# X = res$X; BETA = res$BETA; Y = res$Y
+
+NUM_FEATURES = c(10, 100, 500, 950)
+ALPHA = 0.1
+N = 1000
+NUM_REPS = 500
+
+mean_variances = list()
+variances = list()
+conf_int_lens = list()
+
+true_discoveries_default = list()
+false_discoveries_default = list()
+fwer_default = list()
+fdr_default = list()
+
+true_discoveries_bonferroni = list()
+false_discoveries_bonferroni = list()
+fwer_bonferroni = list()
+fdr_bonferroni = list()
+
+true_discoveries_benjamini = list()
+false_discoveries_benjamini = list()
+fwer_benjamini = list()
+fdr_benjamini = list()
+for (i in 1:length(NUM_FEATURES)){
+  p = NUM_FEATURES[i]
+  variances[[as.character(p)]] = vector()
+  mean_variances[[as.character(p)]] = rep(0.0, p+1)
+  conf_int_lens[[as.character(p)]] = 0.0
+  
+  true_discoveries_default[[as.character(p)]] = 0.0
+  false_discoveries_default[[as.character(p)]] = 0.0
+  fwer_default[[as.character(p)]] = 0.0
+  fdr_default[[as.character(p)]] = 0.0
+  
+  true_discoveries_bonferroni[[as.character(p)]] = 0.0
+  false_discoveries_bonferroni[[as.character(p)]] = 0.0
+  fwer_bonferroni[[as.character(p)]] = 0.0
+  fdr_bonferroni[[as.character(p)]] = 0.0
+  
+  true_discoveries_benjamini[[as.character(p)]] = 0.0
+  false_discoveries_benjamini[[as.character(p)]] = 0.0
+  fwer_benjamini[[as.character(p)]] = 0.0
+  fdr_benjamini[[as.character(p)]] = 0.0
+}
+```
+
+```{r}
+get_discoveries <- function(pvals, alpha, adjusting_type){
+  if(adjusting_type == "default"){
+    discoveries = pvals < alpha
+  }
+  else if(adjusting_type == "bonferroni"){
+    sorted_pvals_idxs = order(pvals)
+    j = 0
+    discoveries = rep(0, length(pvals))
+    while(pvals[sorted_pvals_idxs[j+1]] <= alpha/length(pvals)-j){
+      j = j + 1 
+      discoveries[sorted_pvals_idxs[j]] = 1
+    }
+  }
+  else if(adjusting_type == "benjamini"){
+    sorted_pvals_idxs = order(pvals)
+    j = 1
+    discoveries = rep(0, length(pvals))
+    while(pvals[sorted_pvals_idxs[j]] <= j/length(pvals) * alpha){
+      discoveries[sorted_pvals_idxs[j]] = 1
+      j = j + 1 
+    }
+  }
+  true_pos = sum(discoveries[2:6])
+  false_pos = discoveries[[1]] + sum(discoveries[7:length(discoveries)])
+  return (list("fd" = false_pos, "td" = true_pos))
+}
+
+
+print_discoveries_stats <- function(discoveries_stats){
+    cat("True discoveries:\n")
+    print(discoveries_stats$td)
+    cat("False discoveries:\n")
+    print(discoveries_stats$fd)
+}
+  
+for (repetition_num in 1:NUM_REPS){ 
+  data = generate_data()
+  X = data$X; BETA = data$BETA; Y = data$Y
+  show_output = repetition_num == 1 # Printing output only for the first iteration of the experiments
+  for (i in 1:length(NUM_FEATURES)){
+    p = NUM_FEATURES[i] 
+    verbose = (i == 1) & show_output # Printing detailed output only for the first iteration of the 10 columns experiments
+    x = X[, 1:p]
+    if(show_output){
+      cat("\n\n", p, " FEATURES USED:\n")
+    }
+    
+    
+    # finding least squares estimator of BETA using lm function:
+    model = lm(Y ~ x)
+    model_coeffs = summary(model)$coefficients[,1]
+    
+    # appending a vector of ones to the beginning of x which will be multiplied
+    # with a vector of intercept
+    x = cbind(rep(1, N), x)
+    
+    # finding least squares estimator of BETA using a formula:
+    B = solve(t(x)%*%x)%*%t(x)%*%Y
+    significant_B = B[2:5]
+    insignificant_B = B[6:length(B)]
+    if (show_output){
+      cat("\nSignifcant Betas:\n")
+      cat("Standard deviation: ", sd(significant_B) , "\n")
+      cat("Mean: ", mean(significant_B), "\n")
+      
+      cat("\nInsignifcant Betas:\n")
+      cat("Standard deviation: ", sd(insignificant_B) , "\n")
+      cat("Mean: ", mean(insignificant_B), "\n")
+    }
+    
+    if (verbose & show_output){
+      print(summary(model))
+      cat("\nEstimators from lm funciton:\n")
+      print(model_coeffs)
+      cat("\nEstimators calculated by hand:\n")
+      print(t(B))
+    }
+    
+    # Calculating average standard deviation of the estimators:
+    dfE = N - p
+    SSE = t(Y - (x%*%B))%*%(Y-x%*%B)
+    s2 = (SSE/dfE)[1, 1]
+    cov_b = s2*solve(t(x)%*%x)
+    vars = diag(cov_b)
+    sds = sqrt(vars)
+    
+    if(show_output){
+      cat("\nMean standard deviation of the estimators:\n")
+      print(mean(sds))
+    }
+    
+    # 1b): Calculating the average length of confidence intervals
+    t = qt(1-ALPHA/2, N-p)
+    conf_int = mean(2 * t * sds)
+    if(show_output){
+      cat("\nAverage confidence interval length:\n")
+      print(conf_int)
+    }
+    
+    # 1c): Calculating number of true and false discoveries:
+    pvals = summary(model)$coefficients[, 4]
+    discoveries_default = get_discoveries(pvals, alpha=ALPHA, adjusting_type="default")
+    discoveries_bonferroni = get_discoveries(pvals, ALPHA, "bonferroni")
+    discoveries_benjamini = get_discoveries(pvals, ALPHA, "benjamini")
+    if(show_output){
+      cat("\nDefault discoveries calculation:\n")
+      print_discoveries_stats(discoveries_default)
+      cat("\nBonferroni discoveries calculation:\n")
+      print_discoveries_stats(discoveries_bonferroni)
+      cat("\nBenjamini discoveries calculation:\n")
+      print_discoveries_stats(discoveries_benjamini)
+    }
+    
+    # 2 a) b)
+    p_str = as.character(p)
+    variances[[p_str]] = append(variances[[p_str]], vars)
+    mean_variances[[p_str]] = mean_variances[[p_str]] + vars / NUM_REPS
+    conf_int_lens[[p_str]] = conf_int_lens[[p_str]] + conf_int / NUM_REPS
+    
+    
+    # 2 c)
+    false_discoveries_default[[p_str]] = false_discoveries_default[[p_str]] + discoveries_default$fd
+    false_discoveries_bonferroni[[p_str]] = false_discoveries_bonferroni[[p_str]] + discoveries_bonferroni$fd
+    false_discoveries_benjamini[[p_str]] = false_discoveries_benjamini[[p_str]] + discoveries_benjamini$fd
+    
+    true_discoveries_default[[p_str]] = true_discoveries_default[[p_str]] + discoveries_default$td
+    true_discoveries_bonferroni[[p_str]] = true_discoveries_bonferroni[[p_str]] + discoveries_bonferroni$td
+    true_discoveries_benjamini[[p_str]] = true_discoveries_benjamini[[p_str]] + discoveries_benjamini$td
+    
+    
+    if (discoveries_default$fd > 0){
+      fwer_default[[p_str]] = fwer_default[[p_str]] +  1 / NUM_REPS
+    }
+    if (discoveries_bonferroni$fd > 0){
+      fwer_bonferroni[[p_str]] = fwer_bonferroni[[p_str]] + 1 / NUM_REPS
+    }
+    if (discoveries_benjamini$fd > 0){
+      fwer_benjamini[[p_str]] = fwer_benjamini[[p_str]] + 1 / NUM_REPS
+    }
+    
+    fdr_benjamini[[p_str]] = fdr_benjamini[[p_str]] + discoveries_benjamini$fd / ((discoveries_benjamini$fd + discoveries_benjamini$td) * NUM_REPS + 1e-50)
+    fdr_default[[p_str]] = fdr_default[[p_str]] + discoveries_default$fd / ((discoveries_default$fd + discoveries_default$td) * NUM_REPS + 1e-50)
+    fdr_bonferroni[[p_str]] = fdr_bonferroni[[p_str]] + discoveries_bonferroni$fd / ((discoveries_bonferroni$fd + discoveries_bonferroni$td) * NUM_REPS + 1e-50)
+  }
+  
+}
+```
+Calculating theoretical values:
+```{r}
+
+get_theoretical_variance = function(n, p){
+  return(n / (n - p - 1))
+}
+
+get_theoretical_conf_len = function(n, p, alpha=0.1){
+  return (2 * qt(1 - alpha/2, n - p) * sqrt(get_theoretical_variance(n, p)))
+}
+
+theoretical_variances = Dict$new("10" = 0, "100" = 0, "500" = 0, "950" = 0)
+theoretical_conf_lens = Dict$new("10" = 0, "100" = 0, "500" = 0, "950" = 0)
+theoretical_fwer_default = Dict$new("10" = 0, "100" = 0, "500" = 0, "950" = 0)
+theoretical_fwer_bonferroni = Dict$new("10" = 0, "100" = 0, "500" = 0, "950" = 0)
+
+for (p in NUM_FEATURES) {
+  theoretical_variances[as.character(p)] = get_theoretical_variance(n, p)
+  theoretical_conf_lens[as.character(p)] = get_theoretical_conf_len(n, p)
+  theoretical_fwer_default[as.character(p)] = 1-(1-ALPHA)^(p-5)
+  theoretical_fwer_bonferroni[as.character(p)] = ALPHA * (p-5) / p
+}
+```
+
+
+Printing experimental values:
+```{r}
+cat("Experimental values:\n")
+for (p in NUM_FEATURES){
+  p_str = as.character(p)
+  cat("\n", p, " features:\n")
+  cat("Mean variance: ", mean(mean_variances[[p_str]]), "\n")
+  cat("Mean conf int len: ", conf_int_lens[[p_str]], "\n")
+  cat("Hypothesis testing without adjusting:\n")
+  cat("  Mean number of TD: ", true_discoveries_default[[p_str]] / NUM_REPS, "\n")
+  cat("  Mean number of FD: ", false_discoveries_default[[p_str]] / NUM_REPS, "\n")
+  cat("  FWER: ", fwer_default[[p_str]], "\n")
+  cat("  FDR: ", fdr_default[[p_str]], "\n")
+  
+  cat("Hypothesis testing with Benjamini:\n")
+  cat("  Mean number of TD: ", true_discoveries_benjamini[[p_str]] / NUM_REPS, "\n")
+  cat("  Mean number of FD: ", false_discoveries_benjamini[[p_str]] / NUM_REPS, "\n")
+  cat("  FWER: ", fwer_benjamini[[p_str]], "\n")
+  cat("  FDR: ", fdr_benjamini[[p_str]], "\n")
+  
+  cat("Hypothesis testing with Bonferroni:\n")
+  cat("  Mean number of TD: ", true_discoveries_bonferroni[[p_str]] / NUM_REPS, "\n")
+  cat("  Mean number of FD: ", false_discoveries_bonferroni[[p_str]] / NUM_REPS, "\n")
+  cat("  FWER: ", fwer_bonferroni[[p_str]], "\n")
+  cat("  FDR: ", fdr_bonferroni[[p_str]], "\n")
+}
+```
+
+Printing theoretical values:
+
+```{r}
+cat("Theoretical values:\n")
+for (p in NUM_FEATURES){
+  p_str = as.character(p)
+  cat("\n", p, " features:\n")
+  cat("Variance: ", theoretical_variances[p_str], "\n")
+  cat("Mean conf int len: ", theoretical_conf_lens[p_str], "\n")
+  cat("FWER without adjusting: ", theoretical_fwer_default[p_str], "\n")
+  cat("FWER with Bonferroni: ", theoretical_fwer_bonferroni[p_str], "\n")
+}
+```
+
+
+
+
